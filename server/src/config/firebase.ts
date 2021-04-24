@@ -10,6 +10,14 @@ const serviceAccount = path.resolve(
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
+  storageBucket: "av-mailer-396d7.appspot.com",
 });
 
-export default admin.firestore();
+export const collections = {
+  template: "template",
+  mailList: "mailList",
+};
+
+export const db = admin.firestore();
+
+export const bucket = admin.storage().bucket();
