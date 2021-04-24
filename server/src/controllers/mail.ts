@@ -5,6 +5,7 @@ import parse from "../utils/parse";
 
 // * Utils
 import { sendMails as sendMailsValidator } from "../utils/validators/mail";
+import { firestore } from "firebase-admin";
 
 // * Enter email template and file to send emails
 export const sendMails = async (req: Request, res: Response) => {
@@ -54,10 +55,12 @@ export const sendMails = async (req: Request, res: Response) => {
     let currentDate = new Date();
 
     emailList.forEach((sect) => {
+      console.log(currentDate);
+
       const docData = {
         templateId: templateRef.id,
         sent: false,
-        date: currentDate,
+        date: firestore.Timestamp.fromDate(currentDate),
         list: sect,
       };
       batch.create(db.collection(collections.mailList).doc(), docData);

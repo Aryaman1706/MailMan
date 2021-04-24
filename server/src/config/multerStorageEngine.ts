@@ -2,10 +2,10 @@ import { Bucket, CreateWriteStreamOptions } from "@google-cloud/storage";
 import { Request } from "express";
 import multer from "multer";
 import { v4 as uuidV4 } from "uuid";
+import path from "path";
 
 type Options = {
   bucket: Bucket;
-  name?: string;
   options?: CreateWriteStreamOptions;
 };
 
@@ -21,7 +21,7 @@ class CustomStorageEngine implements multer.StorageEngine {
   constructor(opts: Options) {
     this.bucket = opts.bucket;
     this.options = opts.options || {};
-    this.name = opts.name || uuidV4();
+    this.name = uuidV4();
   }
 
   _handleFile = (
@@ -34,19 +34,23 @@ class CustomStorageEngine implements multer.StorageEngine {
       return;
     }
 
+    const fileExt = path.extname(file.originalname);
+    this.name = `${this.name}${fileExt}`;
+
     const storageFile = this.bucket.file(this.name);
     const fileWriteStream = storageFile.createWriteStream(this.options);
     const fileReadStream = file.stream;
 
-    fileReadStream.pipe(fileWriteStream);
     fileReadStream
-      .on("end", () => {
-        cb(null, { name: this.name });
-      })
+      .pipe(fileWriteStream)
       .on("error", (err) => {
         fileWriteStream.end();
         storageFile.delete({ ignoreNotFound: true });
         cb(err);
+      })
+      .on("finish", () => {
+        console.log("done");
+        cb(null, { name: this.name });
       });
   };
 

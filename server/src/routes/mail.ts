@@ -4,7 +4,7 @@ import { bucket } from "../config/firebase";
 import CustomStorageEngine from "../config/multerStorageEngine";
 
 // * Controllers
-import { sendMails } from "../controllers/mail";
+import { sendMails, uploadImage } from "../controllers/mail";
 
 // * Multer Config
 const storage = CustomStorageEngine({
@@ -36,6 +36,7 @@ router.post("/mail", uploadFile.single("file"), sendMails);
  * Route: {{server_url}}/upload
  * Middleware: Multer
  */
-router.post("/upload", uploadFile.single("image"));
+router.post("/upload", uploadFile.single("image"), uploadImage);
 
 // * End of API Endpoints -->
+export default router;
