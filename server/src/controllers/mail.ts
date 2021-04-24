@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { db, collections } from "../config/firebase";
+import { db, collections, bucket } from "../config/firebase";
 import { UploadedFile } from "./customTypes";
 import parse from "../utils/parse";
 
 // * Utils
 import { sendMails as sendMailsValidator } from "../utils/validators/mail";
 
+// * Enter email template and file to send emails
 export const sendMails = async (req: Request, res: Response) => {
   try {
     // Validating req.body
@@ -84,6 +85,42 @@ export const sendMails = async (req: Request, res: Response) => {
       error: {
         msg: "Request failed. Try again.",
         data: null,
+      },
+    });
+  }
+};
+
+// * Upload image to HTML mail template
+export const uploadImage = async (req: Request, res: Response) => {
+  try {
+    // Get file
+    const fileName = (req.file as UploadedFile).name;
+    const file = bucket.file(fileName);
+
+    // Validating file
+    const fileExists = (await file.exists())[0];
+    if (!fileExists) {
+      return res.status(400).json({
+        error: {
+          message: "File not found. Try again",
+        },
+      });
+    }
+
+    // Make file public
+    await file.makePublic();
+
+    // Get publicUrl
+    const fileURL = file.publicUrl();
+
+    return res.status(200).json({
+      url: fileURL,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: {
+        message: "Internal server error. Try again.",
       },
     });
   }

@@ -30,7 +30,7 @@ class CustomStorageEngine implements multer.StorageEngine {
     cb: (error?: any, info?: CustomFileResult) => void
   ): void => {
     if (!this.bucket) {
-      cb("bucket is a required field.");
+      cb(new Error("bucket is a required field."));
       return;
     }
 
