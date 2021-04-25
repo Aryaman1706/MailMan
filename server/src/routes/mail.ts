@@ -36,7 +36,7 @@ router.post("/mail", uploadFile.single("file"), sendMails);
  * Route: {{server_url}}/upload
  * Middleware: Multer
  */
-router.post("/upload", uploadFile.single("image"), uploadImage);
+router.post("/upload", uploadFile.single("upload"), uploadImage);
 
 // * End of API Endpoints -->
 export default router;

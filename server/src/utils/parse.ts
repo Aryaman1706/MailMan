@@ -2,11 +2,11 @@ import ExcelJS from "exceljs";
 import { bucket } from "../config/firebase";
 import chunk from "lodash.chunk";
 
-type ResultData = {
+export type ResultData = {
   [key: string]: string | null;
 };
 
-type ReturnData = {
+export type ReturnData = {
   emailList: Array<Array<ResultData>> | [];
   trashList: Array<ResultData> | [];
   error: string | null;
