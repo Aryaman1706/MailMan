@@ -1,0 +1,52 @@
+[
+  {
+    "html": "<h2>Hello Toril.</h2><p>last name:- Alstad,</p><p><i>country:- ,</i></p><p>ref:- 3615</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "ta@kremmerhuset.no"
+  },
+  {
+    "html": "<h2>Hello Marco.</h2><p>last name:- Haver,</p><p><i>country:- ,</i></p><p>ref:- 3617</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "marco@carmelgroup.co.il"
+  },
+  {
+    "html": "<h2>Hello Jonathan.</h2><p>last name:- Sedgwick,</p><p><i>country:- ,</i></p><p>ref:- 3618</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "j.sedgwick@clarke-clarke.co.uk"
+  },
+  {
+    "html": "<h2>Hello Reginaldo Niazi.</h2><p>last name:- Chohfi,</p><p><i>country:- ,</i></p><p>ref:- 3618</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "r.chohfi@niazitex.com.br"
+  },
+  {
+    "html": "<h2>Hello Mari.</h2><p>last name:- Korkeamaeki,</p><p><i>country:- ,</i></p><p>ref:- 3623</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "mari.korkeamaki@piironki.fi"
+  },
+  {
+    "html": "<h2>Hello Oddrun-Marie.</h2><p>last name:- Hopland,</p><p><i>country:- ,</i></p><p>ref:- 3623</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "oddrun-marie.hopland@nf-d.no"
+  },
+  {
+    "html": "<h2>Hello Feryal.</h2><p>last name:- Karatas,</p><p><i>country:- ,</i></p><p>ref:- 3624</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "feryal@pandoram.com"
+  },
+  {
+    "html": "<h2>Hello Amy.</h2><p>last name:- Kawamoto,</p><p><i>country:- ,</i></p><p>ref:- 3625</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "amy.kawamoto@cpwm.com"
+  },
+  {
+    "html": "<h2>Hello Lihi.</h2><p>last name:- Ravid,</p><p><i>country:- ,</i></p><p>ref:- 3626</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "lihir@golfco.co.il"
+  },
+  {
+    "html": "<h2>Hello Tami.</h2><p>last name:- Lax,</p><p><i>country:- ,</i></p><p>ref:- 3626</p><p>company: </p><p>done</p>",
+    "subject": "testing",
+    "email": "tamil@golfco.co.il"
+  }
+]

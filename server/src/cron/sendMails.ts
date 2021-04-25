@@ -1,13 +1,13 @@
-import { firestore } from "firebase-admin";
+// import { firestore } from "firebase-admin";
 import { db, collections } from "../config/firebase";
 import mailer from "./mailer";
 
 const sendMails = async () => {
-  const currentDate = firestore.Timestamp.fromDate(new Date());
+  // const currentDate = firestore.Timestamp.fromDate(new Date());
 
   const pendingMailList = await db
     .collection(collections.mailList)
-    .where("date", "<=", currentDate)
+    // .where("date", "<=", currentDate)
     .where("sent", "==", false)
     .orderBy("date", "asc")
     .get();
@@ -31,8 +31,9 @@ const sendMails = async () => {
     return;
   }
 
-  mailer(template.html, template.subject, currentBatch.data().list);
-  currentBatch.ref.update({ sent: true });
+  await mailer(template.html, template.subject, currentBatch.data().list);
+  await currentBatch.ref.update({ sent: true });
+  console.log("Current batch modified");
 };
 
 sendMails();
