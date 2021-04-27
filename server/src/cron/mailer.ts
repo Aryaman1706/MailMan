@@ -36,7 +36,7 @@ const mailer = async (
     //     })
     //     .catch((error) => {
     //       console.log(error);
-    //       return error;
+    //       return {error};
     //     });
     // );
     list.push({

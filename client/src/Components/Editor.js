@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-custom-build/build/ckeditor";
-import axios from "../utils/axios";
+import { Button } from "@material-ui/core";
+import Swal from "sweetalert2";
+import useSendMails from "../hooks/api/sendMails";
 
 const editorConfig = {
   toolbar: {
@@ -26,9 +28,11 @@ const editorConfig = {
     ],
   },
   image: {
+    styles: ["alignLeft", "alignCenter", "alignRight"],
     toolbar: [
-      "imageStyle:full",
-      "imageStyle:side",
+      "imageStyle:alignLeft",
+      "imageStyle:alignCenter",
+      "imageStyle:alignRight",
       "|",
       "imageTextAlternative",
     ],
@@ -48,41 +52,74 @@ const Editor = () => {
   const [data, setData] = useState("");
   const editorRef = useRef(null);
   const [file, setFile] = useState(null);
+  const [mutation, submitHandler] = useSendMails();
 
   const onClickHandler = () => {
-    const formData = new FormData();
-    formData.append("html", data);
-    formData.append("subject", "testing");
-    formData.append("file", file);
+    if (/\w+/g.test(data) && file) {
+      const formData = new FormData();
+      formData.append("html", data);
+      formData.append("subject", "testing");
+      formData.append("file", file);
 
-    axios.post("/mail", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      submitHandler(formData);
+    } else {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Invalid Data.",
+        text: "Check editor text and excel file.",
+        showConfirmButton: true,
+        timer: 1500,
+      });
+    }
   };
 
   return (
     <>
-      <CKEditor
-        editor={ClassicEditor}
-        config={editorConfig}
-        data={data}
-        onReady={(editor) => {
-          editorRef.current = editor;
-          console.log(editorRef);
-        }}
-        onChange={(event, editor) => {
-          setData(editor.getData());
-        }}
-      />
-      <input
-        type="file"
-        onChange={(e) => {
-          setFile(e.target.files[0]);
-        }}
-      />
-      <button onClick={onClickHandler}>Send</button>
+      {mutation.isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <CKEditor
+            editor={ClassicEditor}
+            config={editorConfig}
+            data={data}
+            onReady={(editor) => {
+              editorRef.current = editor;
+            }}
+            onChange={(event, editor) => {
+              setData(editor.getData());
+            }}
+          />
+          <div style={{ marginTop: "25px" }}>
+            <label htmlFor="file">Upload excel file here</label>
+            <input
+              style={{ marginLeft: "10px" }}
+              name="file"
+              type="file"
+              onChange={(e) => {
+                setFile(e.target.files[0]);
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+              marginTop: "15px",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onClickHandler}
+            >
+              Send Emails
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 };
