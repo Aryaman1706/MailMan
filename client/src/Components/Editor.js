@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-custom-build/build/ckeditor";
-import { Button } from "@material-ui/core";
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Typography,
+  TextField,
+} from "@material-ui/core";
 import Swal from "sweetalert2";
 import useSendMails from "../hooks/api/sendMails";
 
@@ -50,12 +56,13 @@ const editorConfig = {
 
 const Editor = () => {
   const [data, setData] = useState("");
+  const [subject, setSubject] = useState("");
   const editorRef = useRef(null);
   const [file, setFile] = useState(null);
   const [mutation, submitHandler] = useSendMails();
 
   const onClickHandler = () => {
-    if (/\w+/g.test(data) && file) {
+    if (/\w+/g.test(data) && /\w+/g.test(subject) && file) {
       const formData = new FormData();
       formData.append("html", data);
       formData.append("subject", "testing");
@@ -67,7 +74,7 @@ const Editor = () => {
         position: "center",
         icon: "error",
         title: "Invalid Data.",
-        text: "Check editor text and excel file.",
+        text: "Check subject, editor text and excel file.",
         showConfirmButton: true,
         timer: 1500,
       });
@@ -76,10 +83,42 @@ const Editor = () => {
 
   return (
     <>
+      <Typography variant="h3" align="center">
+        Mailer
+      </Typography>
+      <Divider></Divider>
+      <div style={{ marginTop: "25px" }}></div>
       {mutation.isLoading ? (
-        <p>Loading...</p>
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              placeContent: "center",
+              height: "500px",
+              width: "100%",
+            }}
+          >
+            <CircularProgress
+              size={80}
+              style={{ marginTop: "auto", marginBottom: "auto" }}
+            />
+          </div>
+        </>
       ) : (
         <>
+          <TextField
+            fullWidth
+            type="text"
+            variant="outlined"
+            style={{ marginBottom: "15px" }}
+            name="subject"
+            label="Subject"
+            value={subject}
+            onChange={(e) => {
+              setSubject(e.target.value);
+            }}
+          />
           <CKEditor
             editor={ClassicEditor}
             config={editorConfig}

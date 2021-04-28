@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { db, collections, bucket } from "../config/firebase";
-import { UploadedFile } from "./customTypes";
+import {
+  UploadedFile,
+  TemplateData,
+  TemplateDocumentData,
+  MailListData,
+} from "./customTypes";
 import parse from "../utils/parse";
 
 // * Utils
@@ -31,7 +36,7 @@ export const sendMails = async (req: Request, res: Response) => {
         },
       });
     }
-    const fileName = (req.file as UploadedFile).name;
+    const fileName: string = (req.file as UploadedFile).name;
 
     // Parse the xlsx
     const { emailList, trashList, error: fileError } = await parse(fileName);
@@ -46,22 +51,41 @@ export const sendMails = async (req: Request, res: Response) => {
     }
 
     // Save mail template to DB
+    const templateData: TemplateData = {
+      ...value,
+      file: fileName,
+      date: firestore.Timestamp.fromDate(new Date()),
+      active: false,
+      complete: false,
+    };
+    const activeTemplates = (await db
+      .collection(collections.template)
+      .where("active", "==", true)
+      .get()) as firestore.QuerySnapshot<TemplateDocumentData>;
+
+    if (activeTemplates.empty || activeTemplates.docs.length === 0) {
+      templateData.active = true;
+    }
+    if (activeTemplates.docs.length > 1) {
+      // TODO handle multiple active templates
+      console.log("Multiple active templates found.");
+      return;
+    }
     const templateRef = await db
       .collection(collections.template)
-      .add({ ...value });
+      .add(templateData);
 
     // Save emailList in DB
     const batch = db.batch();
     let currentDate = new Date();
 
-    emailList.forEach((sect) => {
-      console.log(currentDate);
-
-      const docData = {
+    emailList.forEach((sect, index) => {
+      const docData: MailListData = {
         templateId: templateRef.id,
         sent: false,
         date: firestore.Timestamp.fromDate(currentDate),
         list: sect,
+        last: Boolean(index === emailList.length - 1),
       };
       batch.create(db.collection(collections.mailList).doc(), docData);
 

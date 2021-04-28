@@ -40,14 +40,14 @@ const parse = async (name: string): Promise<ReturnData> => {
       country: "F",
     };
 
-    const emailList: ResultData[] = [];
+    const emailList: NonNullable<ResultData>[] = [];
     const trashList: ResultData[] = [];
 
     workbook.eachSheet((worksheet) => {
       if (worksheet.actualRowCount > 1) {
         worksheet.eachRow((row, rowNumber) => {
           if (rowNumber > 1) {
-            const data: ResultData = {};
+            const data: { [key: string]: string | null } = {};
 
             Object.keys(index).forEach((key) => {
               data[key] = row.getCell(index[key]).text.trim() || null;
