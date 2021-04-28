@@ -71,7 +71,13 @@ export const newTemplate = async (req: Request, res: Response) => {
     if (activeTemplates.docs.length > 1) {
       // TODO handle multiple active templates
       console.log("Multiple active templates found.");
-      return;
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Multiple active templates found.",
+          data: null,
+        },
+      });
     }
     const templateRef = await db
       .collection(collections.template)
@@ -82,12 +88,14 @@ export const newTemplate = async (req: Request, res: Response) => {
     let currentDate = new Date();
 
     emailList.forEach((sect, index) => {
+      const last = !!(index === emailList.length - 1);
+      console.log(last);
       const docData: MailListData = {
         templateId: templateRef.id,
         sent: false,
         date: firestore.Timestamp.fromDate(currentDate),
         list: sect,
-        last: Boolean(index === emailList.length - 1),
+        last,
       };
       batch.create(db.collection(collections.mailList).doc(), docData);
 

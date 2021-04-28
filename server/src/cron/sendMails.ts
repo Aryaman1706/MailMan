@@ -38,12 +38,12 @@ const sendMails = async () => {
   const activeTemplate = activeTemplatesList[0];
 
   // Finding mailList corresponding to activeTemplate
-  const currentDate = firestore.Timestamp.fromDate(new Date());
+  // const currentDate = firestore.Timestamp.fromDate(new Date());
   const pendingMailList = (await db
     .collection(collections.mailList)
     .where("templateId", "==", activeTemplate.id)
     .where("sent", "==", false)
-    .where("date", "<=", currentDate)
+    // .where("date", "<=", currentDate)
     .orderBy("date", "asc")
     .get()) as firestore.QuerySnapshot<MailListDocumentData>;
 
@@ -71,12 +71,15 @@ const sendMails = async () => {
       activeTemplate.ref.update({
         complete: true,
         active: false,
-      }),
-      // Make next template active
-      inactiveTemplatesList[0].ref.update({
-        active: true,
       })
     );
+
+    // Make next template active
+    if (inactiveTemplatesList.length >= 1) {
+      inactiveTemplatesList[0].ref.update({
+        active: true,
+      });
+    }
   }
 
   // Update currentBatch

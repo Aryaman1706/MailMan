@@ -10,6 +10,8 @@ import {
 } from "@material-ui/core";
 import Swal from "sweetalert2";
 import useSendMails from "../hooks/api/sendMails";
+import juice from "juice";
+import styles from "./styles";
 
 const editorConfig = {
   toolbar: {
@@ -47,7 +49,7 @@ const editorConfig = {
     contentToolbar: ["tableColumn", "tableRow", "mergeTableCells"],
   },
   simpleUpload: {
-    uploadUrl: "http://localhost:5000/api/upload",
+    uploadUrl: "http://localhost:5000/api/template/image/upload",
     header: {
       "Content-Type": "multipart/form-data",
     },
@@ -55,8 +57,10 @@ const editorConfig = {
 };
 
 const Editor = () => {
-  const [data, setData] = useState("");
-  const [subject, setSubject] = useState("");
+  const [data, setData] = useState(
+    "<p>Testing mailer 1</p><p>ref:- {{ref}}</p><p>companyName:- {{companyName}}</p><p>firstName:- {{firstName}}</p><p>lastName:- {{lastName}}</p><p>email:- {{email}}</p><p>country:- {{country}}</p>"
+  );
+  const [subject, setSubject] = useState("Testing mailer 1");
   const editorRef = useRef(null);
   const [file, setFile] = useState(null);
   const [mutation, submitHandler] = useSendMails();
@@ -64,8 +68,8 @@ const Editor = () => {
   const onClickHandler = () => {
     if (/\w+/g.test(data) && /\w+/g.test(subject) && file) {
       const formData = new FormData();
-      formData.append("html", data);
-      formData.append("subject", "testing");
+      formData.append("html", juice.inlineContent(data, styles));
+      formData.append("subject", subject);
       formData.append("file", file);
 
       submitHandler(formData);
@@ -83,6 +87,7 @@ const Editor = () => {
 
   return (
     <>
+      {console.log(mutation)}
       <Typography variant="h3" align="center">
         Mailer
       </Typography>
@@ -136,6 +141,7 @@ const Editor = () => {
               style={{ marginLeft: "10px" }}
               name="file"
               type="file"
+              accept=".xlsx"
               onChange={(e) => {
                 setFile(e.target.files[0]);
               }}

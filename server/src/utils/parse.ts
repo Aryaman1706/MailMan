@@ -77,8 +77,10 @@ const parse = async (name: string): Promise<ReturnData> => {
       }
     });
 
-    const chunkedEmailList = chunk(emailList, 10);
+    // ! MAKE CHANGES HERE
+    const chunkedEmailList = chunk(emailList, 5);
 
+    console.log(chunkedEmailList);
     return {
       emailList: chunkedEmailList,
       trashList: trashList,

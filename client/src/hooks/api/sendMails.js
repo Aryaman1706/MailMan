@@ -3,18 +3,20 @@ import Swal from "sweetalert2";
 import axios from "../../utils/axios";
 
 const useSendMails = () => {
-  const promiseFn = (formData) => {
+  const promiseFn = (formData) =>
     new Promise((resolve, reject) => {
       axios
-        .post("/mail", formData, {
+        .post("/template/new", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => resolve(response))
+        .then((response) => {
+          console.log(response);
+          resolve(response.data);
+        })
         .catch((error) => reject(error.response.data));
     });
-  };
   const mutation = useMutation("sendMails", promiseFn, {
     onError: (error) => {
       const errorMsg = error.error.msg || "Request Failed. Try Again.";
@@ -27,7 +29,8 @@ const useSendMails = () => {
       });
     },
     onSuccess: (response) => {
-      const message = response.data.body.msg || "Request successfull.";
+      console.log(response);
+      const message = response.body.msg || "Request successfull.";
       Swal.fire({
         position: "center",
         icon: "success",

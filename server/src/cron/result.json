@@ -1,52 +1,70 @@
-[
-  {
-    "html": "<h2>Hello Toril.</h2><p>last name:- Alstad,</p><p><i>country:- ,</i></p><p>ref:- 3615</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "ta@kremmerhuset.no"
-  },
-  {
-    "html": "<h2>Hello Marco.</h2><p>last name:- Haver,</p><p><i>country:- ,</i></p><p>ref:- 3617</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "marco@carmelgroup.co.il"
-  },
-  {
-    "html": "<h2>Hello Jonathan.</h2><p>last name:- Sedgwick,</p><p><i>country:- ,</i></p><p>ref:- 3618</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "j.sedgwick@clarke-clarke.co.uk"
-  },
-  {
-    "html": "<h2>Hello Reginaldo Niazi.</h2><p>last name:- Chohfi,</p><p><i>country:- ,</i></p><p>ref:- 3618</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "r.chohfi@niazitex.com.br"
-  },
-  {
-    "html": "<h2>Hello Mari.</h2><p>last name:- Korkeamaeki,</p><p><i>country:- ,</i></p><p>ref:- 3623</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "mari.korkeamaki@piironki.fi"
-  },
-  {
-    "html": "<h2>Hello Oddrun-Marie.</h2><p>last name:- Hopland,</p><p><i>country:- ,</i></p><p>ref:- 3623</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "oddrun-marie.hopland@nf-d.no"
-  },
-  {
-    "html": "<h2>Hello Feryal.</h2><p>last name:- Karatas,</p><p><i>country:- ,</i></p><p>ref:- 3624</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "feryal@pandoram.com"
-  },
-  {
-    "html": "<h2>Hello Amy.</h2><p>last name:- Kawamoto,</p><p><i>country:- ,</i></p><p>ref:- 3625</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "amy.kawamoto@cpwm.com"
-  },
-  {
-    "html": "<h2>Hello Lihi.</h2><p>last name:- Ravid,</p><p><i>country:- ,</i></p><p>ref:- 3626</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "lihir@golfco.co.il"
-  },
-  {
-    "html": "<h2>Hello Tami.</h2><p>last name:- Lax,</p><p><i>country:- ,</i></p><p>ref:- 3626</p><p>company: </p><p>done</p>",
-    "subject": "testing",
-    "email": "tamil@golfco.co.il"
-  }
-]
+{
+  "mailInfo": [
+    {
+      "accepted": ["aryamankumud@gmail.com"],
+      "rejected": [],
+      "envelopeTime": 921,
+      "messageTime": 1175,
+      "messageSize": 1012,
+      "response": "250 2.0.0 OK  1619622784 a27sm88174pfl.64 - gsmtp",
+      "envelope": {
+        "from": "1761ary@gmail.com",
+        "to": ["aryamankumud@gmail.com"]
+      },
+      "messageId": "<4789b335-5b56-09d3-014d-c8b72c2e3812@gmail.com>"
+    },
+    {
+      "accepted": ["rinky.grover2011@gmail.com"],
+      "rejected": [],
+      "envelopeTime": 924,
+      "messageTime": 2387,
+      "messageSize": 1020,
+      "response": "250 2.0.0 OK  1619622785 u24sm51020pga.78 - gsmtp",
+      "envelope": {
+        "from": "1761ary@gmail.com",
+        "to": ["rinky.grover2011@gmail.com"]
+      },
+      "messageId": "<cf4baf7f-f31f-671c-38d6-35e3ca4db14f@gmail.com>"
+    },
+    {
+      "accepted": ["aryamankumud@gmail.com"],
+      "rejected": [],
+      "envelopeTime": 916,
+      "messageTime": 954,
+      "messageSize": 1012,
+      "response": "250 2.0.0 OK  1619622783 63sm61766pfx.202 - gsmtp",
+      "envelope": {
+        "from": "1761ary@gmail.com",
+        "to": ["aryamankumud@gmail.com"]
+      },
+      "messageId": "<c81f065a-b4cc-e36d-5cb5-a95aa5139287@gmail.com>"
+    },
+    {
+      "accepted": ["rinky.grover2011@gmail.com"],
+      "rejected": [],
+      "envelopeTime": 943,
+      "messageTime": 2171,
+      "messageSize": 1020,
+      "response": "250 2.0.0 OK  1619622785 k8sm69211pfk.189 - gsmtp",
+      "envelope": {
+        "from": "1761ary@gmail.com",
+        "to": ["rinky.grover2011@gmail.com"]
+      },
+      "messageId": "<5baa9813-2383-b399-7957-3b0f778799bc@gmail.com>"
+    },
+    {
+      "accepted": ["aryamankumud@gmail.com"],
+      "rejected": [],
+      "envelopeTime": 932,
+      "messageTime": 1299,
+      "messageSize": 1012,
+      "response": "250 2.0.0 OK  1619622784 v21sm207056pjg.9 - gsmtp",
+      "envelope": {
+        "from": "1761ary@gmail.com",
+        "to": ["aryamankumud@gmail.com"]
+      },
+      "messageId": "<aae19181-b3e6-9a4c-2a0a-695d06ea7b7d@gmail.com>"
+    }
+  ],
+  "erroredMails": []
+}
