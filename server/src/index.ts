@@ -1,8 +1,9 @@
 import express from "express";
-import mail from "./routes/mail";
 import cors from "cors";
-// import dotenv from "dotenv";
-// dotenv.config();
+
+// * Routes import
+import template from "./routes/template";
+import mailList from "./routes/mailList";
 
 // * Server Init
 const app = express();
@@ -21,7 +22,8 @@ app.use((_req, res, next) => {
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // * Routes
-app.use("/api", mail);
+app.use("/api/template", template);
+app.use("/api/mail_list", mailList);
 
 // * Start Server
 const port = process.env.PORT || 5000;
