@@ -11,7 +11,7 @@ import {
 import parse from "../utils/parse";
 
 // * Utils
-import * as validators from "../utils/validators/mail";
+import * as validators from "../utils/validators/template";
 import { firestore } from "firebase-admin";
 
 // * Create new template with mailLists

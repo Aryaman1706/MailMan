@@ -15,7 +15,7 @@ router.patch("/edit/:id");
 /**
  * Type: GET
  * Desc: List mailList for a template
- * Route: {{server_url}}/api/mail_list/list/:templateId
+ * Route: {{server_url}}/api/mail_list/list/:templateId/?page=1
  */
 router.get("/list/:templateId");
 
