@@ -2,13 +2,19 @@ import ExcelJS from "exceljs";
 import { bucket } from "../config/firebase";
 import chunk from "lodash.chunk";
 
-export type ResultData = {
+type RemoveNullKey<T> = {
+  [Property in keyof T]: NonNullable<T[Property]>;
+};
+
+type TrashListItem = {
   [key: string]: string | null;
 };
 
+type EmailListItem = RemoveNullKey<TrashListItem>;
+
 export type ReturnData = {
-  emailList: Array<Array<ResultData>> | [];
-  trashList: Array<ResultData> | [];
+  emailList: Array<Array<EmailListItem>> | [];
+  trashList: Array<TrashListItem> | [];
   error: string | null;
 };
 
@@ -40,8 +46,8 @@ const parse = async (name: string): Promise<ReturnData> => {
       country: "F",
     };
 
-    const emailList: NonNullable<ResultData>[] = [];
-    const trashList: ResultData[] = [];
+    const emailList: EmailListItem[] = [];
+    const trashList: TrashListItem[] = [];
 
     workbook.eachSheet((worksheet) => {
       if (worksheet.actualRowCount > 1) {
@@ -53,10 +59,18 @@ const parse = async (name: string): Promise<ReturnData> => {
               data[key] = row.getCell(index[key]).text.trim() || null;
             });
 
-            if (Object.values(data).includes(null)) {
+            let hasNull = false;
+            for (const key in data) {
+              if (!data[key] && key !== "lastName") {
+                hasNull = true;
+                return;
+              }
+            }
+
+            if (hasNull) {
               trashList.push(data);
             } else {
-              emailList.push(data);
+              emailList.push(data as { [key: string]: string });
             }
           }
         });
