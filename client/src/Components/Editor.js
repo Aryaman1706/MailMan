@@ -82,7 +82,6 @@ const Editor = () => {
 
   return (
     <>
-      {console.log(mutation)}
       <Typography variant="h3" align="center">
         Mailer
       </Typography>
