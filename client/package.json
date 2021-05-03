@@ -12,13 +12,17 @@
     "axios": "^0.21.1",
     "ckeditor5-custom-build": "file:ckeditor5",
     "file": "^0.2.2",
+    "firebase": "^8.4.3",
+    "formik": "^2.2.6",
     "juice": "^7.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-query": "^3.13.12",
     "react-scripts": "4.0.3",
     "sweetalert2": "^10.16.6",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.9",
+    "zustand": "^3.4.2"
   },
   "scripts": {
     "start": "react-scripts start",

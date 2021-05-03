@@ -7,20 +7,20 @@ import * as validators from "../utils/validators/mailList";
 import { MailListDocumentData } from "./customTypes";
 
 // * Edit a mailList item
-export const editMailList = async (req: Request, res: Response) => {
-  try {
-    //
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
-  }
-};
+// export const editMailList = async (_req: Request, res: Response) => {
+//   try {
+//     //
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({
+//       body: null,
+//       error: {
+//         msg: "Request failed. Try again.",
+//         data: null,
+//       },
+//     });
+//   }
+// };
 
 // * List mailList for a template
 export const listMailList = async (req: Request, res: Response) => {

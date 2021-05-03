@@ -1,17 +1,12 @@
 import { useRef, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-custom-build/build/ckeditor";
-import {
-  Button,
-  CircularProgress,
-  Divider,
-  Typography,
-  TextField,
-} from "@material-ui/core";
+import { Button, Divider, Typography, TextField } from "@material-ui/core";
 import Swal from "sweetalert2";
 import useSendMails from "../hooks/api/sendMails";
 import juice from "juice";
 import styles from "./styles";
+import Loader from "./Loader";
 
 const editorConfig = {
   toolbar: {
@@ -95,20 +90,7 @@ const Editor = () => {
       <div style={{ marginTop: "25px" }}></div>
       {mutation.isLoading ? (
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              placeContent: "center",
-              height: "500px",
-              width: "100%",
-            }}
-          >
-            <CircularProgress
-              size={80}
-              style={{ marginTop: "auto", marginBottom: "auto" }}
-            />
-          </div>
+          <Loader />
         </>
       ) : (
         <>
