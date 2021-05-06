@@ -1,8 +1,10 @@
 import express from "express";
 
 // * Controllers
+import * as controllers from "./controllers";
 
 // * Middlewares
+import { userLogin } from "./middlewares";
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ const router = express.Router();
  * Route: {{server_url}}/api/user/signup
  * Middleware: Admin Login
  */
-router.post("/signup");
+router.post("/signup", controllers.signupUser);
 
 /**
  * Type: PUT
@@ -22,7 +24,7 @@ router.post("/signup");
  * Route: {{server_url}}/api/user/edit
  * Middleware: User Login
  */
-router.put("/edit");
+router.put("/edit", userLogin, controllers.editUser);
 
 // * End of API Endpoints -->
 

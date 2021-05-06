@@ -4,7 +4,7 @@ import { bucket } from "../config/firebase";
 import CustomStorageEngine from "../config/multerStorageEngine";
 
 // * Controllers
-import * as controllers from "../controllers/template";
+import * as controllers from "./controllers";
 
 // * Multer Config
 const storage = CustomStorageEngine({
@@ -61,4 +61,5 @@ router.post(
 );
 
 // * End of API Endpoints -->
+
 export default router;

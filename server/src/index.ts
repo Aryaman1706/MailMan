@@ -5,8 +5,9 @@ import { config } from "dotenv";
 config();
 
 // * Routes import
-import template from "./routes/template";
-import mailList from "./routes/mailList";
+import { router as templateRouter } from "./template";
+import { router as mailListRouter } from "./mailList";
+import { router as userRouter } from "./user";
 
 // * Server Init
 const app = express();
@@ -25,8 +26,9 @@ app.use((_req, res, next) => {
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // * Routes
-app.use("/api/template", template);
-app.use("/api/mail_list", mailList);
+app.use("/api/template", templateRouter);
+app.use("/api/mail-list", mailListRouter);
+app.use("/user", userRouter);
 
 // * Start Server
 const port = process.env.PORT || 5000;

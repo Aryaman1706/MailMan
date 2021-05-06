@@ -1,14 +1,10 @@
-import { Request, Response } from "express";
+import { db, collections, bucket } from "../config/firebase";
 import isEqual from "lodash.isequal";
 import pick from "lodash.pick";
-import { db, collections, bucket } from "../config/firebase";
-import {
-  UploadedFile,
-  TemplateData,
-  TemplateDocumentData,
-  MailListData,
-} from "./customTypes";
 import parse from "../utils/parse";
+import { Request, Response } from "express";
+import { TemplateData, TemplateDocumentData } from "./customTypes";
+import { types as MailListTypes } from "../mailList";
 
 // * Utils
 import * as validators from "../utils/validators/template";
@@ -38,7 +34,7 @@ export const newTemplate = async (req: Request, res: Response) => {
         },
       });
     }
-    const fileName: string = (req.file as UploadedFile).name;
+    const fileName: string = (req.file as MailListTypes.UploadedFile).name;
 
     // Parse the xlsx
     const { emailList, trashList, error: fileError } = await parse(fileName);
@@ -90,7 +86,7 @@ export const newTemplate = async (req: Request, res: Response) => {
     emailList.forEach((sect, index) => {
       const last = !!(index === emailList.length - 1);
       console.log(last);
-      const docData: MailListData = {
+      const docData: MailListTypes.MailListData = {
         templateId: templateRef.id,
         sent: false,
         date: firestore.Timestamp.fromDate(currentDate),
@@ -283,7 +279,7 @@ export const editTemplate = async (req: Request, res: Response) => {
 export const uploadImage = async (req: Request, res: Response) => {
   try {
     // Get file
-    const fileName = (req.file as UploadedFile).name;
+    const fileName = (req.file as MailListTypes.UploadedFile).name;
     const file = bucket.file(fileName);
 
     // Validating file

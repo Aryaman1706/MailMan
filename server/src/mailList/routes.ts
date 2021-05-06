@@ -1,6 +1,7 @@
 import express from "express";
 
 // * Controllers
+import * as controllers from "./controllers";
 
 const router = express.Router();
 
@@ -17,7 +18,8 @@ router.patch("/edit/:id");
  * Desc: List mailList for a template
  * Route: {{server_url}}/api/mail_list/list/:templateId/?page=1
  */
-router.get("/list/:templateId");
+router.get("/list/:templateId", controllers.listMailList);
 
 // * End of API Endpoints -->
+
 export default router;
