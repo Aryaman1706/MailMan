@@ -109,6 +109,13 @@ const Form = ({
               Logout
             </Button>
           </Grid>
+          <Grid item xs={12}>
+            {!mutation.isLoading && firebase.auth().currentUser ? (
+              <p>User logged in</p>
+            ) : (
+              <p>User not logged in</p>
+            )}
+          </Grid>
         </>
       )}
     </>

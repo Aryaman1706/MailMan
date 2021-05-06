@@ -18,7 +18,12 @@ const useLoginHandler = () => {
       });
     },
     onSuccess: (res) => {
-      console.log(res.user);
+      firebase
+        .auth()
+        .currentUser.getIdToken()
+        .then((idToken) => {
+          console.log(idToken);
+        });
     },
   });
 

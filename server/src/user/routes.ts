@@ -19,12 +19,20 @@ const router = express.Router();
 router.post("/signup", controllers.signupUser);
 
 /**
- * Type: PUT
- * Desc: Edit user SMTP settings
- * Route: {{server_url}}/api/user/edit
+ * Type: GET
+ * Desc: Get currentUser profile
+ * Route: {{server_url}}/api/user/profile
  * Middleware: User Login
  */
-router.put("/edit", userLogin, controllers.editUser);
+router.get("/profile", userLogin, controllers.getProfile);
+
+/**
+ * Type: PUT
+ * Desc: Edit user SMTP settings
+ * Route: {{server_url}}/api/user/profile
+ * Middleware: User Login
+ */
+router.put("/profile", userLogin, controllers.editUser);
 
 // * End of API Endpoints -->
 

@@ -28,7 +28,7 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // * Routes
 app.use("/api/template", templateRouter);
 app.use("/api/mail-list", mailListRouter);
-app.use("/user", userRouter);
+app.use("/api/user", userRouter);
 
 // * Start Server
 const port = process.env.PORT || 5000;

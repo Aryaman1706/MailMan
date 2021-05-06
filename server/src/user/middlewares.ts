@@ -1,6 +1,7 @@
 import { Response, NextFunction } from "express";
 import { auth } from "../config/firebase";
 import Request from "../utils/ReqUser";
+import { FirebaseError } from "firebase-admin";
 
 export const userLogin = async (
   req: Request,
@@ -14,14 +15,27 @@ export const userLogin = async (
       return res.status(400).json({
         body: null,
         error: {
-          msg: "Invalid authentication header.",
+          msg: "Invalid or missing Authentication header.",
           data: null,
         },
       });
     }
 
     // Verifying idToken
-    const user = await auth.verifyIdToken(idToken);
+    const user = await auth
+      .verifyIdToken(idToken)
+      .then((u) => u)
+      .catch((err: FirebaseError) => err.message);
+
+    if (typeof user === "string") {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Invalid token.",
+          data: user,
+        },
+      });
+    }
 
     if (!user || user.admin) {
       return res.status(400).json({
