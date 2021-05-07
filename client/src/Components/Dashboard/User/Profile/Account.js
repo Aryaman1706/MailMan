@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Typography, TextField, Grid, Button } from "@material-ui/core";
 
 const Account = () => {
-  const [email, setEmail] = useState(firebase.auth().currentUser.email || "");
+  const [email, setEmail] = useState(firebase.auth().currentUser?.email || "");
   const isValidEmail = () => {
     return string().email().required().isValidSync(email);
   };

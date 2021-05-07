@@ -55,11 +55,12 @@ export const signupUser = async (req: Request, res: Response) => {
         .collection(collections.user)
         .doc(user.uid)
         .create({
+          isAdmin: value.isAdmin,
           uid: user.uid,
           smtp: value.smtp || null,
         }),
       auth.setCustomUserClaims(user.uid, {
-        admin: false,
+        admin: value.isAdmin,
       }),
     ]);
 
@@ -103,7 +104,7 @@ export const getProfile = async (req: ReqUser, res: Response) => {
       auth.getUser(uid),
     ]);
 
-    if (!userSnap || !userRecord || !userSnap.data()) {
+    if (!userSnap || !userRecord)
       return res.status(400).json({
         body: null,
         error: {
@@ -111,11 +112,22 @@ export const getProfile = async (req: ReqUser, res: Response) => {
           data: null,
         },
       });
+
+    const userData = userSnap.data() as UserProfileDocumentData | undefined;
+    if (!userData) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Invalid User.",
+          data: null,
+        },
+      });
     }
 
     const userProfile = {
-      smtp: (userSnap.data() as UserProfileDocumentData).smtp,
+      smtp: userData.smtp,
       email: userRecord.email,
+      isAdmin: userData.isAdmin,
     };
 
     return res.status(200).json({

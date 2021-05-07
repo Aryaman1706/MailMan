@@ -12,7 +12,7 @@ const router = express.Router();
 
 /**
  * Type: POST
- * Desc: SignUp a new user
+ * Desc: SignUp a new user/admin
  * Route: {{server_url}}/api/user/signup
  * Middleware: Admin Login
  */

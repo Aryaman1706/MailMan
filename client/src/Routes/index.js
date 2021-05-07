@@ -5,6 +5,7 @@ import Route from "./RouteWrapper";
 import Login from "../Components/Login";
 import Editor from "../Components/Editor";
 import Profile from "../Components/Dashboard/User/Profile";
+import SignupUser from "../Components/Dashboard/Admin/SignupUser";
 
 const Routes = () => {
   return (
@@ -18,6 +19,7 @@ const Routes = () => {
 
           {/* Admin Dashboard */}
           <Route exact path="/admin/template" onlyAdmins component={Editor} />
+          <Route exact path="/admin/register" component={SignupUser} />
         </Switch>
       </Router>
     </>

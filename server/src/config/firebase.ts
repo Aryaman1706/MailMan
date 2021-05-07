@@ -17,6 +17,7 @@ export const collections = {
   template: "template",
   mailList: "mailList",
   user: "user",
+  admin: "admin",
 };
 
 export const db = admin.firestore();

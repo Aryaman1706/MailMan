@@ -1,9 +1,7 @@
 import { firestore } from "firebase-admin";
 import { db, collections } from "../config/firebase";
-import {
-  MailListDocumentData,
-  TemplateDocumentData,
-} from "../controllers/customTypes";
+import { types as mailListTypes } from "../mailList";
+import { types as templateTypes } from "../template";
 import mailer from "./mailer";
 
 const sendMails = async () => {
@@ -12,7 +10,7 @@ const sendMails = async () => {
     .collection(collections.template)
     .where("complete", "==", false)
     .orderBy("date", "asc")
-    .get()) as firestore.QuerySnapshot<TemplateDocumentData>;
+    .get()) as firestore.QuerySnapshot<templateTypes.TemplateDocumentData>;
 
   if (incompleteTemplates.empty || incompleteTemplates.docs.length === 0) {
     console.log("No incomplete templates found.");
@@ -45,7 +43,7 @@ const sendMails = async () => {
     .where("sent", "==", false)
     // .where("date", "<=", currentDate)
     .orderBy("date", "asc")
-    .get()) as firestore.QuerySnapshot<MailListDocumentData>;
+    .get()) as firestore.QuerySnapshot<mailListTypes.MailListDocumentData>;
 
   // Validating pendingMailList
   if (pendingMailList.empty || pendingMailList.docs.length === 0) {
