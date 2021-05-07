@@ -1,5 +1,6 @@
-import { Grid, TextField, IconButton, Typography } from "@material-ui/core";
-import { Remove, Add } from "@material-ui/icons";
+import { Grid, IconButton, Typography } from "@material-ui/core";
+import { Add } from "@material-ui/icons";
+import FormatFormRowItem from "./FormatFormRowItem";
 
 const FormatFormRow = ({
   arrayHelpers,
@@ -34,46 +35,28 @@ const FormatFormRow = ({
           </IconButton>
         </div>
       </Grid>
+      {typeof formikProps.errors.format === "string" &&
+      formikProps.touched.format ? (
+        <Grid item xs={12}>
+          <Typography variant="subtitle2" color="error">
+            {formikProps.errors.format}
+          </Typography>
+        </Grid>
+      ) : (
+        <></>
+      )}
 
-      {formikProps.values.format.map((obj, index) => {
-        const name = `format[${index}]`;
-        return (
-          <>
-            <Grid item xs={4}>
-              <TextField
-                fullWidth
-                type="text"
-                variant="outlined"
-                name={`${name}.field`}
-                value={obj.field}
-                onChange={(e) => changeHandler(e)}
-                onBlur={(e) => blurHandler(e)}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                fullWidth
-                type="text"
-                variant="outlined"
-                name={`${name}.cell`}
-                value={obj.cell}
-                onChange={(e) => changeHandler(e)}
-                onBlur={(e) => blurHandler(e)}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <IconButton
-                  color="primary"
-                  onClick={(e) => arrayHelpers.remove(index)}
-                >
-                  <Remove />
-                </IconButton>
-              </div>
-            </Grid>
-          </>
-        );
-      })}
+      {formikProps.values.format.map((obj, index) => (
+        <FormatFormRowItem
+          index={index}
+          obj={obj}
+          errors={formikProps.errors}
+          touched={formikProps.touched}
+          removeRow={arrayHelpers.remove}
+          changeHandler={changeHandler}
+          blurHandler={blurHandler}
+        />
+      ))}
     </>
   );
 };

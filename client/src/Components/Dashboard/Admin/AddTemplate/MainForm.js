@@ -59,13 +59,40 @@ const MainForm = (formikProps) => {
     formikProps.setFieldValue(e.target.name, e.target.value);
   };
 
-  const blurHandler = (e) => {
-    formikProps.validateField(e.target.name);
+  const blurHandler = async (e, validationSchema) => {
+    console.log(e.target.name);
+    if (validationSchema) {
+      try {
+        await validationSchema.validateAt(e.target.name, formikProps.values);
+        formikProps.setFieldError(e.target.name, undefined);
+      } catch (error) {
+        formikProps.setFieldError(e.target.name, error?.errors?.[0]);
+      }
+    } else {
+      formikProps.validateField(e.target.name);
+    }
     formikProps.setFieldTouched(e.target.name, true, false);
+  };
+
+  const showErrors = () => {
+    Object.keys(formikProps.errors).forEach((field) => {
+      if (
+        field.trim() === "format" &&
+        typeof formikProps.errors.format !== "string"
+      ) {
+        formikProps.errors.format.forEach((obj, index) => {
+          formikProps.setFieldTouched(`format[${index}].field`, true, false);
+          formikProps.setFieldTouched(`format[${index}].cell`, true, false);
+        });
+      } else {
+        formikProps.setFieldTouched(field.toString(), true, false);
+      }
+    });
   };
 
   const submitHandler = async () => {
     const errors = await formikProps.validateForm();
+    showErrors();
     console.log(errors);
     // if (!errors || errors == {}) {
     //   console.log("no errors");
@@ -93,6 +120,16 @@ const MainForm = (formikProps) => {
           value={title}
           onChange={(e) => changeHandler(e)}
           onBlur={(e) => blurHandler(e)}
+          error={
+            formikProps.touched?.["title"] &&
+            Boolean(formikProps.errors?.["title"])
+          }
+          helperText={
+            formikProps.touched?.["title"] &&
+            Boolean(formikProps.errors?.["title"])
+              ? formikProps.errors?.["title"]
+              : ""
+          }
         />
       </Grid>
 
@@ -107,6 +144,16 @@ const MainForm = (formikProps) => {
           value={subject}
           onChange={(e) => changeHandler(e)}
           onBlur={(e) => blurHandler(e)}
+          error={
+            formikProps.touched?.["subject"] &&
+            Boolean(formikProps.errors?.["subject"])
+          }
+          helperText={
+            formikProps.touched?.["subject"] &&
+            Boolean(formikProps.errors?.["subject"])
+              ? formikProps.errors?.["subject"]
+              : ""
+          }
         />
       </Grid>
 
