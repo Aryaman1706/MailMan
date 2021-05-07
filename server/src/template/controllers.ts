@@ -14,7 +14,7 @@ import { firestore } from "firebase-admin";
 export const newTemplate = async (req: Request, res: Response) => {
   try {
     // Validating req.body
-    const { value, error } = validators.sendMails(req.body);
+    const { value, error } = validators.newTemplate(req.body);
     if (error)
       return res.status(400).json({
         body: null,

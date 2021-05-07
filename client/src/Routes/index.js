@@ -3,9 +3,13 @@ import Route from "./RouteWrapper";
 
 // * Components
 import Login from "../Components/Login";
-import Editor from "../Components/Editor";
-import Profile from "../Components/Dashboard/User/Profile";
+
+// * Admin Dashboard
 import SignupUser from "../Components/Dashboard/Admin/SignupUser";
+import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
+
+// * User Dashboard
+import Profile from "../Components/Dashboard/User/Profile";
 
 const Routes = () => {
   return (
@@ -18,7 +22,7 @@ const Routes = () => {
           <Route exact path="/user/profile" onlyUsers component={Profile} />
 
           {/* Admin Dashboard */}
-          <Route exact path="/admin/template" onlyAdmins component={Editor} />
+          <Route exact path="/admin/template" component={AddTemplate} />
           <Route exact path="/admin/register" component={SignupUser} />
         </Switch>
       </Router>

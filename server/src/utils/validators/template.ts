@@ -1,12 +1,21 @@
 import Joi from "joi";
 import CustomValidationResult from "./customValidationResult";
 
-export const sendMails = (
+export const newTemplate = (
   body: any
-): CustomValidationResult<{ html: string; subject: string }> => {
+): CustomValidationResult<{
+  html: string;
+  subject: string;
+  format: { email: string; [key: string]: string };
+}> => {
   const schema = Joi.object({
     subject: Joi.string().required().trim(),
     html: Joi.string().required(),
+    format: Joi.object({
+      email: Joi.string().trim().length(1).required(),
+    })
+      .pattern(Joi.string().trim(), Joi.string().trim().length(1))
+      .required(),
   });
 
   return schema.validate(body);

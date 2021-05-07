@@ -1,8 +1,8 @@
 import { useMutation } from "react-query";
 import Swal from "sweetalert2";
-import axios from "../../utils/axios";
+import axios from "../../../../utils/axios";
 
-const useSendMails = () => {
+const useAddTemplate = () => {
   const promiseFn = (formData) =>
     new Promise((resolve, reject) => {
       axios
@@ -48,4 +48,4 @@ const useSendMails = () => {
   return [mutation, submitHandler];
 };
 
-export default useSendMails;
+export default useAddTemplate;
