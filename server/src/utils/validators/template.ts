@@ -4,18 +4,18 @@ import CustomValidationResult from "./customValidationResult";
 export const newTemplate = (
   body: any
 ): CustomValidationResult<{
+  title: string;
   html: string;
   subject: string;
   format: { email: string; [key: string]: string };
 }> => {
   const schema = Joi.object({
-    subject: Joi.string().required().trim(),
+    title: Joi.string().trim().required(),
+    subject: Joi.string().trim().required(),
     html: Joi.string().required(),
     format: Joi.object({
-      email: Joi.string().trim().length(1).required(),
-    })
-      .pattern(Joi.string().trim(), Joi.string().trim().length(1))
-      .required(),
+      email: Joi.string().trim().length(1),
+    }).pattern(Joi.string().trim(), Joi.string().trim().length(1)),
   });
 
   return schema.validate(body);

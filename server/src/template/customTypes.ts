@@ -1,12 +1,12 @@
 import { firestore } from "firebase-admin";
 
 export interface TemplateData {
-  html: string;
+  title: string;
   subject: string;
-  file: string;
+  html: string;
+  attachements: string[];
+  format: { email: string; [k: string]: string };
   date: firestore.Timestamp;
-  active: boolean;
-  complete: boolean;
 }
 
 export interface TemplateDocumentData

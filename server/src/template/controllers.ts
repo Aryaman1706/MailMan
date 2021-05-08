@@ -1,7 +1,7 @@
 import { db, collections, bucket } from "../config/firebase";
 import isEqual from "lodash.isequal";
 import pick from "lodash.pick";
-import parse from "../utils/parse";
+import { v4 } from "uuid";
 import { Request, Response } from "express";
 import { TemplateData, TemplateDocumentData } from "./customTypes";
 import { types as MailListTypes } from "../mailList";
@@ -9,6 +9,7 @@ import { types as MailListTypes } from "../mailList";
 // * Utils
 import * as validators from "../utils/validators/template";
 import { firestore } from "firebase-admin";
+import writeToFile from "./writeFilePromise";
 
 // * Create new template with mailLists
 export const newTemplate = async (req: Request, res: Response) => {
@@ -24,90 +25,51 @@ export const newTemplate = async (req: Request, res: Response) => {
         },
       });
 
-    // Uploaded File processing
-    if (!req.file) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "File not uploaded",
-          data: null,
-        },
-      });
-    }
-    const fileName: string = (req.file as MailListTypes.UploadedFile).name;
-
-    // Parse the xlsx
-    const { emailList, trashList, error: fileError } = await parse(fileName);
-    if (fileError) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Error in processing file. Try again.",
-          data: fileError,
-        },
-      });
-    }
-
-    // Save mail template to DB
-    const templateData: TemplateData = {
-      ...value,
-      file: fileName,
-      date: firestore.Timestamp.fromDate(new Date()),
-      active: false,
-      complete: false,
-    };
-    const activeTemplates = (await db
-      .collection(collections.template)
-      .where("active", "==", true)
-      .get()) as firestore.QuerySnapshot<TemplateDocumentData>;
-
-    if (activeTemplates.empty || activeTemplates.docs.length === 0) {
-      templateData.active = true;
-    }
-    if (activeTemplates.docs.length > 1) {
-      // TODO handle multiple active templates
-      console.log("Multiple active templates found.");
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Multiple active templates found.",
-          data: null,
-        },
-      });
-    }
-    const templateRef = await db
-      .collection(collections.template)
-      .add(templateData);
-
-    // Save emailList in DB
-    const batch = db.batch();
-    let currentDate = new Date();
-
-    emailList.forEach((sect, index) => {
-      const last = !!(index === emailList.length - 1);
-      console.log(last);
-      const docData: MailListTypes.MailListData = {
-        templateId: templateRef.id,
-        sent: false,
-        date: firestore.Timestamp.fromDate(currentDate),
-        list: sect,
-        last,
-      };
-      batch.create(db.collection(collections.mailList).doc(), docData);
-
-      // Updating date
-      currentDate.setHours(
-        currentDate.getHours() + 1,
-        currentDate.getMinutes() + 10
+    // Handle attachements
+    let attachements: string[] = [];
+    if (req.files && Array.isArray(req.files) && req.files.length > 0) {
+      attachements = (req.files as MailListTypes.UploadedFile[]).map(
+        (file) => file.name
       );
-    });
+    }
 
-    await batch.commit();
+    // Save value.html in a file
+    const fileName = `${v4()}.html`;
+    const fileWriteStream = bucket.file(fileName).createWriteStream();
+
+    const fileWriteResult: string = await writeToFile(
+      fileWriteStream,
+      value.html
+    )
+      .then((d) => d)
+      .catch((e) => e);
+
+    if (fileWriteResult && fileWriteResult === "error") {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Failed to write html to file",
+          data: null,
+        },
+      });
+    }
+
+    const templateDocData: TemplateDocumentData = {
+      title: value.title,
+      subject: value.subject,
+      html: fileName,
+      attachements,
+      format: value.format,
+      date: firestore.Timestamp.now(),
+    };
+
+    // Save templateData
+    await db.collection(collections.template).add(templateDocData);
 
     return res.status(200).json({
       body: {
-        msg: "Successfull. Mails have been added to pipeline.",
-        data: trashList || null,
+        msg: "Successfull",
+        data: null,
       },
       error: null,
     });
@@ -310,3 +272,93 @@ export const uploadImage = async (req: Request, res: Response) => {
     });
   }
 };
+
+/**
+ // Uploaded File processing
+    if (!req.file) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "File not uploaded",
+          data: null,
+        },
+      });
+    }
+    const fileName: string = (req.file as MailListTypes.UploadedFile).name;
+
+    // Parse the xlsx
+    const { emailList, trashList, error: fileError } = await parse(fileName);
+    if (fileError) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Error in processing file. Try again.",
+          data: fileError,
+        },
+      });
+    }
+
+    // Save mail template to DB
+    const templateData: TemplateData = {
+      ...value,
+      file: fileName,
+      date: firestore.Timestamp.fromDate(new Date()),
+      active: false,
+      complete: false,
+    };
+    const activeTemplates = (await db
+      .collection(collections.template)
+      .where("active", "==", true)
+      .get()) as firestore.QuerySnapshot<TemplateDocumentData>;
+
+    if (activeTemplates.empty || activeTemplates.docs.length === 0) {
+      templateData.active = true;
+    }
+    if (activeTemplates.docs.length > 1) {
+      // TODO handle multiple active templates
+      console.log("Multiple active templates found.");
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Multiple active templates found.",
+          data: null,
+        },
+      });
+    }
+    const templateRef = await db
+      .collection(collections.template)
+      .add(templateData);
+
+    // Save emailList in DB
+    const batch = db.batch();
+    let currentDate = new Date();
+
+    emailList.forEach((sect, index) => {
+      const last = !!(index === emailList.length - 1);
+      console.log(last);
+      const docData: MailListTypes.MailListData = {
+        templateId: templateRef.id,
+        sent: false,
+        date: firestore.Timestamp.fromDate(currentDate),
+        list: sect,
+        last,
+      };
+      batch.create(db.collection(collections.mailList).doc(), docData);
+
+      // Updating date
+      currentDate.setHours(
+        currentDate.getHours() + 1,
+        currentDate.getMinutes() + 10
+      );
+    });
+
+    await batch.commit();
+
+    return res.status(200).json({
+      body: {
+        msg: "Successfull. Mails have been added to pipeline.",
+        data: trashList || null,
+      },
+      error: null,
+    });
+ */

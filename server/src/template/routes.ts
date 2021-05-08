@@ -25,7 +25,7 @@ const router = express.Router();
  * Route: {{server_url}}/api/template/new
  * Middleware: Admin Login
  */
-router.post("/new", controllers.newTemplate);
+router.post("/new", uploadFile.array("attachements"), controllers.newTemplate);
 
 /**
  * Type: GET

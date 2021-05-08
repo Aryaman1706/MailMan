@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-custom-build/build/ckeditor";
@@ -50,6 +50,7 @@ const editorConfig = {
 
 const MainForm = (formikProps) => {
   const editorRef = useRef(null);
+  const [attachements, setAttachments] = useState([]);
 
   const {
     values: { title, subject, html },
@@ -94,11 +95,7 @@ const MainForm = (formikProps) => {
     const errors = await formikProps.validateForm();
     showErrors();
     console.log(errors);
-    // if (!errors || errors == {}) {
-    //   console.log("no errors");
-    // } else {
-    //   console.log("errors", errors);
-    // }
+    console.log(attachements);
   };
 
   return (
@@ -169,6 +166,25 @@ const MainForm = (formikProps) => {
             formikProps.setFieldValue("html", editor.getData());
           }}
         />
+      </Grid>
+
+      <Grid item xs={12}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            placeItems: "center",
+            gap: "15px",
+          }}
+        >
+          <Typography variant="h6">Add Attachments</Typography>
+          <input
+            type="file"
+            name="attachments"
+            multiple
+            onChange={(e) => setAttachments(e.target.files)}
+          />
+        </div>
       </Grid>
 
       <Grid item xs={12}>
