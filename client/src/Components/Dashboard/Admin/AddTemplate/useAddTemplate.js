@@ -17,7 +17,7 @@ const useAddTemplate = () => {
         })
         .catch((error) => reject(error.response.data));
     });
-  const mutation = useMutation("sendMails", promiseFn, {
+  const mutation = useMutation("addTemplate", promiseFn, {
     onError: (error) => {
       const errorMsg = error.error.msg || "Request Failed. Try Again.";
       Swal.fire({

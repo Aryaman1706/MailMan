@@ -4,6 +4,8 @@ const customMessage = {
   required: "Required.",
   min: "Field must contain more than one row.",
   oneChar: "cell should be of only one alphabet.",
+  cell: "must be an alphabet",
+  field: "must be a combination of alphabet, digit, _ or -",
 };
 
 const validationSchema = object({
@@ -13,9 +15,13 @@ const validationSchema = object({
   format: array()
     .of(
       object({
-        field: string().trim().required(customMessage.required),
+        field: string()
+          .trim()
+          .matches(/^[(a-z)(0-9)_-]+$/i, customMessage.field)
+          .required(customMessage.required),
         cell: string()
           .trim()
+          .matches(/^[a-z]{1}$/i, customMessage.cell)
           .length(1, customMessage.oneChar)
           .uppercase()
           .required(customMessage.required),
