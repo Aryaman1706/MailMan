@@ -1,5 +1,6 @@
 import Joi from "joi";
 import CustomValidationResult from "./customValidationResult";
+import { types as templateTypes } from "../../template";
 
 export const newTemplate = (
   body: any
@@ -7,13 +8,14 @@ export const newTemplate = (
   title: string;
   html: string;
   subject: string;
-  format: string;
+  format: string | templateTypes.format;
 }> => {
   const schema = Joi.object({
     title: Joi.string().trim().required(),
     subject: Joi.string().trim().required(),
     html: Joi.string().required(),
     format: Joi.string().required(),
+    attachments: Joi.any(),
   });
 
   return schema.validate(body);
@@ -21,10 +23,7 @@ export const newTemplate = (
 
 export const validateFormat = (
   body: any
-): CustomValidationResult<{
-  email: string;
-  [k: string]: string;
-}> => {
+): CustomValidationResult<templateTypes.format> => {
   const schema = Joi.object({
     email: Joi.string().trim().length(1).uppercase().required(),
   }).pattern(Joi.string().trim(), Joi.string().trim().length(1).uppercase());

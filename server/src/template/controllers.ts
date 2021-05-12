@@ -16,7 +16,7 @@ export const newTemplate = async (req: Request, res: Response) => {
   try {
     // Validating req.body
     const { value, error } = validators.newTemplate(req.body);
-    if (error)
+    if (error) {
       return res.status(400).json({
         body: null,
         error: {
@@ -24,6 +24,23 @@ export const newTemplate = async (req: Request, res: Response) => {
           data: error.details[0].message,
         },
       });
+    }
+
+    // Validating format
+    const { value: format, error: formatError } = validators.validateFormat(
+      JSON.parse(value.format as string)
+    );
+    if (formatError) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Invalid inputs. Try again.",
+          data: formatError.details[0].message,
+        },
+      });
+    }
+
+    value.format = format;
 
     // Handle attachements
     let attachements: string[] = [];

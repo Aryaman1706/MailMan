@@ -23,7 +23,7 @@ const router = express.Router();
  * Type: POST
  * Desc: Create new template with mailLists
  * Route: {{server_url}}/api/template/new
- * Middleware: Admin Login
+ * Middleware: Admin Login, Multer
  */
 router.post("/new", uploadFile.array("attachements"), controllers.newTemplate);
 
