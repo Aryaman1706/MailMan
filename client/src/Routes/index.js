@@ -9,7 +9,7 @@ import SignupUser from "../Components/Dashboard/Admin/SignupUser";
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
 
 // * User Dashboard
-import Profile from "../Components/Dashboard/User/Profile";
+import Profile from "../Components/Profile";
 
 const Routes = () => {
   return (

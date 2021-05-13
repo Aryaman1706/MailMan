@@ -86,7 +86,7 @@ export const signupUser = async (req: Request, res: Response) => {
 export const getProfile = async (req: ReqUser, res: Response) => {
   try {
     // Verfying uid
-    const uid = req.user;
+    const uid = req.user?.id;
     if (!uid) {
       return res.status(400).json({
         body: {
@@ -170,11 +170,11 @@ export const editUser = async (req: ReqUser, res: Response) => {
     console.log(password);
 
     // Validating uid
-    const uid = req.user;
+    const uid = req.user?.id;
     if (!uid) {
       return res.status(400).json({
         body: {
-          msg: "Invalid user.",
+          msg: "Invalid account.",
           data: null,
         },
         error: null,

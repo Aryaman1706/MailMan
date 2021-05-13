@@ -1,8 +1,8 @@
 import { Divider } from "@material-ui/core";
 import Account from "./Account";
 import Smtp from "./Smtp";
-import useUserStore from "../../../../Stores/userStore";
-import Loader from "../../../Loader";
+import useUserStore from "../../Stores/userStore";
+import Loader from "../Loader";
 
 const selector = (state) => ({
   loading: state.loading,

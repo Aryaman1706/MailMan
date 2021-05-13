@@ -4,7 +4,7 @@ import express from "express";
 import * as controllers from "./controllers";
 
 // * Middlewares
-import { userLogin } from "./middlewares";
+import { login, adminLogin } from "./middlewares";
 
 const router = express.Router();
 
@@ -16,23 +16,23 @@ const router = express.Router();
  * Route: {{server_url}}/api/user/signup
  * Middleware: Admin Login
  */
-router.post("/signup", controllers.signupUser);
+router.post("/signup", adminLogin, controllers.signupUser);
 
 /**
  * Type: GET
  * Desc: Get currentUser profile
  * Route: {{server_url}}/api/user/profile
- * Middleware: User Login
+ * Middleware: Login
  */
-router.get("/profile", userLogin, controllers.getProfile);
+router.get("/profile", login, controllers.getProfile);
 
 /**
  * Type: PUT
  * Desc: Edit user SMTP settings
  * Route: {{server_url}}/api/user/profile
- * Middleware: User Login
+ * Middleware: Login
  */
-router.put("/profile", userLogin, controllers.editUser);
+router.put("/profile", login, controllers.editUser);
 
 // * End of API Endpoints -->
 

@@ -29,7 +29,6 @@ const useAddTemplate = () => {
       });
     },
     onSuccess: (response) => {
-      console.log(response);
       const message = response.body.msg || "Request successfull.";
       Swal.fire({
         position: "center",

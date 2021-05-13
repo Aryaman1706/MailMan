@@ -1,5 +1,8 @@
 import { Request } from "express";
 
 export default interface ReqUser extends Request {
-  user?: string;
+  user?: {
+    id: string;
+    isAdmin: boolean;
+  };
 }
