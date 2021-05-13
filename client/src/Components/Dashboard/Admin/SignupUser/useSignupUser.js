@@ -21,7 +21,7 @@ const useSignupUser = (resetForm) => {
         );
     });
 
-  const mutation = useMutation("signup_user", promiseFn, {
+  const mutation = useMutation("signupUser", promiseFn, {
     onError: (error) => {
       const errorMsg = error?.error?.msg || "Signup unsuccessful.";
       Swal.fire({

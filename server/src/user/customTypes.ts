@@ -4,9 +4,9 @@ export interface UserProfileData {
   isAdmin: boolean;
   uid: string;
   smtp: {
-    email: string;
-    password: string;
-  };
+    email: string | null;
+    password?: string | null;
+  } | null;
 }
 
 export interface UserProfileDocumentData

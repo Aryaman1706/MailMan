@@ -1,12 +1,13 @@
 import { Grid, Typography } from "@material-ui/core";
-import { string, object } from "yup";
+import { string, object, boolean } from "yup";
 import { Formik } from "formik";
 import Form from "./Form";
 
 const SignupUser = () => {
-  const Yup = { string, object };
+  const Yup = { string, object, boolean };
 
   const initailValues = {
+    isAdmin: false,
     email: "",
     password: "",
     smtp_email: "",
@@ -19,6 +20,7 @@ const SignupUser = () => {
   };
 
   const validationSchema = Yup.object({
+    isAdmin: Yup.boolean().required(),
     email: Yup.string()
       .trim()
       .email(customMessage.email)

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Typography,
   Grid,
@@ -12,20 +11,23 @@ import Loader from "../../../Loader";
 import useSignupUser from "./useSignupUser";
 
 const Form = ({
-  values: { email, password, smtp_email, smtp_password },
+  values: { email, password, smtp_email, smtp_password, isAdmin },
   errors,
   touched,
   handleChange,
+  setFieldValue,
   isValid,
   setFieldTouched,
   resetForm,
 }) => {
   const mutation = useSignupUser(resetForm);
 
-  const [adminOpt, setAdminOpt] = useState(false);
-
   const changeHandler = (e) => {
-    handleChange(e);
+    if (e.target.name === "isAdmin") {
+      setFieldValue("isAdmin", e.target.checked, false);
+    } else {
+      handleChange(e);
+    }
     setFieldTouched(e.target.name, true, false);
   };
 
@@ -40,14 +42,14 @@ const Form = ({
       });
     } else {
       const inputData = {
+        isAdmin,
         email,
         password,
       };
       inputData.smtp =
-        (!smtp_email || smtp_email === "") &&
-        (!smtp_password || smtp_password === "")
+        !smtp_email && !smtp_password
           ? null
-          : { email: smtp_email, password: smtp_password };
+          : { email: smtp_email || null, password: smtp_password || null };
 
       mutation.mutate(inputData);
     }
@@ -120,8 +122,9 @@ const Form = ({
             <FormControlLabel
               control={
                 <Switch
-                  checked={adminOpt}
-                  onChange={(e) => setAdminOpt(e.target.checked)}
+                  name="isAdmin"
+                  checked={isAdmin}
+                  onChange={(e) => changeHandler(e)}
                 />
               }
               label="Admin Account"

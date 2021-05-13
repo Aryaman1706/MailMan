@@ -5,14 +5,14 @@ import CryptoJS from "crypto-js";
 import { FirebaseError } from "firebase-admin";
 
 // * Utils
-import { userSignup, smtpEdit } from "../utils/validators/user";
-import { UserProfileDocumentData } from "./customTypes";
+import * as validators from "../utils/validators/user";
+import { UserProfileData, UserProfileDocumentData } from "./customTypes";
 
 // * SignUp a new user
 export const signupUser = async (req: Request, res: Response) => {
   try {
     // Validate req.body
-    const { value, error } = userSignup(req.body);
+    const { value, error } = validators.userSignup(req.body);
     if (error)
       return res.status(400).json({
         body: null,
@@ -43,22 +43,21 @@ export const signupUser = async (req: Request, res: Response) => {
       return res.status(400).json({
         body: null,
         error: {
-          msg: user,
-          data: null,
+          msg: "User could be created.",
+          data: user,
         },
       });
     }
 
     // Create user in firestore and add customClaims
+    const userProfileData: UserProfileData = {
+      isAdmin: value.isAdmin,
+      uid: user.uid,
+      smtp: value.smtp,
+    };
+
     await Promise.all([
-      db
-        .collection(collections.user)
-        .doc(user.uid)
-        .create({
-          isAdmin: value.isAdmin,
-          uid: user.uid,
-          smtp: value.smtp || null,
-        }),
+      db.collection(collections.user).doc(user.uid).create(userProfileData),
       auth.setCustomUserClaims(user.uid, {
         admin: value.isAdmin,
       }),
@@ -153,7 +152,7 @@ export const getProfile = async (req: ReqUser, res: Response) => {
 export const editUser = async (req: ReqUser, res: Response) => {
   try {
     // Validating request body
-    const { value, error } = smtpEdit(req.body);
+    const { value, error } = validators.smtpEdit(req.body);
     if (error)
       return res.status(400).json({
         body: null,

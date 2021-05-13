@@ -5,7 +5,7 @@ type signupReqBody = {
   isAdmin: boolean;
   email: string;
   password: string;
-  smtp?: { email?: string; password?: string };
+  smtp: { email: string | null; password: string | null } | null;
 };
 
 export const userSignup = (
@@ -16,9 +16,9 @@ export const userSignup = (
     email: Joi.string().email().required(),
     password: Joi.string().trim().required(),
     smtp: Joi.object({
-      email: Joi.string().trim().email(),
-      password: Joi.string().trim(),
-    }).allow(null),
+      email: Joi.string().trim().email().allow(null).default(null),
+      password: Joi.string().trim().allow(null).default(null),
+    }).allow(null).default(null),
   });
 
   return schema.validate(body);
