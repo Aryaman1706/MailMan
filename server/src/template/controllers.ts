@@ -3,7 +3,7 @@ import isEqual from "lodash.isequal";
 import pick from "lodash.pick";
 import { v4 } from "uuid";
 import { Request, Response } from "express";
-import { TemplateData, TemplateDocumentData } from "./customTypes";
+import { TemplateDocumentData } from "./customTypes";
 import { types as MailListTypes } from "../mailList";
 
 // * Utils
@@ -105,28 +105,34 @@ export const newTemplate = async (req: Request, res: Response) => {
 // * Get all templates
 export const listTemplates = async (_req: Request, res: Response) => {
   try {
-    type PartialTemplateData = Omit<TemplateData, "html" | "file">;
-    interface PartialTemplateDocumentData
-      extends firestore.DocumentData,
-        PartialTemplateData {}
-
-    // Getting all templates
-    const templates = (await db
+    const templateListSnap = (await db
       .collection(collections.template)
+      .select("title", "date", "format")
       .orderBy("date", "desc")
-      .select("subject", "date", "active", "complete")
-      .get()) as firestore.QuerySnapshot<PartialTemplateDocumentData>;
+      .get()) as firestore.QuerySnapshot<
+      Pick<TemplateDocumentData, "date" | "title" | "format">
+    >;
 
-    const templateDocs = templates.docs.map((doc) => ({
-      ...doc.data(),
-      id: doc.id,
+    if (templateListSnap.empty || templateListSnap.docs.length === 0) {
+      return res.status(200).json({
+        body: {
+          msg: "No templates found",
+          data: null,
+        },
+        error: null,
+      });
+    }
+
+    const templateList = templateListSnap.docs.map((doc) => ({
+      title: doc.data().title,
       date: doc.data().date.toDate(),
+      format: doc.data().format,
     }));
 
     return res.status(200).json({
       body: {
         msg: "Template List found.",
-        data: templateDocs,
+        data: templateList,
       },
       error: null,
     });

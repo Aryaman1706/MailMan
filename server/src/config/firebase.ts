@@ -14,10 +14,10 @@ admin.initializeApp({
 });
 
 export const collections = {
+  user: "user",
   template: "template",
   mailList: "mailList",
-  user: "user",
-  admin: "admin",
+  mailListItem: "mailListItem",
 };
 
 export const db = admin.firestore();

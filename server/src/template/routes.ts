@@ -3,6 +3,9 @@ import multer from "multer";
 import { bucket } from "../config/firebase";
 import CustomStorageEngine from "../config/multerStorageEngine";
 
+// * Middlewares
+import { middlewares as userMiddlewares } from "../user";
+
 // * Controllers
 import * as controllers from "./controllers";
 
@@ -25,37 +28,46 @@ const router = express.Router();
  * Route: {{server_url}}/api/template/new
  * Middleware: Admin Login, Multer
  */
-router.post("/new", uploadFile.array("attachements"), controllers.newTemplate);
+router.post(
+  "/new",
+  userMiddlewares.adminLogin,
+  uploadFile.array("attachements"),
+  controllers.newTemplate
+);
 
 /**
  * Type: GET
  * Desc: Get all templates
  * Route: {{server_url}}/api/template/list
+ * Middleware: Login
  */
-router.get("/list", controllers.listTemplates);
+router.get("/list", userMiddlewares.login, controllers.listTemplates);
 
 /**
  * Type: GET
  * Desc: Open a template
  * Route: {{server_url}}/api/template/open/:id
+ * Middleware: Login
  */
-router.get("/open/:id", controllers.openTemplate);
+router.get("/open/:id", userMiddlewares.login, controllers.openTemplate);
 
 /**
  * Type: PATCH
  * Desc: Edit a template
  * Route: {{server_url}}/api/template/edit/:id
+ * Middleware: Admin Login
  */
-router.patch("/edit/:id", controllers.editTemplate);
+router.patch("/edit/:id", userMiddlewares.adminLogin, controllers.editTemplate);
 
 /**
  * Type: POST
  * Desc: Upload image to HTML mail template
  * Route: {{server_url}}/api/template/image/upload
- * Middleware: Multer
+ * Middleware: Admin Login, Multer
  */
 router.post(
   "/image/upload",
+  userMiddlewares.adminLogin,
   uploadFile.single("upload"),
   controllers.uploadImage
 );

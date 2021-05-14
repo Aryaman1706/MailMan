@@ -1,5 +1,3 @@
-import { useState } from "react";
-import validationSchema from "./validationSchema";
 import Swal from "sweetalert2";
 import { useMutation } from "react-query";
 import axios from "../../utils/axios";
@@ -39,37 +37,4 @@ const useEditSmtp = () => {
   return mutation;
 };
 
-const useFormHandler = () => {
-  const [state, setState] = useState({
-    email: "",
-    password: "",
-  });
-  const mutation = useEditSmtp();
-
-  const changeHandler = (e) => {
-    setState((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const submitHandler = async () => {
-    try {
-      const result = await validationSchema.validate(state);
-      mutation.mutate(result);
-    } catch (error) {
-      const errorMsg = error.errors[0] || "Invalid inputs.";
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Error!",
-        text: errorMsg,
-        showConfirmButton: true,
-      });
-    }
-  };
-
-  return [state, changeHandler, submitHandler, mutation];
-};
-
-export default useFormHandler;
+export default useEditSmtp;

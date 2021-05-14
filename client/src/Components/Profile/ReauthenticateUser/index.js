@@ -1,31 +1,37 @@
-import { Typography, Grid, Button, TextField } from "@material-ui/core";
-import Loader from "../Loader";
-import useEditSmtp from "./useEditSmtp";
-import useFormHandler from "../../hooks/useFormHandler";
+import {
+  Grid,
+  TextField,
+  Typography,
+  Button,
+  Container,
+} from "@material-ui/core";
+import useFormHandler from "../../../hooks/useFormHandler";
 import validationSchema from "./validationSchema";
+import useReauthenticate from "./useReauthenticate";
+import Loader from "../../Loader";
 
-const Smtp = () => {
+const ReauthenticateUser = () => {
   const initialValues = {
     email: "",
     password: "",
   };
 
-  const [values, changeHandler, submitHandler] = useFormHandler(
+  const [state, changeHandler, submitHandler] = useFormHandler(
     initialValues,
     validationSchema
   );
-  const mutation = useEditSmtp();
+  const mutation = useReauthenticate();
 
   return (
     <>
       {mutation.isLoading ? (
         <Loader />
       ) : (
-        <>
-          <Grid container alignItems="center" spacing={2}>
+        <Container style={{ marginTop: "15px" }}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h5" align="center">
-                SMTP Settings
+              <Typography align="center" varient="h5">
+                Enter Email and Password
               </Typography>
             </Grid>
             <Grid item xs={12}>
@@ -35,7 +41,7 @@ const Smtp = () => {
                 variant="outlined"
                 label="Email"
                 name="email"
-                value={values.email}
+                value={state.email}
                 onChange={(e) => changeHandler(e)}
               />
             </Grid>
@@ -46,7 +52,7 @@ const Smtp = () => {
                 variant="outlined"
                 label="Password"
                 name="password"
-                value={values.password}
+                value={state.password}
                 onChange={(e) => changeHandler(e)}
               />
             </Grid>
@@ -55,16 +61,22 @@ const Smtp = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                onClick={() => submitHandler(mutation.mutate)}
+                onClick={() => submitHandler()}
               >
-                Save Changes
+                Reauthenticate
               </Button>
             </Grid>
           </Grid>
-        </>
+
+          <p>
+            {mutation.data.user
+              ? "User reauthenticated"
+              : "User needs to reauthenticate"}
+          </p>
+        </Container>
       )}
     </>
   );
 };
 
-export default Smtp;
+export default ReauthenticateUser;
