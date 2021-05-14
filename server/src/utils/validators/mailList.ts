@@ -1,32 +1,14 @@
 import Joi from "joi";
 import CustomValidationResult from "./customValidationResult";
 
-export const listMailList = (
-  body: any
-): CustomValidationResult<{ page: number }> => {
-  const schema = Joi.object({
-    page: Joi.number().integer().positive().required(),
-  });
-
-  return schema.validate(body);
-};
-
-export const editMailList = (
+export const addNew = (
   body: any
 ): CustomValidationResult<{
-  list?: Array<{ [key: string]: string | undefined }>;
+  templateId: string;
 }> => {
   const schema = Joi.object({
-    list: Joi.array().items(
-      Joi.object({
-        companyName: Joi.string().trim(),
-        country: Joi.string().trim(),
-        email: Joi.string().trim().email(),
-        firstName: Joi.string().trim(),
-        lastName: Joi.string().trim(),
-        ref: Joi.string().trim(),
-      })
-    ),
+    templateId: Joi.string().trim().required(),
+    file: Joi.any(),
   });
 
   return schema.validate(body);

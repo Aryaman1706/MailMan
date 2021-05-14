@@ -1,22 +1,11 @@
 import express from "express";
-import multer from "multer";
-import { bucket } from "../config/firebase";
-import CustomStorageEngine from "../config/multerStorageEngine";
 
 // * Middlewares
 import { middlewares as userMiddlewares } from "../user";
+import uploadFile from "../utils/multerMiddleware";
 
 // * Controllers
 import * as controllers from "./controllers";
-
-// * Multer Config
-const storage = CustomStorageEngine({
-  bucket,
-});
-
-const uploadFile = multer({
-  storage,
-});
 
 const router = express.Router();
 

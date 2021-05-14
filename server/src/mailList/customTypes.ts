@@ -4,12 +4,20 @@ export interface UploadedFile extends Express.Multer.File {
   name: string;
 }
 
+type template = {
+  subject: string;
+  html: string;
+  attachements: string[];
+};
+
 export interface MailListData {
-  templateId: string;
-  sent: boolean;
-  date: firestore.Timestamp;
-  list: Array<{ [key: string]: string }>;
-  last: boolean;
+  template: template;
+  email: string;
+  file: string;
+  addedOn: firestore.Timestamp;
+  active: boolean;
+  complete: boolean;
+  lastSent: firestore.Timestamp | null;
 }
 
 export interface MailListDocumentData
