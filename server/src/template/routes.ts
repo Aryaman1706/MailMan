@@ -30,7 +30,7 @@ router.post(
  * Route: {{server_url}}/api/template/list
  * Middleware: Login
  */
-router.get("/list", userMiddlewares.login, controllers.listTemplates);
+router.get("/list", controllers.listTemplates);
 
 /**
  * Type: GET

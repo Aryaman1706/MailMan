@@ -21,7 +21,8 @@ function App() {
           userStore.setState(
             false,
             user.uid,
-            Boolean(idTokenResult.claims.admin)
+            Boolean(idTokenResult.claims.admin),
+            idTokenResult.token.trim()
           );
         });
       } else {
