@@ -1,5 +1,5 @@
 import { string, object } from "yup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 const useFormHandler = (templates) => {
@@ -7,6 +7,10 @@ const useFormHandler = (templates) => {
     template: null,
     file: null,
   });
+
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   const validationSchema = object({
     templateId: string()
@@ -16,7 +20,8 @@ const useFormHandler = (templates) => {
   });
 
   const changeHandler = (e) => {
-    if (e.target.name === "file") {
+    console.log("changeHandler");
+    if (e.target.name.trim() === "file") {
       setState((prev) => ({
         ...prev,
         file: e.target.files[0],
@@ -57,7 +62,7 @@ const useFormHandler = (templates) => {
     }
   };
 
-  const fileClear = () => {
+  const fileClear = (e) => {
     setState((prev) => ({
       ...prev,
       file: null,

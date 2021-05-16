@@ -78,6 +78,7 @@ export const addNew = async (req: Request, res: Response) => {
         },
       });
 
+    // Constructing mailListData
     const mailListData: MailListData = {
       template: {
         subject: templateData.subject,
@@ -91,6 +92,8 @@ export const addNew = async (req: Request, res: Response) => {
       complete: false,
       lastSent: null,
     };
+
+    // TODO => Parse excel file
 
     // Add to db
     db.collection(collections.mailList).add(mailListData);

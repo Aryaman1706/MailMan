@@ -11,10 +11,13 @@ import {
 import { Delete } from "@material-ui/icons";
 import TemplateInfo from "./TemplateInfo";
 import useFormHandler from "./useFormHandler";
+import useAddMailList from "./useAddMailList";
 
 const Form = ({ templates }) => {
   const [{ template, file }, changeHandler, submitHandler, fileClear] =
     useFormHandler(templates);
+
+  const mutation = useAddMailList();
 
   return (
     <>
@@ -78,7 +81,7 @@ const Form = ({ templates }) => {
           fullWidth
           variant="contained"
           color="primary"
-          onClick={() => submitHandler()}
+          onClick={() => submitHandler(mutation.mutate)}
         >
           Add to Queue
         </Button>
