@@ -1,42 +1,51 @@
-import { useEffect } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Container } from "@material-ui/core";
 import useTemplateList from "./useTemplateList";
-import useUserStore from "../../Stores/userStore";
-
-const selector = (state) => ({
-  loading: state.loading,
-});
+import Loader from "../Loader";
+import Form from "./Form";
 
 const AddMailList = () => {
-  const query = useTemplateList();
-  const { loading } = useUserStore(selector);
+  const [query, templates] = useTemplateList();
 
-  useEffect(() => {
-    console.log("Add template component");
-    console.log(`userStore loading -> ${loading}`);
-  }, [loading]);
+  const renderView = () => {
+    if (query.isIdle) {
+      return (
+        <Grid item xs={12}>
+          <Typography variant="body1">Login to continue.</Typography>;
+        </Grid>
+      );
+    }
+
+    if (query.isLoading) {
+      return (
+        <Grid item xs={12}>
+          <Loader />
+        </Grid>
+      );
+    }
+
+    if (!templates) {
+      return (
+        <Grid item xs={12}>
+          <Typography variant="body1">No templates available.</Typography>;
+        </Grid>
+      );
+    }
+
+    return <Form templates={templates} />;
+  };
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography align="center" variant="h5">
-            Queue Emails
-          </Typography>
+      <Container>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography align="center" variant="h4">
+              Queue Emails
+            </Typography>
+          </Grid>
+          {renderView()}
         </Grid>
-
-        <Grid item xs={12}>
-          {/* Select Template Dropdown */}
-        </Grid>
-
-        <Grid item xs={12}>
-          {/* Format */}
-        </Grid>
-
-        <Grid item xs={12}>
-          {/* Input */}
-        </Grid>
-      </Grid>
+      </Container>
     </>
   );
 };

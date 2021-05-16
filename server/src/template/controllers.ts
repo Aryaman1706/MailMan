@@ -124,6 +124,7 @@ export const listTemplates = async (_req: Request, res: Response) => {
     }
 
     const templateList = templateListSnap.docs.map((doc) => ({
+      id: doc.id,
       title: doc.data().title,
       date: doc.data().date.toDate(),
       format: doc.data().format,

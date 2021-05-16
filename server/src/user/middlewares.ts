@@ -38,8 +38,6 @@ const makeMiddleware = (identity?: "admin" | "user") => {
         });
       }
 
-      console.log(user);
-
       if (identity === "admin" && !user.admin) {
         return res.status(400).json({
           body: null,

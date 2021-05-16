@@ -7,5 +7,5 @@
     "av-*.json",
     "node_modules/**/*"
   ],
-  "exec": "npx ts-node src/index.ts"
+  "exec": "ts-node src/index.ts"
 }

@@ -26,7 +26,7 @@ function App() {
           );
         });
       } else {
-        userStore.setState(false, null, false);
+        userStore.setState(false, null, false, null);
       }
     });
 
