@@ -89,6 +89,7 @@ export const addNew = async (req: Request, res: Response) => {
     // Constructing mailListData
     const mailListData: MailListData = {
       template: {
+        title: templateData.title,
         subject: templateData.subject,
         html: templateData.html,
         attachements: templateData.attachements,
@@ -203,18 +204,23 @@ export const listMailList = async (req: Request, res: Response) => {
       });
 
     // Paginated query
-    const mailLists = await db
+    const mailLists = (await db
       .collection(collections.mailList)
       .orderBy("addedOn", "desc")
       .limit(10)
       .offset(page * 10)
-      .get();
+      .get()) as firestore.QuerySnapshot<MailListDocumentData>;
+
+    const list = mailLists.docs.map((doc) => ({
+      ...doc.data(),
+      addedOn: doc.data().addedOn.toDate(),
+    }));
 
     return res.status(200).json({
       body: {
         msg: "MailList List found.",
         data: {
-          list: mailLists.docs,
+          list,
           hasMore: !mailLists.empty && mailLists.size > 10 ? true : false,
         },
       },
@@ -260,19 +266,24 @@ export const listMailListUser = async (req: Request, res: Response) => {
     }
 
     // Paginated query
-    const mailLists = await db
+    const mailLists = (await db
       .collection(collections.mailList)
       .where("uid", "==", req.user.id)
       .orderBy("addedOn", "desc")
       .limit(10)
       .offset(page * 10)
-      .get();
+      .get()) as firestore.QuerySnapshot<MailListDocumentData>;
+
+    const list = mailLists.docs.map((doc) => ({
+      ...doc.data(),
+      addedOn: doc.data().addedOn.toDate(),
+    }));
 
     return res.status(200).json({
       body: {
         msg: "MailList List found.",
         data: {
-          list: mailLists.docs,
+          list,
           hasMore: !mailLists.empty && mailLists.size > 10 ? true : false,
         },
       },

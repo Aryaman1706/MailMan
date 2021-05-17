@@ -5,6 +5,7 @@ export interface UploadedFile extends Express.Multer.File {
 }
 
 type template = {
+  title: string;
   subject: string;
   html: string;
   attachements: string[];
