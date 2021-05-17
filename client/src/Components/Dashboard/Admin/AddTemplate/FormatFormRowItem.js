@@ -21,7 +21,7 @@ const FormatFormRowItem = ({
           variant="outlined"
           name={`format[${index}].field`}
           value={obj.field}
-          onChange={(e) => changeHandler(e)}
+          onChange={(e) => obj.field.trim() !== "email" && changeHandler(e)}
           onBlur={(e) => blurHandler(e, validationSchema)}
           error={
             touched.format?.[index]?.field &&
@@ -58,9 +58,11 @@ const FormatFormRowItem = ({
       </Grid>
       <Grid item xs={4}>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <IconButton color="primary" onClick={(e) => removeRow(index)}>
-            <Remove />
-          </IconButton>
+          {obj.field.trim() !== "email" && (
+            <IconButton color="primary" onClick={(e) => removeRow(index)}>
+              <Remove />
+            </IconButton>
+          )}
         </div>
       </Grid>
     </>

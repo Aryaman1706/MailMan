@@ -5,8 +5,12 @@ import { db, collections, auth } from "../config/firebase";
 
 // * Utils
 import * as validators from "../utils/validators/mailList";
+import parse from "../utils/parse";
+
+// * Types
 import { MailListData, UploadedFile } from "./customTypes";
 import { types as templateTypes } from "../template";
+import { types as mailListItemTypes } from "../mailListItem";
 
 // * Add a new mailList
 export const addNew = async (req: Request, res: Response) => {
@@ -93,10 +97,47 @@ export const addNew = async (req: Request, res: Response) => {
       lastSent: null,
     };
 
-    // TODO => Parse excel file
+    // Add to db and parse excel file
+    const [
+      { id: newMailListId },
+      { error: parsingError, emailList },
+    ] = await Promise.all([
+      db.collection(collections.mailList).add(mailListData),
+      parse(fileName, templateData.format),
+    ]);
 
-    // Add to db
-    db.collection(collections.mailList).add(mailListData);
+    // Validating parsing
+    if (parsingError)
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "There was an error parsing your excel file. Try again.",
+          data: parsingError,
+        },
+      });
+
+    // Saving mailListItems to db
+    const batch = db.batch();
+    let currentDate = new Date();
+
+    emailList.forEach((item, index) => {
+      const data: mailListItemTypes.MailListItemData = {
+        mailListId: newMailListId,
+        list: item,
+        sent: false,
+        date: firestore.Timestamp.fromDate(currentDate),
+        last: Boolean(index === emailList.length - 1),
+      };
+      batch.create(db.collection(collections.mailListItem).doc(), data);
+
+      // Updating currentDate
+      currentDate.setHours(
+        currentDate.getHours() + 1,
+        currentDate.getMinutes() + 10
+      );
+    });
+
+    await batch.commit();
 
     return res.status(200).json({
       body: {
