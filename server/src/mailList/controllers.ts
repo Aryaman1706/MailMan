@@ -8,7 +8,11 @@ import * as validators from "../utils/validators/mailList";
 import parse from "../utils/parse";
 
 // * Types
-import { MailListData, UploadedFile } from "./customTypes";
+import {
+  MailListData,
+  UploadedFile,
+  MailListDocumentData,
+} from "./customTypes";
 import { types as templateTypes } from "../template";
 import { types as mailListItemTypes } from "../mailListItem";
 
@@ -96,6 +100,26 @@ export const addNew = async (req: Request, res: Response) => {
       complete: false,
       lastSent: null,
     };
+
+    // Determining active status of new MailList
+    const activeTemplates = (await db
+      .collection(collections.mailList)
+      .where("active", "==", true)
+      .get()) as firestore.QuerySnapshot<MailListDocumentData>;
+
+    if (activeTemplates.empty || activeTemplates.size === 0) {
+      mailListData.active = true;
+    }
+
+    if (activeTemplates.size > 1) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Multiple active Mail List found.",
+          data: activeTemplates.docs,
+        },
+      });
+    }
 
     // Add to db and parse excel file
     const [

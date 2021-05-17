@@ -58,7 +58,8 @@ const parse = async (name: string, format: Format): Promise<ReturnData> => {
       }
     });
 
-    const chunkedEmailList = chunk(emailList, 50);
+    // ! MAKE CHANGES HERE
+    const chunkedEmailList = chunk(emailList, 5);
     return {
       emailList: chunkedEmailList,
       error: null,

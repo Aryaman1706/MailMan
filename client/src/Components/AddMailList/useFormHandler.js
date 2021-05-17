@@ -33,6 +33,7 @@ const useFormHandler = (templates) => {
 
   const submitHandler = async (mutate) => {
     try {
+      // Validating form data
       if (!state.file || !state.template) {
         throw new Error(
           state.template
@@ -40,7 +41,6 @@ const useFormHandler = (templates) => {
             : "Please select a template."
         );
       }
-
       const result = await validationSchema
         .validate({
           templateId: state.template.id,
@@ -49,7 +49,19 @@ const useFormHandler = (templates) => {
           throw new Error(err.errors[0]);
         });
 
-      mutate && mutate({ templateId: result.templateId, file: state.file });
+      // Constructing formData
+      const formData = new FormData();
+      formData.append("templateId", result.templateId);
+      formData.append("file", state.file);
+
+      // Send mutation
+      mutate && mutate(formData);
+
+      // Reset form
+      setState({
+        template: null,
+        file: null,
+      });
     } catch (error) {
       const errorMsg = error.message || "Invalid inputs.";
       Swal.fire({

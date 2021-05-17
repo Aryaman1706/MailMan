@@ -109,6 +109,7 @@ const MainForm = (formikProps) => {
       formData.append("attachments", attachements);
 
       submitForm(formData);
+      formikProps.resetForm();
     } else {
       showErrors(errors);
     }

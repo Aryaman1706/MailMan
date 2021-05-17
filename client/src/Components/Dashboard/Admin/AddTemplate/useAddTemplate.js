@@ -1,14 +1,22 @@
 import { useMutation } from "react-query";
 import Swal from "sweetalert2";
 import axios from "../../../../utils/axios";
+import useUserStore from "../../../../Stores/userStore";
+
+const selector = (state) => ({
+  idToken: state.idToken,
+});
 
 const useAddTemplate = () => {
+  const { idToken } = useUserStore(selector);
+
   const promiseFn = (formData) =>
     new Promise((resolve, reject) => {
       axios
         .post("/template/new", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            "auth-id-token": idToken,
           },
         })
         .then((response) => {
