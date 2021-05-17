@@ -23,6 +23,22 @@ router.post(
   controllers.addNew
 );
 
+/**
+ * Type: GET
+ * Desc: Get all mailLists
+ * Route: {{server_url}}/api/mail-list/full-list?page=1
+ * Middleware: Admin Login
+ */
+router.get("/full-list", middlewares.adminLogin, controllers.listMailList);
+
+/**
+ * Type: GET
+ * Desc: Get all mailLists of a user
+ * Route: {{server_url}}/api/mail-list/list?page=1
+ * Middleware: Login
+ */
+router.get("/list", middlewares.login, controllers.listMailListUser);
+
 // * End of API Endpoints -->
 
 export default router;

@@ -13,3 +13,13 @@ export const addNew = (
 
   return schema.validate(body);
 };
+
+export const listMailList = (
+  body: any
+): CustomValidationResult<{ page: number }> => {
+  const schema = Joi.object({
+    page: Joi.number().integer().positive().required(),
+  });
+
+  return schema.validate(body);
+};
