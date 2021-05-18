@@ -1,10 +1,13 @@
 import { useMutation } from "react-query";
 import firebase from "firebase";
 import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 const useLoginHandler = () => {
   const promiseFn = ({ email, password }) =>
     firebase.auth().signInWithEmailAndPassword(email, password);
+
+  const history = useHistory();
 
   const mutation = useMutation("login", promiseFn, {
     onError: (error) => {
@@ -20,9 +23,9 @@ const useLoginHandler = () => {
     onSuccess: (res) => {
       firebase
         .auth()
-        .currentUser.getIdToken()
-        .then((idToken) => {
-          console.log(idToken);
+        .currentUser.getIdTokenResult()
+        .then((user) => {
+          history.push(user.claims.admin ? "/admin/dashboard" : "/dashboard");
         });
     },
   });

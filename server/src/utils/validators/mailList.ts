@@ -18,7 +18,7 @@ export const listMailList = (
   body: any
 ): CustomValidationResult<{ page: number }> => {
   const schema = Joi.object({
-    page: Joi.number().integer().positive().required(),
+    page: Joi.number().integer().min(0).required(),
   });
 
   return schema.validate(body);

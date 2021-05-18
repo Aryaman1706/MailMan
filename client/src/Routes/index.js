@@ -1,8 +1,12 @@
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Route from "./RouteWrapper";
 
-// * Components
+// * Common
 import Login from "../Components/Login";
+import Profile from "../Components/Profile";
+import ReauthenticateUser from "../Components/Profile/ReauthenticateUser";
+import AddMailList from "../Components/AddMailList";
+import Layout from "../Components/Dashboard/Layout";
 
 // * Admin Dashboard
 import SignupUser from "../Components/Dashboard/Admin/SignupUser";
@@ -11,19 +15,15 @@ import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
 // * User Dashboard
 import ListMailList from "../Components/Dashboard/User/ListMailList";
 
-// * Common
-import Profile from "../Components/Profile";
-import ReauthenticateUser from "../Components/Profile/ReauthenticateUser";
-import AddMailList from "../Components/AddMailList";
-
 const Routes = () => {
   return (
     <>
       <Router basename="/">
         <Switch>
-          <Route exact path="/login" component={Login} />
+          <Route exact path="/" component={Layout} />
 
           {/* Common */}
+          <Route exact path="/login" component={Login} />
           <Route exact path="/user/profile" component={Profile} />
           <Route
             exact

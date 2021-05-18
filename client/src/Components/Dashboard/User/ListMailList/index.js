@@ -8,41 +8,36 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import MoreInfo from "./MoreInfo";
+import useListMailList from "../../../../hooks/useListMailList";
+import axios from "../../../../utils/axios";
+import useUserStore from "../../../../Stores/userStore";
+
+const selector = (state) => ({
+  idToken: state.idToken,
+});
 
 const ListMailList = () => {
+  const { idToken } = useUserStore(selector);
+
+  const promiseFn = (page) =>
+    axios
+      .get(`/mail-list/full-list?page=${page}`, {
+        headers: {
+          "auth-id-token": idToken,
+        },
+      })
+      .then((response) => response.data)
+      .catch((err) => {
+        throw err.response.data;
+      });
+
+  const [query, page, nextPage, prevPage] = useListMailList(promiseFn);
+
   return (
     <>
       <Container>
-        {[
-          {
-            template: {
-              title: "testing mailer",
-            },
-            email: "test@mail.com",
-            addedOn: Date.now(),
-            active: false,
-            complete: false,
-          },
-          {
-            template: {
-              title: "testing mailer",
-            },
-            email: "test@mail.com",
-            addedOn: Date.now(),
-            active: false,
-            complete: false,
-          },
-          {
-            template: {
-              title: "testing mailer",
-            },
-            email: "test@mail.com",
-            addedOn: Date.now(),
-            active: false,
-            complete: false,
-          },
-        ].map((mailList, index) => (
-          <Accordion>
+        {query.data?.body.data.list.map((mailList, index) => (
+          <Accordion key={index}>
             <AccordionSummary expandIcon={<ExpandMore />}>
               <Typography variant="body1">
                 Added On {new Date(mailList.addedOn).toLocaleString()} by{" "}
@@ -64,13 +59,23 @@ const ListMailList = () => {
           }}
         >
           <div>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={page === 0}
+              onClick={prevPage}
+            >
               Previous
             </Button>
           </div>
 
           <div>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={query.isPreviousData || !query.data?.body.data.hasMore}
+              onClick={nextPage}
+            >
               Next
             </Button>
           </div>
