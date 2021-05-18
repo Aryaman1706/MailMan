@@ -12,6 +12,7 @@ import Layout from "../Components/Dashboard/Layout";
 import SignupUser from "../Components/Dashboard/Admin/SignupUser";
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
 import FullListMailList from "../Components/Dashboard/Admin/ListMailList";
+import ListTemplates from "../Components/Dashboard/Admin/ListTemplates";
 
 // * User Dashboard
 import ListMailList from "../Components/Dashboard/User/ListMailList";
@@ -41,6 +42,7 @@ const Routes = () => {
             path="/admin/full-mail-list"
             component={FullListMailList}
           />
+          <Route exact path="/admin/list-templates" component={ListTemplates} />
 
           {/* User Dashboard */}
           <Route exact path="/user/mail-list" component={ListMailList} />
