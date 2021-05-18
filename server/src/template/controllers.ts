@@ -10,6 +10,7 @@ import { types as MailListTypes } from "../mailList";
 import * as validators from "../utils/validators/template";
 import { firestore } from "firebase-admin";
 import writeToFile from "./writeFilePromise";
+import readFile from "./readFilePromise";
 
 // * Create new template with mailLists
 export const newTemplate = async (req: Request, res: Response) => {
@@ -158,12 +159,37 @@ export const openTemplate = async (req: Request, res: Response) => {
       .doc(req.params.id)
       .get()) as firestore.DocumentSnapshot<TemplateDocumentData>;
 
-    if (!template.exists || !template.data()) {
+    if (!template.exists)
       return res.status(404).json({
         body: null,
         error: {
           msg: "Template not found.",
           data: null,
+        },
+      });
+
+    const templateData = template.data();
+    if (!templateData)
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Template is empty.",
+          data: null,
+        },
+      });
+
+    // Read html file
+    const htmlReadStream = bucket.file(templateData.html).createReadStream();
+    const htmlString = await readFile(htmlReadStream).catch(
+      (err: Error) => err
+    );
+
+    if (typeof htmlString !== "string") {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Error in reading html file.",
+          data: htmlString.message,
         },
       });
     }
@@ -173,6 +199,7 @@ export const openTemplate = async (req: Request, res: Response) => {
         msg: "Template found.",
         data: {
           ...template.data(),
+          html: htmlString,
           date: template.data()?.date.toDate(),
           id: template.id,
         },
