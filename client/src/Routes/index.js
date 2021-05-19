@@ -1,51 +1,47 @@
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Route from "./RouteWrapper";
 
-// * Common
+// * General
 import Login from "../Components/Login";
+import Layout from "../Components/Dashboard/Layout";
+
+// * Common Dashboard
 import Profile from "../Components/Profile";
 import ReauthenticateUser from "../Components/Profile/ReauthenticateUser";
 import AddMailList from "../Components/AddMailList";
-import Layout from "../Components/Dashboard/Layout";
+import ListMailList from "../Components/Dashboard/User/ListMailList";
+import ListTemplates from "../Components/Dashboard/ListTemplates";
 
 // * Admin Dashboard
-import SignupUser from "../Components/Dashboard/Admin/SignupUser";
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
+import SignupUser from "../Components/Dashboard/Admin/SignupUser";
 import FullListMailList from "../Components/Dashboard/Admin/ListMailList";
-import ListTemplates from "../Components/Dashboard/Admin/ListTemplates";
 
 // * User Dashboard
-import ListMailList from "../Components/Dashboard/User/ListMailList";
 
 const Routes = () => {
   return (
     <>
       <Router basename="/">
         <Switch>
+          {/* General */}
           <Route exact path="/" component={Layout} />
-
-          {/* Common */}
           <Route exact path="/login" component={Login} />
-          <Route exact path="/user/profile" component={Profile} />
-          <Route
-            exact
-            path="/user/reauthenticate"
-            component={ReauthenticateUser}
-          />
-          <Route exact path="/mail-list" component={AddMailList} />
+
+          {/* Common Dashboard */}
+          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/reauthenticate" component={ReauthenticateUser} />
+          <Route exact path="/mail-list/add" component={AddMailList} />
+          <Route exact path="/mail-list/list" component={ListMailList} />
+          <Route exact path="/templates/list" component={ListTemplates} />
+          {/* <Route exact path="/template/view/:id" component={} /> */}
 
           {/* Admin Dashboard */}
           <Route exact path="/admin/template" component={AddTemplate} />
           <Route exact path="/admin/register" component={SignupUser} />
-          <Route
-            exact
-            path="/admin/full-mail-list"
-            component={FullListMailList}
-          />
-          <Route exact path="/admin/list-templates" component={ListTemplates} />
+          <Route exact path="/admin/mail-list" component={FullListMailList} />
 
           {/* User Dashboard */}
-          <Route exact path="/user/mail-list" component={ListMailList} />
         </Switch>
       </Router>
     </>
