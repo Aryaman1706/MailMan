@@ -17,8 +17,17 @@ const ListTemplates = () => {
               List Templates
             </Typography>
           </Grid>
-          {templates &&
-            templates.map((t) => <ListTemplatesItem template={t} />)}
+          {templates ? (
+            <>
+              {templates.map((t) => (
+                <ListTemplatesItem template={t} />
+              ))}
+            </>
+          ) : (
+            <>
+              <Typography variant="body1">No templates available.</Typography>
+            </>
+          )}
         </Grid>
       )}
     </Container>

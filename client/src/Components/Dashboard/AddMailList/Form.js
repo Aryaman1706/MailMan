@@ -56,7 +56,7 @@ const Form = ({ templates }) => {
                   id="file-input"
                   style={{ display: "none" }}
                   onChange={(e) => changeHandler(e)}
-                  // accept=".xlsx"
+                  accept=".xlsx"
                 />
                 <label htmlFor="file-input">
                   <Button variant="contained" color="primary" component="span">
@@ -64,21 +64,22 @@ const Form = ({ templates }) => {
                   </Button>
                 </label>
               </div>
-              <div>
-                {file ? (
-                  <Typography variant="subtitle1">
-                    {file.name || "test"}
-                  </Typography>
-                ) : (
-                  <Typography variant="subtitle1">No file selected.</Typography>
-                )}
-              </div>
-
-              {file && (
+              {file ? (
+                <>
+                  <div>
+                    <Typography variant="subtitle1">
+                      {file.name || "test"}
+                    </Typography>
+                  </div>
+                  <div>
+                    <IconButton color="secondary" onClick={fileClear}>
+                      <Delete />
+                    </IconButton>
+                  </div>
+                </>
+              ) : (
                 <div>
-                  <IconButton color="secondary" onClick={fileClear}>
-                    <Delete />
-                  </IconButton>
+                  <Typography variant="subtitle1">No file selected.</Typography>
                 </div>
               )}
             </div>

@@ -7,14 +7,6 @@ const AddMailList = () => {
   const [query, templates] = useTemplateList();
 
   const renderView = () => {
-    if (query.isIdle) {
-      return (
-        <Grid item xs={12}>
-          <Typography variant="body1">Login to continue.</Typography>;
-        </Grid>
-      );
-    }
-
     if (query.isLoading) {
       return (
         <Grid item xs={12}>
@@ -26,7 +18,7 @@ const AddMailList = () => {
     if (!templates) {
       return (
         <Grid item xs={12}>
-          <Typography variant="body1">No templates available.</Typography>;
+          <Typography variant="body1">No templates available.</Typography>
         </Grid>
       );
     }

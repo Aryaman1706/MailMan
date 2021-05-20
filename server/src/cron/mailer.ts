@@ -3,18 +3,19 @@ import handlebars from "handlebars";
 import { promises as fs } from "fs";
 import path from "path";
 import { google } from "googleapis";
+import { types as mailListTypes } from "../mailList";
+import { EmailListItem } from "../utils/parse";
+import { bucket } from "../config/firebase";
+import readFile from "../template/readFilePromise";
 
-type responseData = {
-  info?: {
-    [key: string]: string;
-  };
-  error?: string;
+type MailResult = {
+  info: SentMessageInfo | null;
+  error: string | null;
 };
 
 const mailer = async (
-  htmlTemplate: string,
-  subject: string,
-  emailList: Array<{ [key: string]: string }>
+  mailList: mailListTypes.MailListData,
+  emailList: EmailListItem[]
 ) => {
   const OAuth2 = google.auth.OAuth2;
   const oauth2Client = new OAuth2(
@@ -47,8 +48,12 @@ const mailer = async (
     },
   });
 
+  const htmlTemplate = await readFile(
+    bucket.file(mailList.template.html).createReadStream()
+  );
   const template = handlebars.compile(htmlTemplate);
-  const promiseList: SentMessageInfo[] = [];
+
+  const promiseList: Promise<MailResult>[] = [];
 
   emailList.forEach((value) => {
     const htmlToSend = template({ ...value });
@@ -57,22 +62,30 @@ const mailer = async (
         .sendMail({
           from: '"Aryaman Grover" <1761ary@gmail.com>',
           to: value.email,
-          subject: subject,
+          subject: mailList.template.subject,
           html: htmlToSend,
         })
-        .catch((error) => {
-          console.log(error);
-          return { error: error.message || "Error in sending mail." };
+        .then((msgInfo: SentMessageInfo) => ({
+          info: msgInfo || "Mail sent successfully.",
+          error: null,
+        }))
+        .catch((error: Error) => {
+          console.error(error);
+          return {
+            info: null,
+            error: error.message || "Error in sending mail.",
+          };
         })
     );
   });
 
-  const mailInfo: responseData[] = await Promise.all(promiseList);
-  const erroredMails = mailInfo.filter((obj) => obj.error);
+  const mailResults: MailResult[] = await Promise.all(promiseList);
+  const successfulMails = mailResults.filter((i) => !Boolean(i.error));
+  const erroredMails = mailResults.filter((i) => Boolean(i.error));
 
   await fs.writeFile(
     path.resolve(__dirname, "./", "result.json"),
-    JSON.stringify({ mailInfo, erroredMails })
+    JSON.stringify({ successfulMails, erroredMails })
   );
   console.log("result.json filled.");
 };

@@ -1,94 +1,117 @@
 import { firestore } from "firebase-admin";
 import { db, collections } from "../config/firebase";
 import { types as mailListTypes } from "../mailList";
-import { types as templateTypes } from "../template";
+import { types as mailListItemTypes } from "../mailListItem";
+import { EmailListItem } from "../utils/parse";
 import mailer from "./mailer";
 
 const sendMails = async () => {
-  // Finding incomplete templates
-  const incompleteTemplates = (await db
-    .collection(collections.template)
+  // Finding incomplete mailLists
+  const incompleteMailLists = (await db
+    .collection(collections.mailList)
     .where("complete", "==", false)
     .orderBy("date", "asc")
-    .get()) as firestore.QuerySnapshot<templateTypes.TemplateDocumentData>;
+    .get()) as firestore.QuerySnapshot<mailListTypes.MailListDocumentData>;
 
-  if (incompleteTemplates.empty || incompleteTemplates.docs.length === 0) {
+  if (incompleteMailLists.empty || incompleteMailLists.size === 0) {
     console.log("No incomplete templates found.");
     return;
   }
 
-  // segregating active and inactive templates
-  const activeTemplatesList = incompleteTemplates.docs.filter((doc) =>
+  // Segregating active and inactive mailLists
+  const activeMailLists = incompleteMailLists.docs.filter((doc) =>
     Boolean(doc.data().active)
   );
-  const inactiveTemplatesList = incompleteTemplates.docs.filter(
+  const inactiveMailLists = incompleteMailLists.docs.filter(
     (doc) => !Boolean(doc.data().active)
   );
 
-  // Validating activeTemplates
-  if (activeTemplatesList.length === 0) {
+  // Validating activeMailLists
+  if (activeMailLists.length === 0) {
     console.log("No active template found.");
-    return;
-  } else if (activeTemplatesList.length > 1) {
-    console.log("Multiple active templates found.");
-    return;
-  }
-  const activeTemplate = activeTemplatesList[0];
 
-  // Finding mailList corresponding to activeTemplate
-  // const currentDate = firestore.Timestamp.fromDate(new Date());
-  const pendingMailList = (await db
-    .collection(collections.mailList)
-    .where("templateId", "==", activeTemplate.id)
-    .where("sent", "==", false)
-    // .where("date", "<=", currentDate)
-    .orderBy("date", "asc")
-    .get()) as firestore.QuerySnapshot<mailListTypes.MailListDocumentData>;
-
-  // Validating pendingMailList
-  if (pendingMailList.empty || pendingMailList.docs.length === 0) {
-    console.log("No mails in pipeline.");
-    return;
-  }
-
-  const currentBatch = pendingMailList.docs[0];
-
-  // Send out mails
-  await mailer(
-    activeTemplate.data().html,
-    activeTemplate.data().subject,
-    currentBatch.data().list
-  );
-
-  const promiseArr = [];
-
-  // If last mailList was sent
-  if (currentBatch.data().last) {
-    promiseArr.push(
-      // Mark activeTemplate as inactive and complete
-      activeTemplate.ref.update({
-        complete: true,
-        active: false,
-      })
-    );
-
-    // Make next template active
-    if (inactiveTemplatesList.length >= 1) {
-      inactiveTemplatesList[0].ref.update({
+    // Mark first inactiveMailList if any as active
+    if (inactiveMailLists.length > 0) {
+      await inactiveMailLists[0].ref.update({
         active: true,
       });
     }
+    return;
+  } else if (activeMailLists.length > 1) {
+    console.log("Multiple active templates found.");
+    return;
   }
 
-  // Update currentBatch
+  // Finding the oldest unsent mailListItems corresponding to activeMailList
+  const activeMailList = activeMailLists[0];
+  const currentDate = firestore.Timestamp.now();
+
+  const pendingMailListItems = (await db
+    .collection(collections.mailListItem)
+    .where("mailListId", "==", activeMailList.id)
+    .where("sent", "==", false)
+    .where("date", "<=", currentDate)
+    .orderBy("date", "asc")
+    .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
+
+  // Validating pendingMailListItems
+  if (pendingMailListItems.empty || pendingMailListItems.size === 0) {
+    console.log("No pending mail list items found.");
+    return;
+  }
+
+  // Selecting at max 2 pendingMailListItems
+  const pendingMailListItemDocs = pendingMailListItems.docs.slice(0, 2);
+
+  // TODO -> Send emails
+  const emailData: EmailListItem[] = [];
+  pendingMailListItemDocs.forEach((doc) => {
+    emailData.push(...doc.data().list);
+  });
+  await mailer(activeMailList.data(), emailData);
+
+  const promiseArr: Promise<firestore.WriteResult>[] = [];
+  // Last mailListItem for activeMailList was sent
+  if (
+    Boolean(pendingMailListItemDocs[0].data().last) ||
+    Boolean(pendingMailListItemDocs[1].data().last)
+  ) {
+    // Mark activeMailList as inactive and complete
+    promiseArr.push(
+      activeMailList.ref.update({
+        active: false,
+        complete: true,
+        lastSent: currentDate,
+      })
+    );
+
+    // Mark the first inactiveMailList as active
+    if (inactiveMailLists.length > 0) {
+      promiseArr.push(
+        inactiveMailLists[0].ref.update({
+          active: true,
+        })
+      );
+    }
+  }
+
+  // Mark pendingMailListItemDocs as sent
   promiseArr.push(
-    currentBatch.ref.update({
-      sent: true,
+    ...pendingMailListItemDocs.map((doc) =>
+      doc.ref.update({
+        sent: true,
+      })
+    )
+  );
+
+  // Update lastSent in activeMailList
+  promiseArr.push(
+    activeMailList.ref.update({
+      lastSent: currentDate,
     })
   );
 
   await Promise.all(promiseArr);
-  console.log("Current batch modified");
 };
 
 sendMails();

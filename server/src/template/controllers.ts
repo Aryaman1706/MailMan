@@ -5,6 +5,8 @@ import { v4 } from "uuid";
 import { Request, Response } from "express";
 import { TemplateDocumentData } from "./customTypes";
 import { types as MailListTypes } from "../mailList";
+import juice from "juice";
+import styles from "../utils/styles";
 
 // * Utils
 import * as validators from "../utils/validators/template";
@@ -12,7 +14,7 @@ import { firestore } from "firebase-admin";
 import writeToFile from "./writeFilePromise";
 import readFile from "./readFilePromise";
 
-// * Create new template with mailLists
+// * Create new template
 export const newTemplate = async (req: Request, res: Response) => {
   try {
     // Validating req.body
@@ -57,7 +59,7 @@ export const newTemplate = async (req: Request, res: Response) => {
 
     const fileWriteResult: string = await writeToFile(
       fileWriteStream,
-      value.html
+      juice.inlineContent(value.html, styles)
     )
       .then((d) => d)
       .catch((e) => e);
@@ -118,7 +120,7 @@ export const listTemplates = async (_req: Request, res: Response) => {
       return res.status(200).json({
         body: {
           msg: "No templates found",
-          data: [],
+          data: null,
         },
         error: null,
       });
