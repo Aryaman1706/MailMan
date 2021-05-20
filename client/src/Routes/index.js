@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import Route from "./RouteWrapper";
+import LoginRoute from "./LoginRoute";
 
 // * General
 import Login from "../Components/Login";
 
 // * Common Dashboard
 import Profile from "../Components/Profile";
-import ReauthenticateUser from "../Components/Profile/ReauthenticateUser";
 import AddMailList from "../Components/Dashboard/AddMailList";
 import ListMailList from "../Components/Dashboard/User/ListMailList";
 import ListTemplates from "../Components/Dashboard/ListTemplates";
@@ -24,11 +24,10 @@ const Routes = () => {
       <Router basename="/">
         <Switch>
           {/* General */}
-          <Route exact path="/login" component={Login} />
+          <LoginRoute exact path="/login" component={Login} />
 
           {/* Common Dashboard */}
           <Route exact path="/profile" onlyUsers layout component={Profile} />
-          <Route exact path="/reauthenticate" component={ReauthenticateUser} />
           <Route
             exact
             path="/mail-list/add"
@@ -36,13 +35,7 @@ const Routes = () => {
             layout
             component={AddMailList}
           />
-          <Route
-            exact
-            path="/mail-list/list"
-            onlyUsers
-            layout
-            component={ListMailList}
-          />
+          <Route exact path="/" onlyUsers layout component={ListMailList} />
           <Route
             exact
             path="/template/list"

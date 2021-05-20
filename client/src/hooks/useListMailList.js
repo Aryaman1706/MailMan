@@ -13,12 +13,6 @@ const useList = (promiseFn) => {
   const query = useQuery(["listMailList", page], () => promiseFn(page), {
     keepPreviousData: true,
     enabled: !!idToken,
-    refetchOnMount: "always",
-    refetchOnReconnect: "always",
-    refetchOnWindowFocus: true,
-    retry: 2,
-    retryDelay: 500,
-    staleTime: 15 * 60 * 1000,
   });
 
   const nextPage = () => {

@@ -118,7 +118,7 @@ export const listTemplates = async (_req: Request, res: Response) => {
       return res.status(200).json({
         body: {
           msg: "No templates found",
-          data: null,
+          data: [],
         },
         error: null,
       });

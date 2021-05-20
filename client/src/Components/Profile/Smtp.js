@@ -1,19 +1,34 @@
+import { useEffect } from "react";
 import { Typography, Grid, Button, TextField } from "@material-ui/core";
 import Loader from "../Loader";
 import useEditSmtp from "./useEditSmtp";
 import useFormHandler from "../../hooks/useFormHandler";
 import { initialValues, validationSchema } from "./formInit";
+import useLoadUser from "./useLoadUser";
 
 const Smtp = () => {
-  const [values, changeHandler, submitHandler] = useFormHandler(
+  const query = useLoadUser();
+  const mutation = useEditSmtp();
+  const [values, changeHandler, submitHandler, setValues] = useFormHandler(
     initialValues,
     validationSchema
   );
-  const mutation = useEditSmtp();
+
+  useEffect(() => {
+    const userSmtp = query?.data?.body?.data?.smtp;
+    if (userSmtp) {
+      setValues({
+        email: userSmtp?.email || "",
+        password: userSmtp?.password || "",
+      });
+    }
+
+    // eslint-disable-next-line
+  }, [query.data]);
 
   return (
     <>
-      {mutation.isLoading ? (
+      {mutation.isLoading || query.isLoading ? (
         <Loader />
       ) : (
         <>

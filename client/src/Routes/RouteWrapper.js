@@ -19,13 +19,11 @@ const RouteWrapper = ({
   const { loading, user, isAdmin } = useUserStore(selector);
 
   if (onlyUsers && !loading && !user) {
-    console.log("not a user");
     return <Redirect to="/login" />;
   }
 
   if (onlyAdmins && !loading && (!user || (user && !isAdmin))) {
-    console.log("not an admin");
-    return <Redirect to="/login" />;
+    return <Redirect to="/" />;
   }
 
   if (layout && !loading && user && isAdmin) {

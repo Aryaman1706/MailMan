@@ -8,7 +8,7 @@ const ListTemplates = () => {
 
   return (
     <Container>
-      {query.isLoading || !templates ? (
+      {query.isLoading ? (
         <Loader />
       ) : (
         <Grid container spacing={2}>
@@ -17,9 +17,8 @@ const ListTemplates = () => {
               List Templates
             </Typography>
           </Grid>
-          {templates.map((t) => (
-            <ListTemplatesItem template={t} />
-          ))}
+          {templates &&
+            templates.map((t) => <ListTemplatesItem template={t} />)}
         </Grid>
       )}
     </Container>

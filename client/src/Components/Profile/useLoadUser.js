@@ -1,20 +1,18 @@
-import { useState } from "react";
 import { useQuery } from "react-query";
-import axios from "../utils/axios";
+import useUserStore from "../../Stores/userStore";
+import axios from "../../utils/axios";
 import Swal from "sweetalert2";
-import useUserStore from "../Stores/userStore";
 
 const selector = (state) => ({
   idToken: state.idToken,
 });
 
-const useTemplateList = () => {
+const useLoadUser = () => {
   const { idToken } = useUserStore(selector);
-  const [templates, setTemplates] = useState(null);
 
   const queryFn = () =>
     axios
-      .get("/template/list", {
+      .get("/user/profile", {
         headers: {
           "auth-id-token": idToken,
         },
@@ -24,7 +22,7 @@ const useTemplateList = () => {
         throw err?.response?.data || "Request failed.";
       });
 
-  const query = useQuery("listTemplates", queryFn, {
+  const query = useQuery("userProfile", queryFn, {
     enabled: !!idToken,
     onError: (error) => {
       const errorMsg = error?.error?.msg || "Request Failed. Try Again.";
@@ -35,14 +33,10 @@ const useTemplateList = () => {
         text: errorMsg,
         showConfirmButton: true,
       });
-      setTemplates(null);
-    },
-    onSuccess: (data) => {
-      setTemplates(data.body.data);
     },
   });
 
-  return [query, templates];
+  return query;
 };
 
-export default useTemplateList;
+export default useLoadUser;

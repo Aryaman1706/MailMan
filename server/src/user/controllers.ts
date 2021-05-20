@@ -129,6 +129,14 @@ export const getProfile = async (req: ReqUser, res: Response) => {
       isAdmin: userData.isAdmin,
     };
 
+    // Decrypting password
+    if (userProfile.smtp && userProfile.smtp.password) {
+      userProfile.smtp.password = CryptoJS.AES.decrypt(
+        userProfile.smtp.password,
+        process.env.SECRET_PASSPHRASE as string
+      ).toString(CryptoJS.enc.Utf8);
+    }
+
     return res.status(200).json({
       body: {
         msg: "User found.",

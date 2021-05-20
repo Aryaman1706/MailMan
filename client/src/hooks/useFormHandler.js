@@ -27,7 +27,7 @@ const useFormHandler = (initialValues, validationSchema) => {
     }
   };
 
-  return [state, changeHandler, submitHandler];
+  return [state, changeHandler, submitHandler, setState];
 };
 
 export default useFormHandler;
