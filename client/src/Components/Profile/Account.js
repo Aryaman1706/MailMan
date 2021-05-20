@@ -15,11 +15,7 @@ const Account = () => {
             Email:- {firebase.auth().currentUser?.email || null}
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <Button fullWidth variant="contained" color="primary">
-            Change Email
-          </Button>
-        </Grid>
+        <Grid item xs={6}></Grid>
         <Grid item xs={6}>
           <Button fullWidth variant="contained" color="primary">
             Change Password

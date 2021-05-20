@@ -1,6 +1,5 @@
 import Layout from "../Layout";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
 
@@ -14,20 +13,8 @@ const links = [
     text: "Queued Emails",
   },
   {
-    link: "/admin/mail-list",
-    text: "Queued Emails (full)",
-  },
-  {
-    link: "/admin/template",
-    text: "Add new Template",
-  },
-  {
     link: "/template/list",
     text: "List Templates",
-  },
-  {
-    link: "/admin/register",
-    text: "Register User",
   },
   {
     link: "/profile",
@@ -36,11 +23,8 @@ const links = [
 ];
 
 const LogoutBtn = () => {
-  //   const history = useHistory();
-
   const handler = () => {
     firebase.auth().signOut();
-    // history.push("/login") ;
   };
 
   return (
@@ -50,8 +34,8 @@ const LogoutBtn = () => {
   );
 };
 
-const AdminLayout = ({ children }) => {
+const UserLayout = ({ children }) => {
   return <Layout links={links} logout={<LogoutBtn />} children={children} />;
 };
 
-export default AdminLayout;
+export default UserLayout;

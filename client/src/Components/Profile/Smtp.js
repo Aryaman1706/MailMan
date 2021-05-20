@@ -2,14 +2,9 @@ import { Typography, Grid, Button, TextField } from "@material-ui/core";
 import Loader from "../Loader";
 import useEditSmtp from "./useEditSmtp";
 import useFormHandler from "../../hooks/useFormHandler";
-import validationSchema from "./validationSchema";
+import { initialValues, validationSchema } from "./formInit";
 
 const Smtp = () => {
-  const initialValues = {
-    email: "",
-    password: "",
-  };
-
   const [values, changeHandler, submitHandler] = useFormHandler(
     initialValues,
     validationSchema

@@ -4,8 +4,10 @@ import firebase from "firebase";
 import useUserStore from "./Stores/userStore";
 import { useEffect } from "react";
 import Routes from "./Routes";
+import Loader from "./Components/Loader";
 
 const selector = (state) => ({
+  loading: state.loading,
   setState: state.setState,
 });
 
@@ -36,7 +38,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Routes />
+        {userStore.loading ? <Loader /> : <Routes />}
         <ReactQueryDevtools />
       </QueryClientProvider>
     </>

@@ -6,54 +6,17 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core";
-import Swal from "sweetalert2";
 import Loader from "../../../Loader";
 import useSignupUser from "./useSignupUser";
 
-const Form = ({
-  values: { email, password, smtp_email, smtp_password, isAdmin },
-  errors,
-  touched,
-  handleChange,
-  setFieldValue,
-  isValid,
-  setFieldTouched,
-  resetForm,
-}) => {
-  const mutation = useSignupUser(resetForm);
+const Form = (formikProps) => {
+  const [mutation, changeHandler, submitHandler] = useSignupUser(formikProps);
 
-  const changeHandler = (e) => {
-    if (e.target.name === "isAdmin") {
-      setFieldValue("isAdmin", e.target.checked, false);
-    } else {
-      handleChange(e);
-    }
-    setFieldTouched(e.target.name, true, false);
-  };
-
-  const submitHandler = () => {
-    if (!isValid) {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Invalid Inputs",
-        text: "Input values are not in required format.",
-        showConfirmButton: true,
-      });
-    } else {
-      const inputData = {
-        isAdmin,
-        email,
-        password,
-      };
-      inputData.smtp =
-        !smtp_email && !smtp_password
-          ? null
-          : { email: smtp_email || null, password: smtp_password || null };
-
-      mutation.mutate(inputData);
-    }
-  };
+  const {
+    values: { email, password, smtp_email, smtp_password, isAdmin },
+    errors,
+    touched,
+  } = formikProps;
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Grid, Typography, makeStyles } from "@material-ui/core";
-import useFormInit from "./useFormInit";
+import { initialValues, validationSchema } from "./formInit";
 import { Formik } from "formik";
 import Form from "./Form";
 
@@ -16,7 +16,6 @@ const useStyles = makeStyles(() => ({
 
 const Login = () => {
   const classes = useStyles();
-  const [initialValues, validationSchema] = useFormInit();
 
   return (
     <>
