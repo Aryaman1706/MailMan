@@ -1,5 +1,5 @@
 import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -18,13 +18,13 @@ const LinkItem = ({ link, text }) => {
 
   return (
     <Grid item xs={12}>
-      <Link to={link} className={classes.link}>
+      <NavLink to={link} className={classes.link}>
         <Paper elevation={2} className={classes.paper}>
           <Typography variant="body1" align="center" className={classes.text}>
             {text}
           </Typography>
         </Paper>
-      </Link>
+      </NavLink>
     </Grid>
   );
 };

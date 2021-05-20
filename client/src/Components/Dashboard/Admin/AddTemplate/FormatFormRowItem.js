@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, TextField, IconButton } from "@material-ui/core";
 import { Remove } from "@material-ui/icons";
-import validationSchema from "./validationSchema";
+import { validationSchema } from "./formInit";
 
 const FormatFormRowItem = ({
   index,

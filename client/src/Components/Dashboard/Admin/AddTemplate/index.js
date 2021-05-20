@@ -1,21 +1,9 @@
 import { Grid, Container } from "@material-ui/core";
 import { Formik } from "formik";
 import MainForm from "./MainForm";
-import validationSchema from "./validationSchema";
+import { initialValues, validationSchema } from "./formInit";
 
 const Editor = () => {
-  const initialValues = {
-    title: "",
-    subject: "",
-    html: "",
-    format: [
-      {
-        field: "email",
-        cell: "",
-      },
-    ],
-  };
-
   return (
     <>
       <>

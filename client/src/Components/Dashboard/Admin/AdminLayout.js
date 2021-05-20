@@ -1,6 +1,5 @@
 import Layout from "../Layout";
 import { Button } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 import firebase from "firebase/app";
 import "firebase/auth";
 

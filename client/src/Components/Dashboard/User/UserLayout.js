@@ -14,7 +14,7 @@ const links = [
   },
   {
     link: "/template/list",
-    text: "List Templates",
+    text: "View all Templates",
   },
   {
     link: "/profile",

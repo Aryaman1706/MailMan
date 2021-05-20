@@ -1,16 +1,27 @@
 import Swal from "sweetalert2";
 import { useMutation } from "react-query";
 import axios from "../../utils/axios";
+import useUserStore from "../../Stores/userStore";
 
-const promiseFn = (formData) =>
-  axios
-    .put("/user/profile", formData)
-    .then((response) => response.data)
-    .catch((err) => {
-      throw err.response.data;
-    });
+const selector = (state) => ({
+  idToken: state.idToken,
+});
 
 const useEditSmtp = () => {
+  const { idToken } = useUserStore(selector);
+
+  const promiseFn = (formData) =>
+    axios
+      .put("/user/profile", formData, {
+        headers: {
+          "auth-id-token": idToken,
+        },
+      })
+      .then((response) => response.data)
+      .catch((err) => {
+        throw err.response.data;
+      });
+
   const mutation = useMutation("editSMTP", promiseFn, {
     onError: (error) => {
       const errorMsg = error.error.msg || "Request Failed. Try Again.";

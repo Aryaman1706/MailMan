@@ -29,6 +29,7 @@ const makeMiddleware = (identity?: "admin" | "user") => {
         .catch((err: FirebaseError) => err.message);
 
       if (typeof user === "string" || !user) {
+        console.log(user);
         return res.status(400).json({
           body: null,
           error: {

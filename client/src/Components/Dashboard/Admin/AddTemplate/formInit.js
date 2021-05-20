@@ -8,7 +8,19 @@ const customMessage = {
   field: "must be a combination of alphabet, digit, _ or -",
 };
 
-const validationSchema = object({
+export const initialValues = {
+  title: "",
+  subject: "",
+  html: "",
+  format: [
+    {
+      field: "email",
+      cell: "",
+    },
+  ],
+};
+
+export const validationSchema = object({
   title: string().trim().required(customMessage.required),
   subject: string().trim().required(customMessage.required),
   html: string().trim().required(),
@@ -30,5 +42,3 @@ const validationSchema = object({
     .min(1, customMessage.min)
     .required(customMessage.required),
 });
-
-export default validationSchema;
