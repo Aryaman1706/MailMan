@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Sidenav = () => {
+const Sidenav = ({ links, logout }) => {
   const classes = useStyles();
 
   return (
@@ -24,7 +24,12 @@ const Sidenav = () => {
         <Toolbar></Toolbar>
         <Divider></Divider>
         <Grid container spacing={1} className={classes.linkContainer}>
-          <LinkItem link="/template/list" text="Template Listing" />
+          {links.map((item) => (
+            <LinkItem link={item.link} text={item.text} />
+          ))}
+          <Grid item xs={12}>
+            {logout}
+          </Grid>
         </Grid>
       </Grid>
     </>

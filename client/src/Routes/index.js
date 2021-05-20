@@ -1,4 +1,8 @@
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route as TrueRoute,
+} from "react-router-dom";
 import Route from "./RouteWrapper";
 
 // * General
@@ -13,6 +17,7 @@ import ListMailList from "../Components/Dashboard/User/ListMailList";
 import ListTemplates from "../Components/Dashboard/ListTemplates";
 
 // * Admin Dashboard
+import AdminLayout from "../Components/Dashboard/Admin/AdminLayout";
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
 import SignupUser from "../Components/Dashboard/Admin/SignupUser";
 import FullListMailList from "../Components/Dashboard/Admin/ListMailList";
@@ -24,6 +29,11 @@ const Routes = () => {
     <>
       <Router basename="/">
         <Switch>
+          <TrueRoute exact path="/admin">
+            <AdminLayout>
+              <AddMailList />
+            </AdminLayout>
+          </TrueRoute>
           {/* General */}
           <Route exact path="/" component={Layout} />
           <Route exact path="/login" component={Login} />
