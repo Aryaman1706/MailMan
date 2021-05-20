@@ -1,6 +1,6 @@
 import { Grid, Typography, Container } from "@material-ui/core";
-import useTemplateList from "../../hooks/useTemplateList";
-import Loader from "../Loader";
+import useTemplateList from "../../../hooks/useTemplateList";
+import Loader from "../../Loader";
 import Form from "./Form";
 
 const AddMailList = () => {

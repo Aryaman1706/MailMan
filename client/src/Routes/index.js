@@ -8,7 +8,7 @@ import Layout from "../Components/Dashboard/Layout";
 // * Common Dashboard
 import Profile from "../Components/Profile";
 import ReauthenticateUser from "../Components/Profile/ReauthenticateUser";
-import AddMailList from "../Components/AddMailList";
+import AddMailList from "../Components/Dashboard/AddMailList";
 import ListMailList from "../Components/Dashboard/User/ListMailList";
 import ListTemplates from "../Components/Dashboard/ListTemplates";
 
@@ -33,7 +33,7 @@ const Routes = () => {
           <Route exact path="/reauthenticate" component={ReauthenticateUser} />
           <Route exact path="/mail-list/add" component={AddMailList} />
           <Route exact path="/mail-list/list" component={ListMailList} />
-          <Route exact path="/templates/list" component={ListTemplates} />
+          <Route exact path="/template/list" component={ListTemplates} />
           {/* <Route exact path="/template/view/:id" component={} /> */}
 
           {/* Admin Dashboard */}

@@ -1,6 +1,6 @@
 import { useMutation } from "react-query";
-import axios from "../../utils/axios";
-import useUserStore from "../../Stores/userStore";
+import axios from "../../../utils/axios";
+import useUserStore from "../../../Stores/userStore";
 import Swal from "sweetalert2";
 
 const selector = (state) => ({

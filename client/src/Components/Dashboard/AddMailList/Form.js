@@ -12,7 +12,7 @@ import { Delete } from "@material-ui/icons";
 import TemplateInfo from "./TemplateInfo";
 import useFormHandler from "./useFormHandler";
 import useAddMailList from "./useAddMailList";
-import Loader from "../Loader";
+import Loader from "../../Loader";
 
 const Form = ({ templates }) => {
   const [{ template, file }, changeHandler, submitHandler, fileClear] =
