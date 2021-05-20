@@ -13,6 +13,7 @@ type template = {
 
 export interface MailListData {
   template: template;
+  email: string;
   uid: string;
   file: string;
   addedOn: firestore.Timestamp;

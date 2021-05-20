@@ -46,6 +46,8 @@ const sendMails = async () => {
   const activeMailList = activeMailLists[0];
   const currentDate = firestore.Timestamp.now();
 
+  // Finding user SMTP
+
   const pendingMailListItems = (await db
     .collection(collections.mailListItem)
     .where("mailListId", "==", activeMailList.id)
@@ -63,7 +65,7 @@ const sendMails = async () => {
   // Selecting at max 2 pendingMailListItems
   const pendingMailListItemDocs = pendingMailListItems.docs.slice(0, 2);
 
-  // TODO -> Send emails
+  // Send emails
   const emailData: EmailListItem[] = [];
   pendingMailListItemDocs.forEach((doc) => {
     emailData.push(...doc.data().list);

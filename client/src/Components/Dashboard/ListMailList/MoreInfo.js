@@ -1,7 +1,9 @@
 import { Grid, Button } from "@material-ui/core";
 import MoreInfoItem from "./MoreInfoItem";
+import useDownloadFile from "./useDownloadFile";
 
 const MoreInfo = ({ mailList }) => {
+  const [downloadFile, loading] = useDownloadFile(mailList.file);
   return (
     <>
       <Grid container spacing={1}>
@@ -31,9 +33,17 @@ const MoreInfo = ({ mailList }) => {
         <MoreInfoItem
           title={"Excel File"}
           component={
-            <Button variant="contained" color="primary">
-              Download
-            </Button>
+            <>
+              {!loading && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={downloadFile}
+                >
+                  Download
+                </Button>
+              )}
+            </>
           }
         />
       </Grid>
