@@ -5,43 +5,29 @@ import {
   Button,
   InputAdornment,
   IconButton,
+  makeStyles,
 } from "@material-ui/core";
 import { VisibilityOff, Visibility } from "@material-ui/icons";
-import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 import Loader from "../Loader";
-import useLoginMutate from "./useLoginHandler";
-import firebase from "firebase";
+import useLoginHandler from "./useLoginHandler";
 
-const Form = ({
-  values: { email, password },
-  errors,
-  touched,
-  handleChange,
-  isValid,
-  setFieldTouched,
-}) => {
-  const mutation = useLoginMutate();
+const useStyles = makeStyles(() => ({
+  linkContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+}));
 
-  const changeHandler = (e) => {
-    handleChange(e);
-    setFieldTouched(e.target.name, true, false);
-  };
-
-  const submitHandler = () => {
-    if (isValid) {
-      mutation.mutate({ email, password });
-    } else {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Invalid Inputs",
-        text: "Input values are not in required format.",
-        showConfirmButton: true,
-      });
-    }
-  };
-
+const Form = (formikProps) => {
   const [show, setShow] = useState(false);
+  const classes = useStyles();
+  const [mutation, changeHandler, submitHandler] = useLoginHandler(formikProps);
+  const {
+    values: { email, password },
+    errors,
+    touched,
+  } = formikProps;
 
   return (
     <>
@@ -64,6 +50,7 @@ const Form = ({
               error={touched.email && Boolean(errors.email)}
             />
           </Grid>
+
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -86,6 +73,7 @@ const Form = ({
               }}
             />
           </Grid>
+
           <Grid item xs={12}>
             <Button
               fullWidth
@@ -98,23 +86,11 @@ const Form = ({
           </Grid>
 
           <Grid item xs={12}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                firebase.auth().signOut();
-              }}
-            >
-              Logout
-            </Button>
-          </Grid>
-          <Grid item xs={12}>
-            {!mutation.isLoading && firebase.auth().currentUser ? (
-              <p>User logged in</p>
-            ) : (
-              <p>User not logged in</p>
-            )}
+            <div className={classes.linkContainer}>
+              <Link to="/forgot-password">
+                <p>Forgot Password?</p>
+              </Link>
+            </div>
           </Grid>
         </>
       )}

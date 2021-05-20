@@ -1,33 +1,34 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
+import useFormInit from "./useFormInit";
 import { Formik } from "formik";
-import { string, object } from "yup";
 import Form from "./Form";
 
-const Login = () => {
-  const Yup = { string, object };
-  const customMessage = {
-    required: "This is a required field.",
-  };
+const useStyles = makeStyles(() => ({
+  parentDiv: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "60px",
+  },
+  formContainer: {
+    width: "500px",
+  },
+}));
 
-  const initialValues = {
-    email: "",
-    password: "",
-  };
-  const validationSchema = Yup.object({
-    email: Yup.string().required(customMessage.required),
-    password: Yup.string().required(customMessage.required),
-  });
+const Login = () => {
+  const classes = useStyles();
+  const [initialValues, validationSchema] = useFormInit();
 
   return (
     <>
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "60px" }}
-      >
-        <div style={{ width: "500px" }}>
+      <div className={classes.parentDiv}>
+        <div className={classes.formContainer}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h4" align="center">
-                Login to Mailer
+                Welcome to AV-Mailer
+              </Typography>
+              <Typography variant="h6" align="center">
+                Login to continue
               </Typography>
             </Grid>
             <Formik

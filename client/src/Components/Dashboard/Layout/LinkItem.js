@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   },
   paper: {
-    padding: "8px",
+    padding: "10px",
   },
   text: {
     color: "dark-grey",
