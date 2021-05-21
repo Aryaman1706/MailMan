@@ -1,199 +1,149 @@
 {
-  "mailInfo": [
+  "successfulMails": [
     {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1162,
-      "messageTime": 707,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689284 a26sm2041335pff.149 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
+      "info": {
+        "accepted": ["1761ary@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1079,
+        "messageTime": 2543,
+        "messageSize": 350,
+        "response": "250 2.0.0 OK  1621591942 i7sm4082751pgv.93 - gsmtp",
+        "envelope": {
+          "from": "1761ary@gmail.com",
+          "to": ["1761ary@gmail.com"]
+        },
+        "messageId": "<00b67427-43d2-840f-f9c1-b8e0b0320e7a@gmail.com>"
       },
-      "messageId": "<2e13f60d-da83-0132-b175-26edc825f058@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1164,
-      "messageTime": 1155,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689284 c129sm2013473pfb.141 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
+      "info": {
+        "accepted": ["zqexaf@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1078,
+        "messageTime": 4082,
+        "messageSize": 349,
+        "response": "250 2.0.0 OK  1621591943 f21sm3878982pjt.11 - gsmtp",
+        "envelope": { "from": "1761ary@gmail.com", "to": ["zqexaf@gmail.com"] },
+        "messageId": "<ee15fd4c-8629-469e-e8f6-c598d2db90cc@gmail.com>"
       },
-      "messageId": "<6e7ce8e6-c4cf-ec6f-8eb7-a213f3b8cb93@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1175,
-      "messageTime": 760,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689284 w25sm2018930pfg.206 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
+      "info": {
+        "accepted": ["1761ary@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1082,
+        "messageTime": 5674,
+        "messageSize": 350,
+        "response": "250 2.0.0 OK  1621591945 w15sm8492164pjy.1 - gsmtp",
+        "envelope": {
+          "from": "1761ary@gmail.com",
+          "to": ["1761ary@gmail.com"]
+        },
+        "messageId": "<ff379637-efca-4e4a-09cb-e58300272773@gmail.com>"
       },
-      "messageId": "<aedf5dea-3578-2c9f-3332-c5f448c93d57@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1135,
-      "messageTime": 983,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689284 f15sm2106168pgv.5 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
+      "info": {
+        "accepted": ["zqexaf@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1084,
+        "messageTime": 1592,
+        "messageSize": 349,
+        "response": "250 2.0.0 OK  1621591941 s14sm4008017pjp.16 - gsmtp",
+        "envelope": { "from": "1761ary@gmail.com", "to": ["zqexaf@gmail.com"] },
+        "messageId": "<f25fb7c6-9a36-c769-139a-e404a05c55cd@gmail.com>"
       },
-      "messageId": "<73d634e5-5be3-9cd0-82f2-5d4d152ee727@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1124,
-      "messageTime": 3955,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689288 g8sm2089276pfo.85 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
+      "info": {
+        "accepted": ["1761ary@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1019,
+        "messageTime": 927,
+        "messageSize": 350,
+        "response": "250 2.0.0 OK  1621591940 n11sm4449333pff.96 - gsmtp",
+        "envelope": {
+          "from": "1761ary@gmail.com",
+          "to": ["1761ary@gmail.com"]
+        },
+        "messageId": "<bbccade7-3619-d7cb-6272-c0c928bc091b@gmail.com>"
       },
-      "messageId": "<cbc0ccf9-3113-e56f-1967-4b39a1ff9deb@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1145,
-      "messageTime": 5449,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689289 ch14sm1774527pjb.55 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
+      "info": {
+        "accepted": ["zqexaf@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1087,
+        "messageTime": 3173,
+        "messageSize": 349,
+        "response": "250 2.0.0 OK  1621591942 f17sm4123895pgi.26 - gsmtp",
+        "envelope": { "from": "1761ary@gmail.com", "to": ["zqexaf@gmail.com"] },
+        "messageId": "<99c5b164-3a00-0f0c-a9e2-f93f097b9baa@gmail.com>"
       },
-      "messageId": "<a4232406-0628-5057-62d7-34c1bdbf8184@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1178,
-      "messageTime": 1442,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689285 d132sm1979868pfd.136 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
+      "info": {
+        "accepted": ["1761ary@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1087,
+        "messageTime": 4332,
+        "messageSize": 350,
+        "response": "250 2.0.0 OK  1621591944 w124sm4008459pfb.73 - gsmtp",
+        "envelope": {
+          "from": "1761ary@gmail.com",
+          "to": ["1761ary@gmail.com"]
+        },
+        "messageId": "<1fee35fa-dc05-a627-824a-c086ad6f615e@gmail.com>"
       },
-      "messageId": "<8892847c-8b5f-9eef-5336-2540f0028552@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1069,
-      "messageTime": 3506,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689287 b25sm1571261pfo.218 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
+      "info": {
+        "accepted": ["zqexaf@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1032,
+        "messageTime": 1181,
+        "messageSize": 349,
+        "response": "250 2.0.0 OK  1621591940 k21sm3927985pgb.56 - gsmtp",
+        "envelope": { "from": "1761ary@gmail.com", "to": ["zqexaf@gmail.com"] },
+        "messageId": "<541bb6c6-2675-b23d-849f-26595d4002c8@gmail.com>"
       },
-      "messageId": "<f165b6d3-ea78-7974-5d2d-326b91e8ab9e@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1157,
-      "messageTime": 5829,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689289 x4sm1127616pfr.160 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
+      "info": {
+        "accepted": ["1761ary@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1103,
+        "messageTime": 2883,
+        "messageSize": 350,
+        "response": "250 2.0.0 OK  1621591942 f9sm3705840pfc.42 - gsmtp",
+        "envelope": {
+          "from": "1761ary@gmail.com",
+          "to": ["1761ary@gmail.com"]
+        },
+        "messageId": "<8633643c-5d8c-c948-54b7-d5147de04fbb@gmail.com>"
       },
-      "messageId": "<f547a9fa-e9a6-cbc9-afed-41691b7d275c@gmail.com>"
+      "error": null
     },
     {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1143,
-      "messageTime": 4590,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689288 c125sm2028602pfa.74 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
+      "info": {
+        "accepted": ["zqexaf@gmail.com"],
+        "rejected": [],
+        "envelopeTime": 1108,
+        "messageTime": 4603,
+        "messageSize": 349,
+        "response": "250 2.0.0 OK  1621591944 m5sm3872703pgl.75 - gsmtp",
+        "envelope": { "from": "1761ary@gmail.com", "to": ["zqexaf@gmail.com"] },
+        "messageId": "<6cc52c4d-651d-f71b-de86-7ad68b771022@gmail.com>"
       },
-      "messageId": "<0ff90e80-31bf-434d-1cf0-7031e6c23115@gmail.com>"
-    },
-    {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1136,
-      "messageTime": 2567,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689286 x22sm2021329pfa.24 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
-      },
-      "messageId": "<5233adfc-c556-9555-5783-2d0d87a93359@gmail.com>"
-    },
-    {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1107,
-      "messageTime": 3744,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689287 a20sm2061343pfk.46 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
-      },
-      "messageId": "<f8f8774e-ed14-1b12-bee9-0ea118587aa7@gmail.com>"
-    },
-    {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1068,
-      "messageTime": 2623,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689286 g29sm994948pgm.11 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
-      },
-      "messageId": "<0ab4557e-7396-9ef5-338f-6b812ab61674@gmail.com>"
-    },
-    {
-      "accepted": ["aryamankumud@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1148,
-      "messageTime": 5054,
-      "messageSize": 1070,
-      "response": "250 2.0.0 OK  1619689289 q3sm2032723pgb.80 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["aryamankumud@gmail.com"]
-      },
-      "messageId": "<6ed5f416-9c44-a4b1-2741-1e60cef217c4@gmail.com>"
-    },
-    {
-      "accepted": ["rinky.grover2011@gmail.com"],
-      "rejected": [],
-      "envelopeTime": 1127,
-      "messageTime": 2295,
-      "messageSize": 1078,
-      "response": "250 2.0.0 OK  1619689286 k127sm2138851pfd.63 - gsmtp",
-      "envelope": {
-        "from": "1761ary@gmail.com",
-        "to": ["rinky.grover2011@gmail.com"]
-      },
-      "messageId": "<3f81293a-fc70-c71e-719e-40c5b877e6ec@gmail.com>"
+      "error": null
     }
   ],
   "erroredMails": []

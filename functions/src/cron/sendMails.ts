@@ -11,11 +11,11 @@ const sendMails = async () => {
   const incompleteMailLists = (await db
     .collection(collections.mailList)
     .where("complete", "==", false)
-    .orderBy("date", "asc")
+    .orderBy("addedOn", "asc")
     .get()) as firestore.QuerySnapshot<mailListTypes.MailListDocumentData>;
 
   if (incompleteMailLists.empty || incompleteMailLists.size === 0) {
-    console.log("No incomplete templates found.");
+    console.log("No incomplete mailList found.");
     return;
   }
 
@@ -141,4 +141,4 @@ const sendMails = async () => {
   await Promise.all(promiseArr);
 };
 
-sendMails();
+export default sendMails;

@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { config } from "dotenv";
+import * as functions from "firebase-functions";
 
 config();
 
@@ -13,25 +14,21 @@ import { router as userRouter } from "./user";
 const app = express();
 
 // * Middlewares
-app.use(express.json());
-app.use((_req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: true, credentials: true }));
 
 // * Routes
-app.use("/api/template", templateRouter);
-app.use("/api/mail-list", mailListRouter);
-app.use("/api/user", userRouter);
+app.use("/template", templateRouter);
+app.use("/mail-list", mailListRouter);
+app.use("/user", userRouter);
 
-// * Start Server
-const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+import sendMails from "./cron/sendMails";
+
+exports.api = functions.region("asia-east2").https.onRequest(app);
+exports.sendMails = functions
+  .region("asia-east2")
+  .pubsub.schedule("every 20 minutes")
+  .timeZone("Asia/Kolkata")
+  .onRun((_context) => {
+    sendMails();
+    return null;
+  });
