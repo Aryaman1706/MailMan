@@ -1,10 +1,11 @@
 {
   "name": "functions",
   "scripts": {
+    "start": "tsc && node lib/index.js",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
+    "start:fn": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
