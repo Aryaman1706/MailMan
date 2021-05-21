@@ -5,6 +5,8 @@ import useAuthObserver from "./hooks/useAuthObserver";
 import Routes from "./Routes";
 import Loader from "./Components/Loader";
 
+import RefreshToken from "./Components/RefreshToken";
+
 const selector = (state) => ({
   loading: state.loading,
 });
@@ -15,10 +17,10 @@ function App() {
       queries: {
         refetchOnMount: "always",
         refetchOnReconnect: "always",
-        refetchOnWindowFocus: "true",
+        refetchOnWindowFocus: true,
         retry: 2,
         retryDelay: 500,
-        staleTime: 2 * 60 * 1000,
+        staleTime: 5 * 60 * 1000,
       },
     },
   });
@@ -28,6 +30,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
+        <RefreshToken />
         {loading ? <Loader /> : <Routes />}
         <ReactQueryDevtools />
       </QueryClientProvider>

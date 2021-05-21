@@ -33,7 +33,7 @@ const useLoginHandler = (formikProps) => {
         .auth()
         .currentUser.getIdTokenResult()
         .then((user) => {
-          history.push("/mail-list/list");
+          history.push("/");
         });
     },
   });

@@ -5,7 +5,7 @@ export interface UserProfileData {
   uid: string;
   smtp: {
     email: string | null;
-    password?: string | null;
+    password: string | null;
   } | null;
 }
 

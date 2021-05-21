@@ -9,7 +9,7 @@ const links = [
     text: "Queue new Emails",
   },
   {
-    link: "/mail-list/list",
+    link: "/",
     text: "Queued Emails",
   },
   {

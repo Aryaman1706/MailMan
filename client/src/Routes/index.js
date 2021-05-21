@@ -10,6 +10,7 @@ import Profile from "../Components/Profile";
 import AddMailList from "../Components/Dashboard/AddMailList";
 import ListMailList from "../Components/Dashboard/User/ListMailList";
 import ListTemplates from "../Components/Dashboard/ListTemplates";
+import ViewTemplate from "../Components/Dashboard/ViewTemplate";
 
 // * Admin Dashboard
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
@@ -42,6 +43,13 @@ const Routes = () => {
             onlyUsers
             layout
             component={ListTemplates}
+          />
+          <Route
+            exact
+            path="/template/open/:templateId"
+            onlyUsers
+            layout
+            component={ViewTemplate}
           />
 
           {/* Admin Dashboard */}

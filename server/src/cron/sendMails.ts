@@ -2,6 +2,7 @@ import { firestore } from "firebase-admin";
 import { db, collections } from "../config/firebase";
 import { types as mailListTypes } from "../mailList";
 import { types as mailListItemTypes } from "../mailListItem";
+import { types as userTypes } from "../user";
 import { EmailListItem } from "../utils/parse";
 import mailer from "./mailer";
 
@@ -47,6 +48,30 @@ const sendMails = async () => {
   const currentDate = firestore.Timestamp.now();
 
   // Finding user SMTP
+  const userSnap = await db
+    .collection(collections.user)
+    .doc(activeMailList.data().uid)
+    .get()
+    .catch((err: Error) => err.message);
+
+  if (typeof userSnap === "string" || !userSnap.exists) {
+    console.log("User account not found.");
+    return;
+  }
+
+  const userData = userSnap.data() as
+    | userTypes.UserProfileDocumentData
+    | undefined;
+
+  if (
+    !userData ||
+    !userData.smtp ||
+    !userData.smtp.email ||
+    !userData.smtp.password
+  ) {
+    console.log("SMTP information missing.");
+    return;
+  }
 
   const pendingMailListItems = (await db
     .collection(collections.mailListItem)

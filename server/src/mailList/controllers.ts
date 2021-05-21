@@ -15,6 +15,7 @@ import {
 } from "./customTypes";
 import { types as templateTypes } from "../template";
 import { types as mailListItemTypes } from "../mailListItem";
+import { types as userTypes } from "../user";
 
 // * Add a new mailList
 export const addNew = async (req: Request, res: Response) => {
@@ -42,25 +43,6 @@ export const addNew = async (req: Request, res: Response) => {
         },
       });
 
-    // Validating templateId
-    const templateSnap = await db
-      .collection(collections.template)
-      .doc(value.templateId)
-      .get();
-    const templateData = templateSnap.data() as
-      | templateTypes.TemplateDocumentData
-      | undefined;
-
-    if (!templateSnap.exists || !templateData) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid template.",
-          data: null,
-        },
-      });
-    }
-
     // Validating req.user
     if (!req.user)
       return res.status(400).json({
@@ -71,20 +53,75 @@ export const addNew = async (req: Request, res: Response) => {
         },
       });
 
-    // Validating user account
-    const userAccount = await auth
-      .getUser(req.user.id)
-      .then((ur) => ur)
-      .catch((err: Error) => err.message);
+    // Finding template and userAccount
+    const [templateSnap, userRecord, userSnap] = await Promise.all([
+      db
+        .collection(collections.template)
+        .doc(value.templateId)
+        .get()
+        .catch((err: Error) => err.message),
+      auth.getUser(req.user.id).catch((err: Error) => err.message),
+      db
+        .collection(collections.user)
+        .doc(req.user.id)
+        .get()
+        .catch((err: Error) => err.message),
+    ]);
 
-    if (typeof userAccount === "string" || !userAccount.email)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid account.",
-          data: null,
-        },
-      });
+    // Validating templateSnap
+    if (typeof templateSnap === "string" || !templateSnap.exists) {
+      throw {
+        type: "template_error",
+        error: templateSnap || "Template not found.",
+      };
+    }
+
+    const templateData = templateSnap.data() as
+      | templateTypes.TemplateDocumentData
+      | undefined;
+
+    // Validating template data
+    if (!templateData) {
+      throw {
+        type: "template_error",
+        error: "Invalid data in template.",
+      };
+    }
+
+    // Validating userRecord
+    if (typeof userRecord === "string" || !userRecord.email) {
+      throw {
+        type: "user_error",
+        error: "Invalid user account.",
+      };
+    }
+
+    // Validating userSnap
+    if (typeof userSnap === "string" || !userSnap.exists) {
+      throw {
+        type: "user_error",
+        error: userSnap || "User account not found.",
+      };
+    }
+
+    // Validating userData
+    const userData = userSnap.data() as
+      | userTypes.UserProfileDocumentData
+      | undefined;
+
+    if (!userData) {
+      throw {
+        type: "user_error",
+        error: "Invalid data in user account.",
+      };
+    }
+
+    if (!userData.smtp || !userData.smtp.email || !userData.smtp.password) {
+      throw {
+        type: "user_error",
+        error: "SMTP information missing in user.",
+      };
+    }
 
     // Constructing mailListData
     const mailListData: MailListData = {
@@ -94,8 +131,8 @@ export const addNew = async (req: Request, res: Response) => {
         html: templateData.html,
         attachements: templateData.attachements,
       },
-      email: userAccount.email,
-      uid: userAccount.uid,
+      email: userRecord.email,
+      uid: userRecord.uid,
       file: fileName,
       addedOn: firestore.Timestamp.now(),
       active: false,
@@ -177,10 +214,21 @@ export const addNew = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+
+    if (error instanceof Error) {
+      return res.status(500).json({
+        body: null,
+        error: {
+          msg: "Request failed. Try again.",
+          data: null,
+        },
+      });
+    }
+
+    return res.status(400).json({
       body: null,
       error: {
-        msg: "Request failed. Try again.",
+        msg: error?.error || "Invalid request. Try again.",
         data: null,
       },
     });

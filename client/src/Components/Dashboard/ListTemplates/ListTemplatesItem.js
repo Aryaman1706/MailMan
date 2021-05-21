@@ -1,7 +1,10 @@
 import { Grid, Typography, IconButton } from "@material-ui/core";
 import { Visibility } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 
 const ListTemplatesItem = ({ template }) => {
+  const history = useHistory();
+
   return (
     <>
       <Grid item xs={12}>
@@ -19,7 +22,12 @@ const ListTemplatesItem = ({ template }) => {
             </Typography>
           </div>
           <div>
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={() => {
+                history.push(`/template/open/${template.id}`);
+              }}
+            >
               <Visibility />
             </IconButton>
           </div>
