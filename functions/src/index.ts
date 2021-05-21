@@ -14,6 +14,7 @@ import { router as userRouter } from "./user";
 const app = express();
 
 // * Middlewares
+app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
 
 // * Routes
@@ -23,7 +24,7 @@ app.use("/user", userRouter);
 
 import sendMails from "./cron/sendMails";
 
-exports.api = functions.region("asia-east2").https.onRequest(app);
+// exports.api = functions.region("asia-east2").https.onRequest(app);
 exports.sendMails = functions
   .region("asia-east2")
   .pubsub.schedule("every 20 minutes")
@@ -32,3 +33,5 @@ exports.sendMails = functions
     sendMails();
     return null;
   });
+
+// app.listen(process.env.PORT, () => console.log("Server started.."));
