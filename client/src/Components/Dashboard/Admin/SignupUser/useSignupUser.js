@@ -1,8 +1,14 @@
 import { useMutation } from "react-query";
 import Swal from "sweetalert2";
 import axios from "../../../../utils/axios";
+import useUserStore from "../../../../Stores/userStore";
+
+const selector = (state) => ({
+  idToken: state.idToken,
+});
 
 const useSignupUser = (formikProps) => {
+  const { idToken } = useUserStore(selector);
   const {
     values: { email, password, smtp_email, smtp_password, isAdmin },
     resetForm,
@@ -15,7 +21,11 @@ const useSignupUser = (formikProps) => {
   const promiseFn = (inputData) =>
     new Promise((resolve, reject) => {
       axios
-        .post("/user/signup", inputData)
+        .post("/user/signup", inputData, {
+          headers: {
+            "auth-id-token": idToken,
+          },
+        })
         .then((response) => resolve(response.data))
         .catch((error) =>
           reject(
