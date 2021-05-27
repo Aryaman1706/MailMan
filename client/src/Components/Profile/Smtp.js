@@ -31,47 +31,45 @@ const Smtp = () => {
       {mutation.isLoading || query.isLoading ? (
         <Loader />
       ) : (
-        <>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h5" align="center">
-                SMTP Settings
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                type="text"
-                variant="outlined"
-                label="Email"
-                name="email"
-                value={values.email}
-                onChange={(e) => changeHandler(e)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                type="text"
-                variant="outlined"
-                label="Password"
-                name="password"
-                value={values.password}
-                onChange={(e) => changeHandler(e)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={() => submitHandler(mutation.mutate)}
-              >
-                Save Changes
-              </Button>
-            </Grid>
+        <Grid container alignItems="center" spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h5" align="center">
+              SMTP Settings
+            </Typography>
           </Grid>
-        </>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              type="text"
+              variant="outlined"
+              label="Email"
+              name="email"
+              value={values.email}
+              onChange={(e) => changeHandler(e)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              type="text"
+              variant="outlined"
+              label="Password"
+              name="password"
+              value={values.password}
+              onChange={(e) => changeHandler(e)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={() => submitHandler(mutation.mutate)}
+            >
+              Save Changes
+            </Button>
+          </Grid>
+        </Grid>
       )}
     </>
   );

@@ -4,18 +4,21 @@ import {
   Typography,
   Button,
   Container,
+  makeStyles,
 } from "@material-ui/core";
 import useFormHandler from "../../../hooks/useFormHandler";
-import validationSchema from "./validationSchema";
+import { initialValues, validationSchema } from "./formInit";
 import useReauthenticate from "./useReauthenticate";
 import Loader from "../../Loader";
 
-const ReauthenticateUser = () => {
-  const initialValues = {
-    email: "",
-    password: "",
-  };
+const useStyles = makeStyles(() => ({
+  container: {
+    marginTop: "15px",
+  },
+}));
 
+const ReauthenticateUser = () => {
+  const { container } = useStyles();
   const [state, changeHandler, submitHandler] = useFormHandler(
     initialValues,
     validationSchema
@@ -27,7 +30,7 @@ const ReauthenticateUser = () => {
       {mutation.isLoading ? (
         <Loader />
       ) : (
-        <Container style={{ marginTop: "15px" }}>
+        <Container className={container}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography align="center" varient="h5">

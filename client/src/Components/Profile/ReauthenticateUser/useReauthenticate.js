@@ -5,19 +5,13 @@ import "firebase/auth";
 
 const promiseFn = (formData) => {
   const authCred = firebase.auth.EmailAuthProvider.credential(formData);
-  firebase
-    .auth()
-    .currentUser.reauthenticateWithCredential(authCred)
-    .then((userCred) => userCred)
-    .catch((err) => {
-      throw err.message;
-    });
+  return firebase.auth().currentUser.reauthenticateWithCredential(authCred);
 };
 
 const useReauthenticate = () => {
   const mutation = useMutation("reauthenticateUser", promiseFn, {
     onError: (error) => {
-      const errorMsg = error || "User Reauthentication failed.";
+      const errorMsg = error.message || "User Reauthentication failed.";
       Swal.fire({
         position: "center",
         icon: "error",

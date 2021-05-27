@@ -1,8 +1,23 @@
-import { Divider } from "@material-ui/core";
+import { Divider, makeStyles } from "@material-ui/core";
 import Account from "./Account";
 import Smtp from "./Smtp";
 import useUserStore from "../../Stores/userStore";
 import Loader from "../Loader";
+
+const useStyles = makeStyles(() => ({
+  flexContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
+
+  midContainer: {
+    width: "500px",
+  },
+
+  divider: {
+    margin: "15px 0px 15px 0px",
+  },
+}));
 
 const selector = (state) => ({
   loading: state.loading,
@@ -10,6 +25,7 @@ const selector = (state) => ({
 
 const Profile = () => {
   const { loading } = useUserStore(selector);
+  const { flexContainer, midContainer, divider } = useStyles();
 
   return (
     <>
@@ -17,10 +33,10 @@ const Profile = () => {
         <Loader />
       ) : (
         <>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ width: "500px" }}>
+          <div className={flexContainer}>
+            <div className={midContainer}>
               <Account />
-              <div style={{ margin: "15px 0px 15px 0px" }}>
+              <div className={divider}>
                 <Divider></Divider>
               </div>
               <Smtp />
