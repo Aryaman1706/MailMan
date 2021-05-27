@@ -8,10 +8,14 @@ const useStyles = makeStyles(() => ({
   tableCellText: {
     textAlign: "center",
   },
+
+  boldText: {
+    fontWeight: "bold",
+  },
 }));
 
 const TemplateInfo = ({ template }) => {
-  const classes = useStyles();
+  const { tableCell, tableCellText, boldText } = useStyles();
 
   return (
     <>
@@ -19,48 +23,36 @@ const TemplateInfo = ({ template }) => {
         <>
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography variant="body1" style={{ fontWeight: "bold" }}>
+              <Typography variant="body1" className={boldText}>
                 Information about selected template:-
               </Typography>
             </Grid>
 
             <Grid item xs={2}>
-              <p style={{ fontWeight: "bold" }}>Added on:- </p>
+              <p className={boldText}>Added on:- </p>
             </Grid>
             <Grid item xs={10}>
               <p>{new Date(template.date).toLocaleDateString()}</p>
             </Grid>
 
             <Grid item xs={2}>
-              <p style={{ fontWeight: "bold" }}>Format:- </p>
+              <p className={boldText}>Format:- </p>
             </Grid>
-            <Grid
-              item
-              xs={5}
-              className={classes.tableCell}
-              style={{ fontWeight: "bold" }}
-            >
-              <p className={classes.tableCellText}>Field</p>
+            <Grid item xs={5} className={(tableCell, boldText)}>
+              <p className={tableCellText}>Field</p>
             </Grid>
-            <Grid
-              item
-              xs={5}
-              className={classes.tableCell}
-              style={{ fontWeight: "bold" }}
-            >
-              <p className={classes.tableCellText}>Cell</p>
+            <Grid item xs={5} className={(tableCell, boldText)}>
+              <p className={tableCellText}>Cell</p>
             </Grid>
 
             {Object.keys(template.format).map((key) => (
               <>
                 <Grid item xs={2}></Grid>
-                <Grid item xs={5} className={classes.tableCell}>
-                  <p className={classes.tableCellText}>{key}</p>
+                <Grid item xs={5} className={tableCell}>
+                  <p className={tableCellText}>{key}</p>
                 </Grid>
-                <Grid item xs={5} className={classes.tableCell}>
-                  <p className={classes.tableCellText}>
-                    {template.format[key]}
-                  </p>
+                <Grid item xs={5} className={tableCell}>
+                  <p className={tableCellText}>{template.format[key]}</p>
                 </Grid>
               </>
             ))}

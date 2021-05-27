@@ -1,20 +1,27 @@
-import { Grid, Typography, IconButton } from "@material-ui/core";
-import { Visibility } from "@material-ui/icons";
+import { Grid, Typography, IconButton, makeStyles } from "@material-ui/core";
+import Visibility from "@material-ui/icons/Visibility";
 import { useHistory } from "react-router-dom";
 
+const useStyles = makeStyles(() => ({
+  flexContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    placeItems: "center",
+  },
+}));
+
 const ListTemplatesItem = ({ template }) => {
+  const { flexContainer } = useStyles();
   const history = useHistory();
+
+  const viewTemplate = () => {
+    history.push(`/template/open/${template.id}`);
+  };
 
   return (
     <>
       <Grid item xs={12}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            placeItems: "center",
-          }}
-        >
+        <div className={flexContainer}>
           <div>
             <Typography variant="body1">Title: {template.title}</Typography>
             <Typography variant="subtitle1">
@@ -22,12 +29,7 @@ const ListTemplatesItem = ({ template }) => {
             </Typography>
           </div>
           <div>
-            <IconButton
-              color="primary"
-              onClick={() => {
-                history.push(`/template/open/${template.id}`);
-              }}
-            >
+            <IconButton color="primary" onClick={viewTemplate}>
               <Visibility />
             </IconButton>
           </div>

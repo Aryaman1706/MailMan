@@ -14,13 +14,7 @@ const useRefreshToken = () => {
   const queryFn = () => {
     console.log("refreshing token");
     setLoading(true);
-    return firebase
-      .auth()
-      .currentUser.getIdTokenResult(true)
-      .then((res) => res)
-      .catch((err) => {
-        throw err;
-      });
+    return firebase.auth().currentUser.getIdTokenResult(true);
   };
 
   const query = useQuery("refreshIdToken", queryFn, {

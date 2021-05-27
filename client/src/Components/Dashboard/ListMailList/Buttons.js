@@ -1,17 +1,21 @@
-import { Button } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
+
+const useStyles = makeStyles(() => ({
+  container: {
+    width: "100%",
+    display: "flex",
+    placeItems: "center",
+    justifyContent: "space-around",
+    marginTop: "15px",
+  },
+}));
 
 const Buttons = ({ query, page, nextPage, prevPage }) => {
+  const { container } = useStyles();
+
   return (
     <>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          placeItems: "center",
-          justifyContent: "space-around",
-          marginTop: "15px",
-        }}
-      >
+      <div className={container}>
         <div>
           <Button
             variant="contained"

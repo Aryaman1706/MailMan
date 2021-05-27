@@ -7,14 +7,29 @@ import {
   Button,
   Typography,
   IconButton,
+  makeStyles,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import Delete from "@material-ui/icons/Delete";
 import TemplateInfo from "./TemplateInfo";
 import useFormHandler from "./useFormHandler";
 import useAddMailList from "./useAddMailList";
 import Loader from "../../Loader";
 
+const useStyles = makeStyles(() => ({
+  flexContainer: {
+    display: "flex",
+    placeItems: "center",
+    gap: "50px",
+  },
+
+  fileInput: {
+    display: "none",
+  },
+}));
+
 const Form = ({ templates }) => {
+  const { flexContainer, fileInput } = useStyles();
+
   const [{ template, file }, changeHandler, submitHandler, fileClear] =
     useFormHandler(templates);
 
@@ -48,13 +63,13 @@ const Form = ({ templates }) => {
           </Grid>
 
           <Grid item xs={12}>
-            <div style={{ display: "flex", placeItems: "center", gap: "50px" }}>
+            <div className={flexContainer}>
               <div>
                 <input
                   type="file"
                   name="file"
                   id="file-input"
-                  style={{ display: "none" }}
+                  className={fileInput}
                   onChange={(e) => changeHandler(e)}
                   accept=".xlsx"
                 />
@@ -67,9 +82,7 @@ const Form = ({ templates }) => {
               {file ? (
                 <>
                   <div>
-                    <Typography variant="subtitle1">
-                      {file.name || "test"}
-                    </Typography>
+                    <Typography variant="subtitle1">{file.name}</Typography>
                   </div>
                   <div>
                     <IconButton color="secondary" onClick={fileClear}>

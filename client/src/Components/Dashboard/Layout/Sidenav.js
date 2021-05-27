@@ -16,14 +16,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Sidenav = ({ links, logout }) => {
-  const classes = useStyles();
+  const { sidenav, linkContainer } = useStyles();
 
   return (
     <>
-      <Grid item xs={2} className={classes.sidenav}>
+      <Grid item xs={2} className={sidenav}>
         <Toolbar></Toolbar>
         <Divider></Divider>
-        <Grid container spacing={1} className={classes.linkContainer}>
+        <Grid container spacing={1} className={linkContainer}>
           {links.map((item) => (
             <LinkItem link={item.link} text={item.text} />
           ))}
