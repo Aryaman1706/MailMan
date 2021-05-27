@@ -1,13 +1,25 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 import { initialValues, validationSchema } from "./formInit";
 import { Formik } from "formik";
 import Form from "./Form";
 
+const useStyles = makeStyles(() => ({
+  container: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  subContainer: {
+    width: "500px",
+  },
+}));
+
 const SignupUser = () => {
+  const { container, subContainer } = useStyles();
+
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "500px" }}>
+      <div className={container}>
+        <div className={subContainer}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h5" align="center">

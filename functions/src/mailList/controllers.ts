@@ -161,13 +161,11 @@ export const addNew = async (req: Request, res: Response) => {
     }
 
     // Add to db and parse excel file
-    const [
-      { id: newMailListId },
-      { error: parsingError, emailList },
-    ] = await Promise.all([
-      db.collection(collections.mailList).add(mailListData),
-      parse(fileName, templateData.format),
-    ]);
+    const [{ id: newMailListId }, { error: parsingError, emailList }] =
+      await Promise.all([
+        db.collection(collections.mailList).add(mailListData),
+        parse(fileName, templateData.format),
+      ]);
 
     // Validating parsing
     if (parsingError)

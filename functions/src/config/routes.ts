@@ -4,9 +4,9 @@ import { router as mailListRouter } from "../mailList";
 import { router as userRouter } from "../user";
 
 const routes = (app: Express) => {
-  app.use("/template", templateRouter);
-  app.use("/mail-list", mailListRouter);
-  app.use("/user", userRouter);
+  app.use("/api/template", templateRouter);
+  app.use("/api/mail-list", mailListRouter);
+  app.use("/api/user", userRouter);
 };
 
 export default routes;

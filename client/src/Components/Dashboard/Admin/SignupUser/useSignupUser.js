@@ -19,26 +19,16 @@ const useSignupUser = (formikProps) => {
   } = formikProps;
 
   const promiseFn = (inputData) =>
-    new Promise((resolve, reject) => {
-      axios
-        .post("/user/signup", inputData, {
-          headers: {
-            "auth-id-token": idToken,
-          },
-        })
-        .then((response) => resolve(response.data))
-        .catch((error) =>
-          reject(
-            error?.response?.data || {
-              body: null,
-              error: {
-                msg: "Request failed. Try again.",
-                data: null,
-              },
-            }
-          )
-        );
-    });
+    axios
+      .post("/user/signup", inputData, {
+        headers: {
+          "auth-id-token": idToken,
+        },
+      })
+      .then((response) => response.data)
+      .catch((err) => {
+        throw err?.response?.data || "Request failed.";
+      });
 
   const mutation = useMutation("signupUser", promiseFn, {
     onError: (error) => {

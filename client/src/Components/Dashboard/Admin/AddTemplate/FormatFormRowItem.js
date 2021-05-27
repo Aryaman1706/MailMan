@@ -1,7 +1,14 @@
 import React from "react";
-import { Grid, TextField, IconButton } from "@material-ui/core";
-import { Remove } from "@material-ui/icons";
+import { Grid, TextField, IconButton, makeStyles } from "@material-ui/core";
+import Remove from "@material-ui/icons/Remove";
 import { validationSchema } from "./formInit";
+
+const useStyles = makeStyles(() => ({
+  flexContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
 
 const FormatFormRowItem = ({
   index,
@@ -12,6 +19,8 @@ const FormatFormRowItem = ({
   changeHandler,
   blurHandler,
 }) => {
+  const { flexContainer } = useStyles();
+
   return (
     <>
       <Grid item xs={4}>
@@ -57,7 +66,7 @@ const FormatFormRowItem = ({
         />
       </Grid>
       <Grid item xs={4}>
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div className={flexContainer}>
           {obj.field.trim() !== "email" && (
             <IconButton color="primary" onClick={(e) => removeRow(index)}>
               <Remove />

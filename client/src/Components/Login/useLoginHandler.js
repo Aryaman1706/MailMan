@@ -29,12 +29,7 @@ const useLoginHandler = (formikProps) => {
       });
     },
     onSuccess: (res) => {
-      firebase
-        .auth()
-        .currentUser.getIdTokenResult()
-        .then((user) => {
-          history.push("/");
-        });
+      history.push("/");
     },
   });
 

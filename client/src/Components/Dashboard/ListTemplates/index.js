@@ -20,7 +20,7 @@ const ListTemplates = () => {
           {templates ? (
             <>
               {templates.map((t) => (
-                <ListTemplatesItem template={t} />
+                <ListTemplatesItem key={t.id} template={t} />
               ))}
             </>
           ) : (

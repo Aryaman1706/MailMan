@@ -24,8 +24,8 @@ const Sidenav = ({ links, logout }) => {
         <Toolbar></Toolbar>
         <Divider></Divider>
         <Grid container spacing={1} className={linkContainer}>
-          {links.map((item) => (
-            <LinkItem link={item.link} text={item.text} />
+          {links.map((item, index) => (
+            <LinkItem key={index} link={item.link} text={item.text} />
           ))}
           <Grid item xs={12}>
             {logout}

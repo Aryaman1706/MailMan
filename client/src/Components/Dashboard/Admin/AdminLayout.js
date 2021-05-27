@@ -35,11 +35,8 @@ const links = [
 ];
 
 const LogoutBtn = () => {
-  //   const history = useHistory();
-
   const handler = () => {
     firebase.auth().signOut();
-    // history.push("/login") ;
   };
 
   return (

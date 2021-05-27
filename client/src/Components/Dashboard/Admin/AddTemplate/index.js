@@ -5,22 +5,18 @@ import { initialValues, validationSchema } from "./formInit";
 
 const Editor = () => {
   return (
-    <>
-      <>
-        <Container>
-          <Grid container spacing={2}>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              validateOnMount={true}
-              validateOnChange={false}
-              validateOnBlur={false}
-              component={MainForm}
-            />
-          </Grid>
-        </Container>
-      </>
-    </>
+    <Container>
+      <Grid container spacing={2}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          validateOnMount={true}
+          validateOnChange={false}
+          validateOnBlur={false}
+          component={MainForm}
+        />
+      </Grid>
+    </Container>
   );
 };
 

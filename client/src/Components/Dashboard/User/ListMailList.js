@@ -5,7 +5,7 @@ import {
   AccordionSummary,
   Typography,
 } from "@material-ui/core";
-import { ExpandMore } from "@material-ui/icons";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 import MoreInfo from "../ListMailList/MoreInfo";
 import useListMailList from "../../../hooks/useListMailList";
 import axios from "../../../utils/axios";

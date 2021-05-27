@@ -11,23 +11,21 @@ const useAddTemplate = () => {
   const { idToken } = useUserStore(selector);
 
   const promiseFn = (formData) =>
-    new Promise((resolve, reject) => {
-      axios
-        .post("/template/new", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "auth-id-token": idToken,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-          resolve(response.data);
-        })
-        .catch((error) => reject(error.response.data));
-    });
+    axios
+      .post("/template/new", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "auth-id-token": idToken,
+        },
+      })
+      .then((response) => response.data)
+      .catch((error) => {
+        throw error?.response?.data || "Request failed.";
+      });
+
   const mutation = useMutation("addTemplate", promiseFn, {
     onError: (error) => {
-      const errorMsg = error.error.msg || "Request Failed. Try Again.";
+      const errorMsg = error?.error?.msg || "Request Failed. Try Again.";
       Swal.fire({
         position: "center",
         icon: "error",
@@ -37,7 +35,7 @@ const useAddTemplate = () => {
       });
     },
     onSuccess: (response) => {
-      const message = response.body.msg || "Request successfull.";
+      const message = response?.body?.msg || "Request successfull.";
       Swal.fire({
         position: "center",
         icon: "success",

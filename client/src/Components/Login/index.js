@@ -15,12 +15,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Login = () => {
-  const classes = useStyles();
+  const { parentDiv, formContainer } = useStyles();
 
   return (
     <>
-      <div className={classes.parentDiv}>
-        <div className={classes.formContainer}>
+      <div className={parentDiv}>
+        <div className={formContainer}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h4" align="center">

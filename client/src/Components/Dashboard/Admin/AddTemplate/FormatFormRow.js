@@ -1,6 +1,13 @@
-import { Grid, IconButton, Typography } from "@material-ui/core";
-import { Add } from "@material-ui/icons";
+import { Grid, IconButton, Typography, makeStyles } from "@material-ui/core";
+import Add from "@material-ui/icons/Add";
 import FormatFormRowItem from "./FormatFormRowItem";
+
+const useStyles = makeStyles(() => ({
+  flexContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
 
 const FormatFormRow = ({
   arrayHelpers,
@@ -8,6 +15,14 @@ const FormatFormRow = ({
   changeHandler,
   blurHandler,
 }) => {
+  const { flexContainer } = useStyles();
+  const addRow = () => {
+    arrayHelpers.push({
+      field: "",
+      cell: "",
+    });
+  };
+
   return (
     <>
       <Grid item xs={4}>
@@ -21,30 +36,20 @@ const FormatFormRow = ({
         </Typography>
       </Grid>
       <Grid item xs={4}>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <IconButton
-            color="primary"
-            onClick={(e) =>
-              arrayHelpers.push({
-                field: "",
-                cell: "",
-              })
-            }
-          >
+        <div className={flexContainer}>
+          <IconButton color="primary" onClick={addRow}>
             <Add />
           </IconButton>
         </div>
       </Grid>
       {typeof formikProps.errors.format === "string" &&
-      formikProps.touched.format ? (
-        <Grid item xs={12}>
-          <Typography variant="subtitle2" color="error">
-            {formikProps.errors.format}
-          </Typography>
-        </Grid>
-      ) : (
-        <></>
-      )}
+        formikProps.touched.format && (
+          <Grid item xs={12}>
+            <Typography variant="subtitle2" color="error">
+              {formikProps.errors.format}
+            </Typography>
+          </Grid>
+        )}
 
       {formikProps.values.format.map((obj, index) => (
         <FormatFormRowItem
