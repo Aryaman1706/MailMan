@@ -1,77 +1,27 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-custom-build/build/ckeditor";
 import { FieldArray } from "formik";
 import FormatFormRow from "./FormatFormRow";
 import Loader from "../../../Loader";
-import useAddTemplate from "./useAddTemplate";
+import useFormHandler from "./useFormHandler";
 import editorConfig from "./editorConfig";
 
 const MainForm = (formikProps) => {
   const editorRef = useRef(null);
-  const [attachements, setAttachments] = useState([]);
-  const [mutation, submitForm] = useAddTemplate();
+  const [
+    mutation,
+    changeHandler,
+    fileChangeHandler,
+    editorChangeHandler,
+    blurHandler,
+    submitHandler,
+  ] = useFormHandler(formikProps);
 
   const {
     values: { title, subject, html },
   } = formikProps;
-
-  const changeHandler = (e) => {
-    formikProps.setFieldValue(e.target.name, e.target.value);
-  };
-
-  const blurHandler = async (e, validationSchema) => {
-    console.log(e.target.name);
-    if (validationSchema) {
-      try {
-        await validationSchema.validateAt(e.target.name, formikProps.values);
-        formikProps.setFieldError(e.target.name, undefined);
-      } catch (error) {
-        formikProps.setFieldError(e.target.name, error?.errors?.[0]);
-      }
-    } else {
-      formikProps.validateField(e.target.name);
-    }
-    formikProps.setFieldTouched(e.target.name, true, false);
-  };
-
-  const showErrors = (errors) => {
-    Object.keys(errors).forEach((field) => {
-      if (field.trim() === "format" && typeof errors.format !== "string") {
-        errors.format.forEach((obj, index) => {
-          if (obj) {
-            formikProps.setFieldTouched(`format[${index}].field`, true, false);
-            formikProps.setFieldTouched(`format[${index}].cell`, true, false);
-          }
-        });
-      } else {
-        formikProps.setFieldTouched(field.toString(), true, false);
-      }
-    });
-  };
-
-  const submitHandler = async () => {
-    const errors = await formikProps.validateForm();
-    if (Object.keys(errors).length === 0) {
-      const format = {};
-      formikProps.values.format.forEach((obj) => {
-        format[obj.field] = obj.cell;
-      });
-
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("subject", subject);
-      formData.append("html", html);
-      formData.append("format", JSON.stringify(format));
-      formData.append("attachments", attachements);
-
-      submitForm(formData);
-      formikProps.resetForm();
-    } else {
-      showErrors(errors);
-    }
-  };
 
   return (
     <>
@@ -141,9 +91,7 @@ const MainForm = (formikProps) => {
               onReady={(editor) => {
                 editorRef.current = editor;
               }}
-              onChange={(event, editor) => {
-                formikProps.setFieldValue("html", editor.getData());
-              }}
+              onChange={(event, editor) => editorChangeHandler(editor)}
             />
           </Grid>
 
@@ -161,7 +109,7 @@ const MainForm = (formikProps) => {
                 type="file"
                 name="attachments"
                 multiple
-                onChange={(e) => setAttachments(e.target.files)}
+                onChange={(e) => fileChangeHandler(e)}
               />
             </div>
           </Grid>

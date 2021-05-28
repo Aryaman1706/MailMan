@@ -28,7 +28,7 @@ const useLoginHandler = (formikProps) => {
         showConfirmButton: true,
       });
     },
-    onSuccess: (res) => {
+    onSuccess: () => {
       history.push("/");
     },
   });

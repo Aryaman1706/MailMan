@@ -53,6 +53,7 @@ const FormatFormRow = ({
 
       {formikProps.values.format.map((obj, index) => (
         <FormatFormRowItem
+          key={index}
           index={index}
           obj={obj}
           errors={formikProps.errors}
