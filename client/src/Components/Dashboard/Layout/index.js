@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, Container } from "@material-ui/core";
 import Sidenav from "./Sidenav";
 
 const Layout = ({ links, logout, children }) => {
@@ -7,7 +7,7 @@ const Layout = ({ links, logout, children }) => {
       <Grid container spacing={1}>
         <Sidenav links={links} logout={logout} />
         <Grid item xs={10}>
-          {children}
+          <Container>{children}</Container>
         </Grid>
       </Grid>
     </>

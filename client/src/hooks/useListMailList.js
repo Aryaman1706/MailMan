@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import useUserStore from "../Stores/userStore";
+import axios from "../utils/axios";
 
 const selector = (state) => ({
   idToken: state.idToken,

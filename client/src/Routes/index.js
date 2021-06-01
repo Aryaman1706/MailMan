@@ -8,14 +8,14 @@ import Login from "../Components/Login";
 // * Common Dashboard
 import Profile from "../Components/Profile";
 import AddMailList from "../Components/Dashboard/AddMailList";
-import ListMailList from "../Components/Dashboard/User/ListMailList";
+import UserMailListing from "../Components/Dashboard/User/UserMailListing";
 import ListTemplates from "../Components/Dashboard/ListTemplates";
 import ViewTemplate from "../Components/Dashboard/ViewTemplate";
 
 // * Admin Dashboard
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
 import SignupUser from "../Components/Dashboard/Admin/SignupUser";
-import FullListMailList from "../Components/Dashboard/Admin/ListMailList";
+import AdminMailListing from "../Components/Dashboard/Admin/AdminMailListing";
 
 // * User Dashboard
 
@@ -36,7 +36,7 @@ const Routes = () => {
             layout
             component={AddMailList}
           />
-          <Route exact path="/" onlyUsers layout component={ListMailList} />
+          <Route exact path="/" onlyUsers layout component={UserMailListing} />
           <Route
             exact
             path="/template/list"
@@ -72,7 +72,7 @@ const Routes = () => {
             path="/admin/mail-list"
             onlyAdmins
             layout
-            component={FullListMailList}
+            component={AdminMailListing}
           />
 
           {/* User Dashboard */}
