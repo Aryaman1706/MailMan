@@ -14,7 +14,7 @@ export const addNew = (
   return schema.validate(body);
 };
 
-export const listMailList = (
+export const pagination = (
   body: any
 ): CustomValidationResult<{ page: number }> => {
   const schema = Joi.object({

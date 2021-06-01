@@ -239,7 +239,7 @@ export const listMailList = async (req: Request, res: Response) => {
     const {
       error,
       value: { page },
-    } = validators.listMailList(req.query);
+    } = validators.pagination(req.query);
     if (error)
       return res.status(400).json({
         body: null,
@@ -253,8 +253,8 @@ export const listMailList = async (req: Request, res: Response) => {
     const mailLists = (await db
       .collection(collections.mailList)
       .orderBy("addedOn", "desc")
-      .limit(10)
       .offset(page * 10)
+      .limit(10)
       .get()) as firestore.QuerySnapshot<MailListDocumentData>;
 
     const list = mailLists.docs.map((doc) => ({
@@ -290,7 +290,7 @@ export const listMailListUser = async (req: Request, res: Response) => {
     const {
       error,
       value: { page },
-    } = validators.listMailList(req.query);
+    } = validators.pagination(req.query);
     if (error)
       return res.status(400).json({
         body: null,
@@ -316,8 +316,8 @@ export const listMailListUser = async (req: Request, res: Response) => {
       .collection(collections.mailList)
       .where("uid", "==", req.user.id)
       .orderBy("addedOn", "desc")
-      .limit(10)
       .offset(page * 10)
+      .limit(10)
       .get()) as firestore.QuerySnapshot<MailListDocumentData>;
 
     const list = mailLists.docs.map((doc) => ({
@@ -331,6 +331,99 @@ export const listMailListUser = async (req: Request, res: Response) => {
         data: {
           list,
           hasMore: !mailLists.empty && mailLists.size > 10 ? true : false,
+        },
+      },
+      error: null,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      body: null,
+      error: {
+        msg: "Request failed. Try again.",
+        data: null,
+      },
+    });
+  }
+};
+
+export const viewMailList = async (req: Request, res: Response) => {
+  try {
+    // Validate req.query
+    const {
+      error,
+      value: { page },
+    } = validators.pagination(req.query);
+    if (error)
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Invalid inputs. Try again.",
+          data: error.details[0].message,
+        },
+      });
+
+    // Finding valid mailList
+    const mailListDoc = (await db
+      .collection(collections.mailList)
+      .doc(req.params.mailListId)
+      .get()) as firestore.DocumentSnapshot<MailListDocumentData>;
+    const mailListDocData = mailListDoc.data();
+
+    if (!mailListDoc.exists || !mailListDocData) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "Mail List not found.",
+          data: null,
+        },
+      });
+    }
+
+    // Verify User access
+    if (
+      !req.user ||
+      (!req.user.isAdmin && req.user.id.trim() !== mailListDocData.uid.trim())
+    ) {
+      return res.status(400).json({
+        body: null,
+        error: {
+          msg: "You do not have access to this mail list.",
+          data: null,
+        },
+      });
+    }
+
+    // Find related mailListItems (paginated)
+    const mailListItemDocs = (await db
+      .collection(collections.mailListItem)
+      .where("mailListId", "==", mailListDoc.id.trim())
+      .orderBy("date", "asc")
+      .offset(page * 10)
+      .limit(10)
+      .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
+
+    let isLast: boolean = false;
+    const list = mailListItemDocs.docs.map((doc) => {
+      if (doc.data().last) {
+        isLast = true;
+      }
+
+      return {
+        ...doc.data(),
+        date: doc.data().date.toDate(),
+      };
+    });
+
+    return res.status(200).json({
+      body: {
+        msg: "MailList List found.",
+        data: {
+          list,
+          hasMore:
+            !mailListItemDocs.empty && mailListItemDocs.size > 10 && !isLast
+              ? true
+              : false,
         },
       },
       error: null,

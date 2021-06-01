@@ -14,7 +14,7 @@ const router = express.Router();
  * Type: POST
  * Desc: Add a new mailList
  * Route: {{server_url}}/api/mail-list
- * Middleware: Login, Multer
+ * Middleware: Login, File Upload
  */
 router.post(
   "/",
@@ -38,6 +38,14 @@ router.get("/full-list", middlewares.adminLogin, controllers.listMailList);
  * Middleware: Login
  */
 router.get("/list", middlewares.login, controllers.listMailListUser);
+
+/**
+ * Type: GET
+ * Desc: View a mailList
+ * Route: {{server_url}}/api/mail-list/view/:mailListId
+ * Middleware: Login
+ */
+router.get("/view/:mailListId", middlewares.login, controllers.viewMailList);
 
 // * End of API Endpoints -->
 

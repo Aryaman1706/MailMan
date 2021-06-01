@@ -35,80 +35,78 @@ const Form = ({ templates }) => {
 
   const mutation = useAddMailList();
 
+  if (mutation.isLoading) {
+    return <Loader />;
+  }
+
   return (
     <>
-      {mutation.isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <Grid item xs={12}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Template</InputLabel>
-              <Select
-                name="template"
-                value={template}
-                onChange={(e) => changeHandler(e)}
-              >
-                {templates.map((t) => (
-                  <MenuItem value={t} key={t.id}>
-                    {t.title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+      <Grid item xs={12}>
+        <FormControl fullWidth variant="outlined">
+          <InputLabel>Template</InputLabel>
+          <Select
+            name="template"
+            value={template}
+            onChange={(e) => changeHandler(e)}
+          >
+            {templates.map((t) => (
+              <MenuItem value={t} key={t.id}>
+                {t.title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
 
-          <Grid item xs={12}>
-            <TemplateInfo template={template} />
-          </Grid>
+      <Grid item xs={12}>
+        <TemplateInfo template={template} />
+      </Grid>
 
-          <Grid item xs={12}>
-            <div className={flexContainer}>
+      <Grid item xs={12}>
+        <div className={flexContainer}>
+          <div>
+            <input
+              type="file"
+              name="file"
+              id="file-input"
+              className={fileInput}
+              onChange={(e) => changeHandler(e)}
+              accept=".xlsx"
+            />
+            <label htmlFor="file-input">
+              <Button variant="contained" color="primary" component="span">
+                Upload Excel file
+              </Button>
+            </label>
+          </div>
+          {file ? (
+            <>
               <div>
-                <input
-                  type="file"
-                  name="file"
-                  id="file-input"
-                  className={fileInput}
-                  onChange={(e) => changeHandler(e)}
-                  accept=".xlsx"
-                />
-                <label htmlFor="file-input">
-                  <Button variant="contained" color="primary" component="span">
-                    Upload Excel file
-                  </Button>
-                </label>
+                <Typography variant="subtitle1">{file.name}</Typography>
               </div>
-              {file ? (
-                <>
-                  <div>
-                    <Typography variant="subtitle1">{file.name}</Typography>
-                  </div>
-                  <div>
-                    <IconButton color="secondary" onClick={fileClear}>
-                      <Delete />
-                    </IconButton>
-                  </div>
-                </>
-              ) : (
-                <div>
-                  <Typography variant="subtitle1">No file selected.</Typography>
-                </div>
-              )}
+              <div>
+                <IconButton color="secondary" onClick={fileClear}>
+                  <Delete />
+                </IconButton>
+              </div>
+            </>
+          ) : (
+            <div>
+              <Typography variant="subtitle1">No file selected.</Typography>
             </div>
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={() => submitHandler(mutation.mutate)}
-            >
-              Add to Queue
-            </Button>
-          </Grid>
-        </>
-      )}
+          )}
+        </div>
+      </Grid>
+      <Grid item xs={12}>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={() => submitHandler(mutation.mutate)}
+        >
+          Add to Queue
+        </Button>
+      </Grid>
     </>
   );
 };
