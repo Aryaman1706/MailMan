@@ -33,7 +33,7 @@ const ListItem = ({ mailListDoc }) => {
               </Typography>
             </div>
             <div>
-              <IconButton>
+              <IconButton color="primary">
                 <Visibility />
               </IconButton>
             </div>

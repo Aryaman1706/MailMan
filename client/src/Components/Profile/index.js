@@ -1,19 +1,11 @@
-import { Divider, makeStyles } from "@material-ui/core";
+import { Grid, Divider, makeStyles } from "@material-ui/core";
 import Account from "./Account";
 import Smtp from "./Smtp";
 import useUserStore from "../../Stores/userStore";
 import Loader from "../Loader";
+import Heading from "../Heading";
 
 const useStyles = makeStyles(() => ({
-  flexContainer: {
-    display: "flex",
-    justifyContent: "center",
-  },
-
-  midContainer: {
-    width: "500px",
-  },
-
   divider: {
     margin: "15px 0px 15px 0px",
   },
@@ -25,25 +17,30 @@ const selector = (state) => ({
 
 const Profile = () => {
   const { loading } = useUserStore(selector);
-  const { flexContainer, midContainer, divider } = useStyles();
+  const { divider } = useStyles();
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <div className={flexContainer}>
-            <div className={midContainer}>
-              <Account />
-              <div className={divider}>
-                <Divider></Divider>
-              </div>
-              <Smtp />
-            </div>
+      <Heading text="User Profile" />
+      <Grid container>
+        <Grid item xs={12}>
+          <Account />
+        </Grid>
+
+        <Grid item xs={12}>
+          <div className={divider}>
+            <Divider></Divider>
           </div>
-        </>
-      )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <Smtp />
+        </Grid>
+      </Grid>
     </>
   );
 };

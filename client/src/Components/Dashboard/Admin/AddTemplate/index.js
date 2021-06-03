@@ -1,11 +1,13 @@
-import { Grid, Container } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Formik } from "formik";
 import MainForm from "./MainForm";
+import Heading from "../../../Heading";
 import { initialValues, validationSchema } from "./formInit";
 
 const Editor = () => {
   return (
-    <Container>
+    <>
+      <Heading text="Add New template" />
       <Grid container spacing={2}>
         <Formik
           initialValues={initialValues}
@@ -16,7 +18,7 @@ const Editor = () => {
           component={MainForm}
         />
       </Grid>
-    </Container>
+    </>
   );
 };
 

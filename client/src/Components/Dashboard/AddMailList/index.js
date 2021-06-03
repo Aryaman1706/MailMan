@@ -1,7 +1,8 @@
-import { Grid, Typography, Container } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import useTemplateList from "../../../hooks/useTemplateList";
 import Loader from "../../Loader";
 import Form from "./Form";
+import Heading from "../../Heading";
 
 const AddMailList = () => {
   const [query, templates] = useTemplateList();
@@ -23,16 +24,12 @@ const AddMailList = () => {
   }
 
   return (
-    <Container>
+    <>
+      <Heading text={"Queue E-mails"} />
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography align="center" variant="h4">
-            Queue Emails
-          </Typography>
-        </Grid>
         <Form templates={templates} />
       </Grid>
-    </Container>
+    </>
   );
 };
 
