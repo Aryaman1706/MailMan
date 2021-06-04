@@ -6,7 +6,7 @@ import LoginRoute from "./LoginRoute";
 import Login from "../Components/Login";
 
 // * Common Dashboard
-import Profile from "../Components/Profile";
+import Profile from "../Components/Profile/General";
 import AddMailList from "../Components/Dashboard/AddMailList";
 import UserMailListing from "../Components/Dashboard/User/UserMailListing";
 import ListTemplates from "../Components/Dashboard/ListTemplates";

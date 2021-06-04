@@ -1,10 +1,12 @@
-import { useEffect } from "react";
 import { Typography, Grid, Button, TextField } from "@material-ui/core";
-import Loader from "../Loader";
-import useEditSmtp from "./useEditSmtp";
-import useFormHandler from "../../hooks/useFormHandler";
-import { initialValues, validationSchema } from "./formInit";
-import useLoadUser from "./useLoadUser";
+import Loader from "../../../Loader";
+
+import { useEffect } from "react";
+import useEditSmtp from "../hooks/useEditSmtp";
+import useFormHandler from "../../../../hooks/useFormHandler";
+import useLoadUser from "../hooks/useLoadUser";
+
+import { initialValues, validationSchema } from "../utils/formInit";
 
 const Smtp = () => {
   const query = useLoadUser();

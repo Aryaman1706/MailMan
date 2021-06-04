@@ -1,9 +1,10 @@
 import { Grid, Divider, makeStyles } from "@material-ui/core";
-import Account from "./Account";
-import Smtp from "./Smtp";
-import useUserStore from "../../Stores/userStore";
-import Loader from "../Loader";
-import Heading from "../Heading";
+import Account from "./ui/Account";
+import Smtp from "./ui/Smtp";
+import Loader from "../../Loader";
+import Heading from "../../Heading";
+
+import useUserStore from "../../../Stores/userStore";
 
 const useStyles = makeStyles(() => ({
   divider: {

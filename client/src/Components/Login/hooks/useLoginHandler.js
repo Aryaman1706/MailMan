@@ -1,6 +1,8 @@
-import { useMutation } from "react-query";
 import Swal from "sweetalert2";
+
+import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
+
 import firebase from "firebase/app";
 import "firebase/auth";
 

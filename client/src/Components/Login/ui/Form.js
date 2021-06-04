@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Grid,
   TextField,
@@ -9,8 +8,10 @@ import {
 } from "@material-ui/core";
 import { VisibilityOff, Visibility } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import Loader from "../Loader";
-import useLoginHandler from "./useLoginHandler";
+import Loader from "../../Loader";
+
+import { useState } from "react";
+import useLoginHandler from "../hooks/useLoginHandler";
 
 const useStyles = makeStyles(() => ({
   linkContainer: {
