@@ -6,10 +6,12 @@ import {
   Container,
   makeStyles,
 } from "@material-ui/core";
-import useFormHandler from "../../../hooks/useFormHandler";
-import { initialValues, validationSchema } from "./formInit";
-import useReauthenticate from "./useReauthenticate";
 import Loader from "../../Loader";
+
+import useFormHandler from "../../../hooks/useFormHandler";
+import useReauthenticate from "./hooks/useReauthenticate";
+
+import { initialValues, validationSchema } from "./utils/formInit";
 
 const useStyles = makeStyles(() => ({
   container: {
