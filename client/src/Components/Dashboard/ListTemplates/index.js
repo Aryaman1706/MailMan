@@ -1,8 +1,9 @@
 import { Grid, Typography } from "@material-ui/core";
-import useTemplateList from "../../../hooks/useTemplateList";
 import Loader from "../../Loader";
-import ListTemplatesItem from "./ListTemplatesItem";
 import Heading from "../../Heading";
+import ListTemplatesItem from "./ui/ListTemplatesItem";
+
+import useTemplateList from "../../../hooks/useTemplateList";
 
 const ListTemplates = () => {
   const [query, templates] = useTemplateList();

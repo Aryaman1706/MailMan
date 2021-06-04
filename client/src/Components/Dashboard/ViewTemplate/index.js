@@ -1,9 +1,10 @@
-import { Grid, Paper } from "@material-ui/core";
-import useLoadTemplate from "./useLoadTemplate";
+import { Grid } from "@material-ui/core";
 import Loader from "../../Loader";
-import Item from "./Item";
-import Format from "./Format";
 import Heading from "../../Heading";
+import Item from "./ui/Item";
+import Format from "./ui/Format";
+
+import useLoadTemplate from "./hooks/useLoadTemplate";
 
 const ViewTemplate = () => {
   const [query, template] = useLoadTemplate();

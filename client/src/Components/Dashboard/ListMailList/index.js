@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Button } from "@material-ui/core";
 import Heading from "../../Heading";
 import Loader from "../../Loader";
-import ListItem from "./ListItem";
+import ListItem from "./ui/ListItem";
 
 import useListMailList from "../../../hooks/useListMailList";
 

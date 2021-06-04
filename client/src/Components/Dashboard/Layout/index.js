@@ -1,5 +1,5 @@
 import { Grid, Container } from "@material-ui/core";
-import Sidenav from "./Sidenav";
+import Sidenav from "./ui/Sidenav";
 
 const Layout = ({ links, logout, children }) => {
   return (

@@ -1,8 +1,9 @@
 import { Grid } from "@material-ui/core";
-import { initialValues, validationSchema } from "./formInit";
 import { Formik } from "formik";
-import Form from "./Form";
+import Form from "./ui/Form";
 import Heading from "../../../Heading";
+
+import { initialValues, validationSchema } from "./utils/formInit";
 
 const SignupUser = () => {
   return (

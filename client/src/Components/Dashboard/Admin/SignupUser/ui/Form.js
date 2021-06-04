@@ -6,8 +6,9 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core";
-import Loader from "../../../Loader";
-import useSignupUser from "./useSignupUser";
+import Loader from "../../../../Loader";
+
+import useSignupUser from "../hooks/useSignupUser";
 
 const Form = (formikProps) => {
   const [mutation, changeHandler, submitHandler] = useSignupUser(formikProps);
