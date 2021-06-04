@@ -11,9 +11,10 @@ import {
 } from "@material-ui/core";
 import Delete from "@material-ui/icons/Delete";
 import TemplateInfo from "./TemplateInfo";
-import useFormHandler from "./useFormHandler";
-import useAddMailList from "./useAddMailList";
-import Loader from "../../Loader";
+import Loader from "../../../Loader";
+
+import useFormHandler from "../hooks/useFormHandler";
+import useAddMailList from "../hooks/useAddMailList";
 
 const useStyles = makeStyles(() => ({
   flexContainer: {

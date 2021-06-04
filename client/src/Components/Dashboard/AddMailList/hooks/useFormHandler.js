@@ -1,6 +1,8 @@
-import { string, object } from "yup";
-import { useState } from "react";
 import Swal from "sweetalert2";
+
+import { useState } from "react";
+
+import { string, object } from "yup";
 
 const useFormHandler = (templates) => {
   const [state, setState] = useState({
