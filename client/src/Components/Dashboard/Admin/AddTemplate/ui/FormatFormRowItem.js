@@ -1,7 +1,8 @@
 import React from "react";
 import { Grid, TextField, IconButton, makeStyles } from "@material-ui/core";
 import Remove from "@material-ui/icons/Remove";
-import { validationSchema } from "./formInit";
+
+import { validationSchema } from "../utils/formInit";
 
 const useStyles = makeStyles(() => ({
   flexContainer: {

@@ -1,8 +1,9 @@
 import { Grid } from "@material-ui/core";
 import { Formik } from "formik";
-import MainForm from "./MainForm";
+import MainForm from "./ui/MainForm";
 import Heading from "../../../Heading";
-import { initialValues, validationSchema } from "./formInit";
+
+import { initialValues, validationSchema } from "./utils/formInit";
 
 const Editor = () => {
   return (

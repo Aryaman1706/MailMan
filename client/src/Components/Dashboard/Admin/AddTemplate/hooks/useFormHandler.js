@@ -1,16 +1,10 @@
-import { useState } from "react";
 import useAddTemplate from "./useAddTemplate";
 
 const useFormHandler = (formikProps) => {
-  const [attachements, setAttachments] = useState([]);
   const [mutation, submitForm] = useAddTemplate();
 
   const changeHandler = (e) => {
     formikProps.setFieldValue(e.target.name, e.target.value);
-  };
-
-  const fileChangeHandler = (e) => {
-    setAttachments(e.target.files);
   };
 
   const editorChangeHandler = (editor) => {
@@ -46,7 +40,7 @@ const useFormHandler = (formikProps) => {
     });
   };
 
-  const submitHandler = async () => {
+  const submitHandler = async (attachements = []) => {
     const errors = await formikProps.validateForm();
     if (Object.keys(errors).length === 0) {
       const format = {};
@@ -71,7 +65,6 @@ const useFormHandler = (formikProps) => {
   return [
     mutation,
     changeHandler,
-    fileChangeHandler,
     editorChangeHandler,
     blurHandler,
     submitHandler,

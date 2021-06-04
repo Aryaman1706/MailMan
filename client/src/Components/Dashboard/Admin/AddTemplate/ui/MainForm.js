@@ -1,23 +1,36 @@
-import { useRef } from "react";
-import { Grid, Typography, TextField, Button } from "@material-ui/core";
+import { Grid, TextField, Button, makeStyles } from "@material-ui/core";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "ckeditor5-custom-build/build/ckeditor";
+import Attachments from "./Attachments";
 import { FieldArray } from "formik";
 import FormatFormRow from "./FormatFormRow";
-import Loader from "../../../Loader";
-import useFormHandler from "./useFormHandler";
-import editorConfig from "./editorConfig";
+import Loader from "../../../../Loader";
+
+import { useRef } from "react";
+import useFormHandler from "../hooks/useFormHandler";
+import useFileHandler from "../hooks/useFileHandler";
+
+import editorConfig from "../utils/editorConfig";
+
+const useStyles = makeStyles(() => ({
+  textField: {
+    marginBottom: "15px",
+  },
+}));
 
 const MainForm = (formikProps) => {
+  const { textField } = useStyles();
+
   const editorRef = useRef(null);
+
   const [
     mutation,
     changeHandler,
-    fileChangeHandler,
     editorChangeHandler,
     blurHandler,
     submitHandler,
   ] = useFormHandler(formikProps);
+  const [fileChangeHandler, removeFile, attachments] = useFileHandler();
 
   const {
     values: { title, subject, html },
@@ -34,7 +47,7 @@ const MainForm = (formikProps) => {
           fullWidth
           type="text"
           variant="outlined"
-          style={{ marginBottom: "15px" }}
+          className={textField}
           name="title"
           label="Title"
           value={title}
@@ -58,7 +71,7 @@ const MainForm = (formikProps) => {
           fullWidth
           type="text"
           variant="outlined"
-          style={{ marginBottom: "15px" }}
+          className={textField}
           name="subject"
           label="Subject"
           value={subject}
@@ -85,27 +98,16 @@ const MainForm = (formikProps) => {
           onReady={(editor) => {
             editorRef.current = editor;
           }}
-          onChange={(event, editor) => editorChangeHandler(editor)}
+          onChange={(_, editor) => editorChangeHandler(editor)}
         />
       </Grid>
 
       <Grid item xs={12}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            placeItems: "center",
-            gap: "15px",
-          }}
-        >
-          <Typography variant="h6">Add Attachments</Typography>
-          <input
-            type="file"
-            name="attachments"
-            multiple
-            onChange={(e) => fileChangeHandler(e)}
-          />
-        </div>
+        <Attachments
+          fileChangeHandler={fileChangeHandler}
+          removeFile={removeFile}
+          attachments={attachments}
+        />
       </Grid>
 
       <Grid item xs={12}>
@@ -129,7 +131,7 @@ const MainForm = (formikProps) => {
           fullWidth
           variant="contained"
           color="primary"
-          onClick={submitHandler}
+          onClick={() => submitHandler(attachments)}
         >
           Add Template
         </Button>
