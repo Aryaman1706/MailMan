@@ -1,7 +1,8 @@
 import { useEffect } from "react";
+import useUserStore from "../Stores/userStore";
+
 import firebase from "firebase";
 import "firebase/auth";
-import useUserStore from "../Stores/userStore";
 
 const selector = (state) => ({
   setState: state.setState,

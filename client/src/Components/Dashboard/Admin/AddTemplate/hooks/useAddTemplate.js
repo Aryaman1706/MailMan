@@ -1,9 +1,9 @@
 import Swal from "sweetalert2";
 
 import { useMutation } from "react-query";
+import useUserStore from "../../../../../Stores/userStore";
 
 import axios from "../../../../../utils/axios";
-import useUserStore from "../../../../../Stores/userStore";
 
 const selector = (state) => ({
   idToken: state.idToken,

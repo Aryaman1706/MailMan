@@ -1,7 +1,8 @@
-import useUserStore from "../Stores/userStore";
 import { Route, Redirect } from "react-router-dom";
 import AdminLayout from "../Components/Dashboard/Admin/AdminLayout";
 import UserLayout from "../Components/Dashboard/User/UserLayout";
+
+import useUserStore from "../Stores/userStore";
 
 const selector = (state) => ({
   loading: state.loading,

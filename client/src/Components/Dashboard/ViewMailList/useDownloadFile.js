@@ -1,7 +1,9 @@
+import Swal from "sweetalert2";
+
 import { useState } from "react";
+
 import firebase from "firebase";
 import "firebase/storage";
-import Swal from "sweetalert2";
 
 const useDownloadFile = (fileName) => {
   const [loading, setLoading] = useState(false);

@@ -1,7 +1,8 @@
 import { useQuery } from "react-query";
+import useUserStore from "../Stores/userStore";
+
 import firebase from "firebase";
 import "firebase/auth";
-import useUserStore from "../Stores/userStore";
 
 const selector = (state) => ({
   setLoading: state.setLoading,

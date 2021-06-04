@@ -6,6 +6,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
+
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({

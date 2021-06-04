@@ -1,8 +1,10 @@
+import Swal from "sweetalert2";
+
 import { useState } from "react";
 import { useQuery } from "react-query";
-import axios from "../utils/axios";
-import Swal from "sweetalert2";
 import useUserStore from "../Stores/userStore";
+
+import axios from "../utils/axios";
 
 const selector = (state) => ({
   idToken: state.idToken,
