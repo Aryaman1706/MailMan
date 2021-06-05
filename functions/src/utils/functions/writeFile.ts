@@ -6,7 +6,7 @@ const writeToFile = (stream: Writable, data: string): Promise<string> =>
     stream.end();
 
     stream.on("error", () => {
-      reject("error");
+      reject(new Error("error"));
     });
 
     stream.on("finish", () => {

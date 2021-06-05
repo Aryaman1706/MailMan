@@ -2,42 +2,26 @@ import { db, collections, bucket } from "../config/firebase";
 import { v4 } from "uuid";
 import juice from "juice";
 
-// * Types
-import { Request, Response } from "express";
+// Types
+import Request from "../utils/types/CustomRequest";
+import { Response } from "express";
 import { TemplateDocumentData } from "./types";
 import { types as MailListTypes } from "../mailList";
+import { types as MailListItemTypes } from "../mailListItem";
+import { NewTemplateValid } from "./middlewares";
 
-// * Utils
+// Utils
 import { firestore } from "firebase-admin";
-import * as validators from "./validators";
 import sendResponse, {
   serverErrorResponse,
-  validationErrorResponse,
 } from "../utils/functions/sendResponse";
 import writeFile from "../utils/functions/writeFile";
 import readFile from "../utils/functions/readFile";
 import styles from "../utils/styles";
 
 // * Create new template
-export const newTemplate = async (req: Request, res: Response) => {
+const newTemplate = async (req: Request<NewTemplateValid>, res: Response) => {
   try {
-    // Validating req.body
-    const { value, error } = validators.newTemplate(req.body);
-    if (error) {
-      return validationErrorResponse(res, error);
-    }
-
-    // Validating format
-    const { value: format, error: formatError } = validators.validateFormat(
-      JSON.parse(value.format as string)
-    );
-    if (formatError) {
-      return validationErrorResponse(res, formatError);
-    }
-
-    value.format = format;
-
-    // Handle attachements
     let attachements: string[] = [];
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
       attachements = (req.files as MailListTypes.UploadedFile[]).map(
@@ -45,31 +29,27 @@ export const newTemplate = async (req: Request, res: Response) => {
       );
     }
 
-    // Save value.html in a file
     const fileName = `${v4()}.html`;
     const fileWriteStream = bucket.file(fileName).createWriteStream();
 
-    const fileWriteResult: string = await writeFile(
+    const fileWriteResult = await writeFile(
       fileWriteStream,
-      juice.inlineContent(value.html, styles)
-    )
-      .then((d) => d)
-      .catch((e) => e);
+      req.body.html
+    ).catch((e: Error) => e.message);
 
     if (fileWriteResult && fileWriteResult === "error") {
       return sendResponse(res, 400, "Failed to write html to file");
     }
 
     const templateDocData: TemplateDocumentData = {
-      title: value.title,
-      subject: value.subject,
+      title: req.body.title,
+      subject: req.body.subject,
       html: fileName,
       attachements,
-      format: value.format,
+      format: req.body.format,
       date: firestore.Timestamp.now(),
     };
 
-    // Save templateData
     await db.collection(collections.template).add(templateDocData);
 
     return sendResponse(res, 200, null, "New template added successfully.");
@@ -80,7 +60,7 @@ export const newTemplate = async (req: Request, res: Response) => {
 };
 
 // * Get all templates
-export const listTemplates = async (_req: Request, res: Response) => {
+const listTemplates = async (_req: Request, res: Response) => {
   try {
     const templateListSnap = (await db
       .collection(collections.template)
@@ -91,13 +71,7 @@ export const listTemplates = async (_req: Request, res: Response) => {
     >;
 
     if (templateListSnap.empty || templateListSnap.docs.length === 0) {
-      return res.status(200).json({
-        body: {
-          msg: "No templates found",
-          data: null,
-        },
-        error: null,
-      });
+      return sendResponse(res, 200, null, "No templates found");
     }
 
     const templateList = templateListSnap.docs.map((doc) => ({
@@ -107,12 +81,9 @@ export const listTemplates = async (_req: Request, res: Response) => {
       format: doc.data().format,
     }));
 
-    return res.status(200).json({
-      body: {
-        msg: "Template List found.",
-        data: templateList,
-      },
-      error: null,
+    return sendResponse(res, 200, null, {
+      msg: "Template list found.",
+      data: templateList,
     });
   } catch (error) {
     console.error(error);
@@ -121,32 +92,22 @@ export const listTemplates = async (_req: Request, res: Response) => {
 };
 
 // * Open a template
-export const openTemplate = async (req: Request, res: Response) => {
+const openTemplate = async (req: Request, res: Response) => {
   try {
-    // Find valid template document
+    // Finding valid template document
     const template = (await db
       .collection(collections.template)
       .doc(req.params.id)
       .get()) as firestore.DocumentSnapshot<TemplateDocumentData>;
 
-    if (!template.exists)
-      return res.status(404).json({
-        body: null,
-        error: {
-          msg: "Template not found.",
-          data: null,
-        },
-      });
+    if (!template.exists) {
+      return sendResponse(res, 404, "Template not found.");
+    }
 
     const templateData = template.data();
-    if (!templateData)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Template is empty.",
-          data: null,
-        },
-      });
+    if (!templateData) {
+      return sendResponse(res, 400, "Template is empty.");
+    }
 
     // Read html file
     const htmlReadStream = bucket.file(templateData.html).createReadStream();
@@ -155,26 +116,20 @@ export const openTemplate = async (req: Request, res: Response) => {
     );
 
     if (typeof htmlString !== "string") {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Error in reading html file.",
-          data: htmlString.message,
-        },
+      return sendResponse(res, 400, {
+        msg: "Error in reading html file.",
+        data: htmlString.message,
       });
     }
 
-    return res.status(200).json({
-      body: {
-        msg: "Template found.",
-        data: {
-          ...template.data(),
-          html: htmlString,
-          date: template.data()?.date.toDate(),
-          id: template.id,
-        },
+    return sendResponse(res, 200, null, {
+      msg: "Template found.",
+      data: {
+        ...template.data(),
+        html: juice.inlineContent(htmlString, styles),
+        date: template.data()?.date.toDate(),
+        id: template.id,
       },
-      error: null,
     });
   } catch (error) {
     console.error(error);
@@ -182,14 +137,85 @@ export const openTemplate = async (req: Request, res: Response) => {
   }
 };
 
-// * Upload image to HTML mail template
-export const uploadImage = async (req: Request, res: Response) => {
+// * Delete a template
+const deleteTemplate = async (req: Request, res: Response) => {
   try {
-    // Get file
+    const templateSnap = (await db
+      .collection(collections.template)
+      .doc(req.params.id)
+      .get()) as firestore.DocumentSnapshot<TemplateDocumentData>;
+    if (!templateSnap.exists) {
+      return sendResponse(res, 404, "Template not found.");
+    }
+
+    const templateData = templateSnap.data();
+    if (!templateData) {
+      return sendResponse(res, 404, "Template is empty.");
+    }
+
+    const deleteFilePromises = [
+      ...templateData.attachements,
+      templateData.html,
+    ].map((fileName) =>
+      bucket
+        .file(fileName)
+        .delete({ ignoreNotFound: true })
+        .then(() => `${fileName} deleted.`)
+        .catch(() => `unable to delete ${fileName}`)
+    );
+
+    const relatedMailList = (await db
+      .collection(collections.mailList)
+      .where("templateId", "==", templateSnap.id)
+      .get()) as firestore.QuerySnapshot<MailListTypes.MailListDocumentData>;
+
+    const relatedMailListItem = (await db
+      .collection(collections.mailListItem)
+      .where("templateId", "==", templateSnap.id)
+      .get()) as firestore.QuerySnapshot<MailListItemTypes.MailListItemDocumentData>;
+
+    const writeBatch = db.batch();
+
+    [...relatedMailList.docs, ...relatedMailListItem.docs].forEach((doc) => {
+      writeBatch.delete(doc.ref);
+    });
+
+    writeBatch.delete(templateSnap.ref);
+
+    const promiseArr = [
+      writeBatch
+        .commit()
+        .then(() => "All related documents deleted successfully"),
+      ...deleteFilePromises,
+    ];
+    await Promise.all(promiseArr);
+
+    return sendResponse(
+      res,
+      200,
+      null,
+      "Template and related email lists deleted successfully."
+    );
+  } catch (error) {
+    console.error(error);
+    return serverErrorResponse(res);
+  }
+};
+
+// * Upload image to HTML mail template
+const uploadImage = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        error: {
+          message: "File not uploaded. Try again",
+        },
+      });
+    }
+
     const fileName = (req.file as MailListTypes.UploadedFile).name;
     const file = bucket.file(fileName);
 
-    // Validating file
     const fileExists = (await file.exists())[0];
     if (!fileExists) {
       return res.status(400).json({
@@ -199,14 +225,10 @@ export const uploadImage = async (req: Request, res: Response) => {
       });
     }
 
-    // Make file public
     await file.makePublic();
 
-    // Get publicUrl
-    const fileURL = file.publicUrl();
-
     return res.status(200).json({
-      url: fileURL,
+      url: file.publicUrl(),
     });
   } catch (error) {
     console.error(error);
@@ -216,4 +238,12 @@ export const uploadImage = async (req: Request, res: Response) => {
       },
     });
   }
+};
+
+export {
+  newTemplate,
+  listTemplates,
+  openTemplate,
+  deleteTemplate,
+  uploadImage,
 };

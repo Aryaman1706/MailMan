@@ -1,4 +1,6 @@
 import Joi from "joi";
+
+// Types
 import CustomValidationResult from "../utils/types/CustomValidationResult";
 import { Format } from "./types";
 
@@ -29,4 +31,4 @@ const validateFormat = (body: any): CustomValidationResult<Format> => {
   return schema.validate(body);
 };
 
-export { newTemplate, validateFormat };
+export { newTemplate, NewTemplateBody, validateFormat };

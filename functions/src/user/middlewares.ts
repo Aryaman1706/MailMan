@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { auth } from "../config/firebase";
-import Request from "../utils/ReqUser";
+import Request from "../utils/types/CustomRequest";
 import { FirebaseError } from "firebase-admin";
 
 const makeMiddleware = (identity?: "admin" | "user") => {

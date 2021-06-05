@@ -2,6 +2,7 @@ import express from "express";
 
 // * Middlewares
 import { middlewares as userMiddlewares } from "../user";
+import * as templateValidators from "./middlewares";
 
 // * Controllers
 import * as controllers from "./controllers";
@@ -16,7 +17,12 @@ const router = express.Router();
  * Route: {{server_url}}/api/template/new
  * Middleware: Admin Login, Multer
  */
-router.post("/new", userMiddlewares.adminLogin, controllers.newTemplate);
+router.post(
+  "/new",
+  userMiddlewares.adminLogin,
+  templateValidators.validateNewTemplate,
+  controllers.newTemplate
+);
 
 /**
  * Type: GET
@@ -35,12 +41,16 @@ router.get("/list", userMiddlewares.login, controllers.listTemplates);
 router.get("/open/:id", userMiddlewares.login, controllers.openTemplate);
 
 /**
- * Type: PATCH
- * Desc: Edit a template
- * Route: {{server_url}}/api/template/edit/:id
+ * Type: DELETE
+ * Desc: Delete a template
+ * Route: {{server_url}}/api/template/delete/:id
  * Middleware: Admin Login
  */
-router.patch("/edit/:id", userMiddlewares.adminLogin, controllers.editTemplate);
+router.delete(
+  "/delete/:id",
+  userMiddlewares.adminLogin,
+  controllers.deleteTemplate
+);
 
 /**
  * Type: POST

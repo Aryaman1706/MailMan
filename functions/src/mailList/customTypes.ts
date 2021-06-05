@@ -12,6 +12,7 @@ type template = {
 };
 
 export interface MailListData {
+  templateId: string;
   template: template;
   email: string;
   uid: string;
