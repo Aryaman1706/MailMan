@@ -7,20 +7,32 @@ import { FirebaseError } from "firebase-admin";
 // * Utils
 import * as validators from "../utils/validators/user";
 import { UserProfileData, UserProfileDocumentData } from "./customTypes";
+import { signupReqBody } from "../utils/validators/user";
+import validateReq, { isResponse } from "../utils/generalValidate";
 
 // * SignUp a new user
 export const signupUser = async (req: Request, res: Response) => {
   try {
     // Validate req.body
-    const { value, error } = validators.userSignup(req.body);
-    if (error)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid inputs. Try again.",
-          data: error.details[0].message,
-        },
-      });
+    // const { value, error } = validators.userSignup(req.body);
+    // if (error)
+    //   return res.status(400).json({
+    //     body: null,
+    //     error: {
+    //       msg: "Invalid inputs. Try again.",
+    //       data: error.details[0].message,
+    //     },
+    //   });
+
+    // Alt Validate request
+    const value = validateReq<signupReqBody>(
+      req.body,
+      validators.userSignup,
+      res
+    );
+    if (isResponse(value)) {
+      return;
+    }
 
     // Encrypt the password
     if (value.smtp && value.smtp.password) {

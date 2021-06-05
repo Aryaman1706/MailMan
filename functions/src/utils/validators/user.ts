@@ -1,7 +1,7 @@
 import Joi from "joi";
-import CustomValidationResult from "./customValidationResult";
+import CustomValidationResult from "../types/CustomValidationResult";
 
-type signupReqBody = {
+export type signupReqBody = {
   isAdmin: boolean;
   email: string;
   password: string;
@@ -18,7 +18,9 @@ export const userSignup = (
     smtp: Joi.object({
       email: Joi.string().trim().email().allow(null).default(null),
       password: Joi.string().trim().allow(null).default(null),
-    }).allow(null).default(null),
+    })
+      .allow(null)
+      .default(null),
   });
 
   return schema.validate(body);

@@ -5,7 +5,7 @@ import { db, collections, auth } from "../config/firebase";
 
 // * Utils
 import * as validators from "../utils/validators/mailList";
-import parse from "../utils/parse";
+import parse from "../utils/functions/parse";
 
 // * Types
 import {

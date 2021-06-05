@@ -1,18 +1,22 @@
 import { db, collections, bucket } from "../config/firebase";
-import isEqual from "lodash.isequal";
-import pick from "lodash.pick";
 import { v4 } from "uuid";
-import { Request, Response } from "express";
-import { TemplateDocumentData } from "./customTypes";
-import { types as MailListTypes } from "../mailList";
 import juice from "juice";
-import styles from "../utils/styles";
+
+// * Types
+import { Request, Response } from "express";
+import { TemplateDocumentData } from "./types";
+import { types as MailListTypes } from "../mailList";
 
 // * Utils
-import * as validators from "../utils/validators/template";
 import { firestore } from "firebase-admin";
-import writeToFile from "./writeFilePromise";
-import readFile from "./readFilePromise";
+import * as validators from "./validators";
+import sendResponse, {
+  serverErrorResponse,
+  validationErrorResponse,
+} from "../utils/functions/sendResponse";
+import writeFile from "../utils/functions/writeFile";
+import readFile from "../utils/functions/readFile";
+import styles from "../utils/styles";
 
 // * Create new template
 export const newTemplate = async (req: Request, res: Response) => {
@@ -20,13 +24,7 @@ export const newTemplate = async (req: Request, res: Response) => {
     // Validating req.body
     const { value, error } = validators.newTemplate(req.body);
     if (error) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid inputs. Try again.",
-          data: error.details[0].message,
-        },
-      });
+      return validationErrorResponse(res, error);
     }
 
     // Validating format
@@ -34,13 +32,7 @@ export const newTemplate = async (req: Request, res: Response) => {
       JSON.parse(value.format as string)
     );
     if (formatError) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid inputs. Try again.",
-          data: formatError.details[0].message,
-        },
-      });
+      return validationErrorResponse(res, formatError);
     }
 
     value.format = format;
@@ -57,7 +49,7 @@ export const newTemplate = async (req: Request, res: Response) => {
     const fileName = `${v4()}.html`;
     const fileWriteStream = bucket.file(fileName).createWriteStream();
 
-    const fileWriteResult: string = await writeToFile(
+    const fileWriteResult: string = await writeFile(
       fileWriteStream,
       juice.inlineContent(value.html, styles)
     )
@@ -65,13 +57,7 @@ export const newTemplate = async (req: Request, res: Response) => {
       .catch((e) => e);
 
     if (fileWriteResult && fileWriteResult === "error") {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Failed to write html to file",
-          data: null,
-        },
-      });
+      return sendResponse(res, 400, "Failed to write html to file");
     }
 
     const templateDocData: TemplateDocumentData = {
@@ -86,22 +72,10 @@ export const newTemplate = async (req: Request, res: Response) => {
     // Save templateData
     await db.collection(collections.template).add(templateDocData);
 
-    return res.status(200).json({
-      body: {
-        msg: "Successfull",
-        data: null,
-      },
-      error: null,
-    });
+    return sendResponse(res, 200, null, "New template added successfully.");
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
+    return serverErrorResponse(res);
   }
 };
 
@@ -142,13 +116,7 @@ export const listTemplates = async (_req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
+    return serverErrorResponse(res);
   }
 };
 
@@ -210,83 +178,7 @@ export const openTemplate = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
-  }
-};
-
-// * Edit a template
-export const editTemplate = async (req: Request, res: Response) => {
-  try {
-    // Validating request body
-    const { value, error } = validators.editTemplate(req.body);
-    if (error)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid inputs. Try again.",
-          data: error.details[0].message,
-        },
-      });
-
-    // Finding valid template
-    const template = (await db
-      .collection(collections.template)
-      .doc(req.params.id)
-      .get()) as firestore.DocumentSnapshot<TemplateDocumentData>;
-
-    const templateData = template.data();
-    if (!template.exists || !templateData) {
-      return res.status(404).json({
-        body: null,
-        error: {
-          msg: "Template not found.",
-          data: null,
-        },
-      });
-    }
-
-    // Validating changes
-    if (isEqual(value, pick(templateData, [...Object.keys(value)]))) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "No changes were made. Try again.",
-          data: null,
-        },
-      });
-    }
-
-    // Updating template document
-    const newTemplateData = {
-      ...templateData,
-      ...value,
-    };
-    await template.ref.update({
-      ...value,
-    });
-
-    return res.status(200).json({
-      body: {
-        msg: "Template updated successfully.",
-        data: newTemplateData,
-      },
-      error: null,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
+    return serverErrorResponse(res);
   }
 };
 

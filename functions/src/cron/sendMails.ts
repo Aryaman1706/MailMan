@@ -3,7 +3,7 @@ import { db, collections } from "../config/firebase";
 import { types as mailListTypes } from "../mailList";
 import { types as mailListItemTypes } from "../mailListItem";
 import { types as userTypes } from "../user";
-import { EmailListItem } from "../utils/parse";
+import { EmailListItem } from "../utils/functions/parse";
 import mailer from "./mailer";
 
 const sendMails = async () => {

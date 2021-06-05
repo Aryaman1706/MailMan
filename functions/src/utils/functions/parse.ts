@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-import { bucket } from "../config/firebase";
+import { bucket } from "../../config/firebase";
 import chunk from "lodash.chunk";
 
 export type EmailListItem = {

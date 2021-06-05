@@ -1,5 +1,5 @@
 import Joi from "joi";
-import CustomValidationResult from "./customValidationResult";
+import CustomValidationResult from "../types/CustomValidationResult";
 
 export const addNew = (
   body: any

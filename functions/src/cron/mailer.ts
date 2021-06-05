@@ -4,9 +4,9 @@ import { promises as fs } from "fs";
 import path from "path";
 import { google } from "googleapis";
 import { types as mailListTypes } from "../mailList";
-import { EmailListItem } from "../utils/parse";
+import { EmailListItem } from "../utils/functions/parse";
 import { bucket } from "../config/firebase";
-import readFile from "../template/readFilePromise";
+import readFile from "../utils/functions/readFile";
 
 type MailResult = {
   info: SentMessageInfo | null;

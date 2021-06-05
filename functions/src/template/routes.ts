@@ -2,7 +2,6 @@ import express from "express";
 
 // * Middlewares
 import { middlewares as userMiddlewares } from "../user";
-import uploadFile from "../utils/multerMiddleware";
 
 // * Controllers
 import * as controllers from "./controllers";
@@ -17,12 +16,7 @@ const router = express.Router();
  * Route: {{server_url}}/api/template/new
  * Middleware: Admin Login, Multer
  */
-router.post(
-  "/new",
-  userMiddlewares.adminLogin,
-  uploadFile.array("attachements"),
-  controllers.newTemplate
-);
+router.post("/new", userMiddlewares.adminLogin, controllers.newTemplate);
 
 /**
  * Type: GET
@@ -57,7 +51,6 @@ router.patch("/edit/:id", userMiddlewares.adminLogin, controllers.editTemplate);
 router.post(
   "/image/upload",
   userMiddlewares.adminLogin,
-  uploadFile.single("upload"),
   controllers.uploadImage
 );
 
