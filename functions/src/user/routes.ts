@@ -1,10 +1,14 @@
 import express from "express";
 
-// * Controllers
+// Controllers
 import * as controllers from "./controllers";
 
-// * Middlewares
+// Middlewares
 import { login, adminLogin } from "./middlewares";
+import validationMiddleware from "../utils/functions/validationMiddleware";
+
+// Types
+import { userSignup, smtpEdit } from "./validators";
 
 const router = express.Router();
 
@@ -16,7 +20,12 @@ const router = express.Router();
  * Route: {{server_url}}/api/user/signup
  * Middleware: Admin Login
  */
-router.post("/signup", adminLogin, controllers.signupUser);
+router.post(
+  "/signup",
+  adminLogin,
+  validationMiddleware(userSignup),
+  controllers.signupUser
+);
 
 /**
  * Type: GET
@@ -32,7 +41,12 @@ router.get("/profile", login, controllers.getProfile);
  * Route: {{server_url}}/api/user/profile
  * Middleware: Login
  */
-router.put("/profile", login, controllers.editUser);
+router.put(
+  "/profile",
+  login,
+  validationMiddleware(smtpEdit),
+  controllers.editUser
+);
 
 // * End of API Endpoints -->
 

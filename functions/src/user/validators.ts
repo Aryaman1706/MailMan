@@ -1,16 +1,19 @@
 import Joi from "joi";
-import CustomValidationResult from "../types/CustomValidationResult";
+import CustomValidationResult from "../utils/types/CustomValidationResult";
 
-export type signupReqBody = {
+type UserSignupBody = {
   isAdmin: boolean;
   email: string;
   password: string;
   smtp: { email: string | null; password: string | null } | null;
 };
 
-export const userSignup = (
-  body: any
-): CustomValidationResult<signupReqBody> => {
+type SmtpBody = {
+  email: string;
+  password: string;
+};
+
+const userSignup = (body: any): CustomValidationResult<UserSignupBody> => {
   const schema = Joi.object({
     isAdmin: Joi.boolean().required(),
     email: Joi.string().email().required(),
@@ -26,9 +29,7 @@ export const userSignup = (
   return schema.validate(body);
 };
 
-export const smtpEdit = (
-  body: any
-): CustomValidationResult<{ email: string; password: string }> => {
+const smtpEdit = (body: any): CustomValidationResult<SmtpBody> => {
   const schema = Joi.object({
     email: Joi.string().email().trim().required(),
     password: Joi.string().trim().required(),
@@ -36,3 +37,5 @@ export const smtpEdit = (
 
   return schema.validate(body);
 };
+
+export { userSignup, UserSignupBody, smtpEdit, SmtpBody };

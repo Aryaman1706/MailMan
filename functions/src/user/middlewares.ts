@@ -1,6 +1,8 @@
-import { Response, NextFunction } from "express";
 import { auth } from "../config/firebase";
+
+// Types
 import Request from "../utils/types/CustomRequest";
+import { Response, NextFunction } from "express";
 import { FirebaseError } from "firebase-admin";
 
 const makeMiddleware = (identity?: "admin" | "user") => {
@@ -80,6 +82,8 @@ const makeMiddleware = (identity?: "admin" | "user") => {
   return middleware;
 };
 
-export const login = makeMiddleware();
-export const userLogin = makeMiddleware("user");
-export const adminLogin = makeMiddleware("admin");
+const login = makeMiddleware();
+const userLogin = makeMiddleware("user");
+const adminLogin = makeMiddleware("admin");
+
+export { login, userLogin, adminLogin };

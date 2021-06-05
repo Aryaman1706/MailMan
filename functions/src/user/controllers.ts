@@ -1,138 +1,82 @@
-import { Request, Response } from "express";
 import { db, collections, auth } from "../config/firebase";
-import ReqUser from "../utils/ReqUser";
 import CryptoJS from "crypto-js";
+
+import Request from "../utils/types/CustomRequest";
+import { Response } from "express";
 import { FirebaseError } from "firebase-admin";
+import { UserProfileData, UserProfileDocumentData } from "./types";
 
 // * Utils
-import * as validators from "../utils/validators/user";
-import { UserProfileData, UserProfileDocumentData } from "./customTypes";
-import { signupReqBody } from "../utils/validators/user";
-import validateReq, { isResponse } from "../utils/generalValidate";
+import * as validators from "./validators";
+import sendResponse, {
+  serverErrorResponse,
+} from "../utils/functions/sendResponse";
 
 // * SignUp a new user
-export const signupUser = async (req: Request, res: Response) => {
+export const signupUser = async (
+  req: Request<validators.UserSignupBody>,
+  res: Response
+) => {
   try {
-    // Validate req.body
-    // const { value, error } = validators.userSignup(req.body);
-    // if (error)
-    //   return res.status(400).json({
-    //     body: null,
-    //     error: {
-    //       msg: "Invalid inputs. Try again.",
-    //       data: error.details[0].message,
-    //     },
-    //   });
-
-    // Alt Validate request
-    const value = validateReq<signupReqBody>(
-      req.body,
-      validators.userSignup,
-      res
-    );
-    if (isResponse(value)) {
-      return;
-    }
-
-    // Encrypt the password
-    if (value.smtp && value.smtp.password) {
-      value.smtp.password = CryptoJS.AES.encrypt(
-        value.password,
+    if (req.body.smtp && req.body.smtp.password) {
+      req.body.smtp.password = CryptoJS.AES.encrypt(
+        req.body.password,
         process.env.SECRET_PASSPHRASE as string
       ).toString();
     }
 
-    // Create user
     const user = await auth
       .createUser({
-        email: value.email,
-        password: value.password,
+        email: req.body.email,
+        password: req.body.password,
       })
       .then((user) => user)
       .catch((err: FirebaseError) => err.message);
 
     if (typeof user === "string") {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "User could be created.",
-          data: user,
-        },
-      });
+      return sendResponse(res, 400, "User could not be created.");
     }
 
-    // Create user in firestore and add customClaims
     const userProfileData: UserProfileData = {
-      isAdmin: value.isAdmin,
+      isAdmin: req.body.isAdmin,
       uid: user.uid,
-      smtp: value.smtp,
+      smtp: req.body.smtp,
     };
 
     await Promise.all([
       db.collection(collections.user).doc(user.uid).create(userProfileData),
       auth.setCustomUserClaims(user.uid, {
-        admin: value.isAdmin,
+        admin: req.body.isAdmin,
       }),
     ]);
 
-    return res.status(200).json({
-      body: {
-        msg: "New user created successfully.",
-        data: null,
-      },
-      error: null,
-    });
+    return sendResponse(res, 200, null, "New user created successfully.");
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
+    return serverErrorResponse(res);
   }
 };
 
 // * Get user profile
-export const getProfile = async (req: ReqUser, res: Response) => {
+export const getProfile = async (req: Request, res: Response) => {
   try {
-    // Verfying uid
     const uid = req.user?.id;
     if (!uid) {
-      return res.status(400).json({
-        body: {
-          msg: "Invalid user.",
-          data: null,
-        },
-        error: null,
-      });
+      return sendResponse(res, 400, "Invalid user.");
     }
 
-    // Finding valid user document
     const [userSnap, userRecord] = await Promise.all([
       db.collection(collections.user).doc(uid).get(),
       auth.getUser(uid),
     ]);
 
-    if (!userSnap || !userRecord)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "User not found.",
-          data: null,
-        },
-      });
+    if (!userSnap || !userRecord) {
+      return sendResponse(res, 404, "User not found.");
+    }
 
     const userData = userSnap.data() as UserProfileDocumentData | undefined;
     if (!userData) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid User.",
-          data: null,
-        },
-      });
+      return sendResponse(res, 404, "User is empty.");
     }
 
     const userProfile = {
@@ -141,7 +85,6 @@ export const getProfile = async (req: ReqUser, res: Response) => {
       isAdmin: userData.isAdmin,
     };
 
-    // Decrypting password
     if (userProfile.smtp && userProfile.smtp.password) {
       userProfile.smtp.password = CryptoJS.AES.decrypt(
         userProfile.smtp.password,
@@ -149,84 +92,45 @@ export const getProfile = async (req: ReqUser, res: Response) => {
       ).toString(CryptoJS.enc.Utf8);
     }
 
-    return res.status(200).json({
-      body: {
-        msg: "User found.",
-        data: userProfile,
-      },
-      error: null,
+    return sendResponse(res, 200, null, {
+      msg: "User found.",
+      data: userProfile,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
+    return serverErrorResponse(res);
   }
 };
 
 // * Edit user SMTP settings
-export const editUser = async (req: ReqUser, res: Response) => {
+export const editUser = async (
+  req: Request<validators.SmtpBody>,
+  res: Response
+) => {
   try {
-    // Validating request body
-    const { value, error } = validators.smtpEdit(req.body);
-    if (error)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid inputs. Try again.",
-          data: error.details[0].message,
-        },
-      });
-
-    // Encrypting password
-    const password = CryptoJS.AES.encrypt(
-      value.password,
-      process.env.SECRET_PASSPHRASE as string
-    ).toString();
-    console.log(password);
-
-    // Validating uid
     const uid = req.user?.id;
     if (!uid) {
-      return res.status(400).json({
-        body: {
-          msg: "Invalid account.",
-          data: null,
-        },
-        error: null,
-      });
+      return sendResponse(res, 400, "Invalid account.");
     }
 
-    // Finding and updating user document
+    const password = CryptoJS.AES.encrypt(
+      req.body.password,
+      process.env.SECRET_PASSPHRASE as string
+    ).toString();
+
     await db
       .collection(collections.user)
       .doc(uid)
       .update({
         smtp: {
-          email: value.email,
+          email: req.body.email,
           password: password,
         },
       });
 
-    return res.status(200).json({
-      body: {
-        msg: "Updated successfully.",
-        data: null,
-      },
-      error: null,
-    });
+    return sendResponse(res, 200, null, "Updated successfully.");
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      body: null,
-      error: {
-        msg: "Request failed. Try again.",
-        data: null,
-      },
-    });
+    return serverErrorResponse(res);
   }
 };
