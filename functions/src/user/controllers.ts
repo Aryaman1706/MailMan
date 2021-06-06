@@ -1,12 +1,13 @@
 import { db, collections, auth } from "../config/firebase";
 import CryptoJS from "crypto-js";
 
+// Types
 import Request from "../utils/types/CustomRequest";
 import { Response } from "express";
 import { FirebaseError } from "firebase-admin";
 import { UserProfileData, UserProfileDocumentData } from "./types";
 
-// * Utils
+// Utils
 import * as validators from "./validators";
 import sendResponse, {
   serverErrorResponse,

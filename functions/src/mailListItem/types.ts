@@ -1,15 +1,17 @@
 import { firestore } from "firebase-admin";
-import { EmailListItem } from "../utils/functions/parse";
+import { types as TemplateTypes } from "../template";
 
-export interface MailListItemData {
+interface MailListItemData {
   templateId: string;
   mailListId: string;
-  list: EmailListItem[];
+  list: TemplateTypes.Format[];
   sent: boolean;
   date: firestore.Timestamp;
   last: boolean;
 }
 
-export interface MailListItemDocumentData
+interface MailListItemDocumentData
   extends firestore.DocumentData,
     MailListItemData {}
+
+export { MailListItemData, MailListItemDocumentData };

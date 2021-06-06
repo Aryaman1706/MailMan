@@ -1,19 +1,15 @@
 import { firestore } from "firebase-admin";
 
-export interface UploadedFile extends Express.Multer.File {
-  name: string;
-}
-
-type template = {
+type Template = {
   title: string;
   subject: string;
   html: string;
   attachements: string[];
 };
 
-export interface MailListData {
+interface MailListData {
   templateId: string;
-  template: template;
+  template: Template;
   email: string;
   uid: string;
   file: string;
@@ -23,6 +19,6 @@ export interface MailListData {
   lastSent: firestore.Timestamp | null;
 }
 
-export interface MailListDocumentData
-  extends firestore.DocumentData,
-    MailListData {}
+interface MailListDocumentData extends firestore.DocumentData, MailListData {}
+
+export { MailListData, MailListDocumentData };

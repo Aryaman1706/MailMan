@@ -1,11 +1,14 @@
 import express from "express";
 
-// * Middlewares
+// Middlewares
 import { middlewares } from "../user";
-import uploadFile from "../utils/multerMiddleware";
+import validationMiddleware from "../utils/functions/validationMiddleware";
 
-// * Controllers
+// Controllers
 import * as controllers from "./controllers";
+
+// Utils
+import { addNew } from "./validators";
 
 const router = express.Router();
 
@@ -19,7 +22,7 @@ const router = express.Router();
 router.post(
   "/",
   middlewares.login,
-  uploadFile.single("file"),
+  validationMiddleware(addNew),
   controllers.addNew
 );
 

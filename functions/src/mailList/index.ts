@@ -1,2 +1,2 @@
-export * as types from "./customTypes";
+export * as types from "./types";
 export { default as router } from "./routes";

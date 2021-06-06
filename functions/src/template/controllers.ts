@@ -9,6 +9,7 @@ import { TemplateDocumentData } from "./types";
 import { types as MailListTypes } from "../mailList";
 import { types as MailListItemTypes } from "../mailListItem";
 import { NewTemplateValid } from "./middlewares";
+import UploadedFile from "../utils/types/CustomReqFile";
 
 // Utils
 import { firestore } from "firebase-admin";
@@ -24,9 +25,7 @@ const newTemplate = async (req: Request<NewTemplateValid>, res: Response) => {
   try {
     let attachements: string[] = [];
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-      attachements = (req.files as MailListTypes.UploadedFile[]).map(
-        (file) => file.name
-      );
+      attachements = (req.files as UploadedFile[]).map((file) => file.name);
     }
 
     const fileName = `${v4()}.html`;
@@ -213,7 +212,7 @@ const uploadImage = async (req: Request, res: Response) => {
       });
     }
 
-    const fileName = (req.file as MailListTypes.UploadedFile).name;
+    const fileName = (req.file as UploadedFile).name;
     const file = bucket.file(fileName);
 
     const fileExists = (await file.exists())[0];

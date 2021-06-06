@@ -2,21 +2,18 @@ import ExcelJS from "exceljs";
 import { bucket } from "../../config/firebase";
 import chunk from "lodash.chunk";
 
-export type EmailListItem = {
-  [key: string]: string;
-};
+// Types
+import { types as TemplateTypes } from "../../template";
 
 type ReturnData = {
-  emailList: Array<Array<EmailListItem>> | [];
+  emailList: Array<Array<TemplateTypes.Format>> | [];
   error: string | null;
 };
 
-type Format = {
-  email: string;
-  [k: string]: string;
-};
-
-const parse = async (name: string, format: Format): Promise<ReturnData> => {
+const parse = async (
+  name: string,
+  format: TemplateTypes.Format
+): Promise<ReturnData> => {
   try {
     // Creating a workbook
     const workbook = new ExcelJS.Workbook();
@@ -35,7 +32,7 @@ const parse = async (name: string, format: Format): Promise<ReturnData> => {
     const fileReadStream = file.createReadStream();
     await workbook.xlsx.read(fileReadStream);
 
-    const emailList: EmailListItem[] = [];
+    const emailList: TemplateTypes.Format[] = [];
 
     // Iterating on all worksheets in a workbook
     workbook.eachSheet((worksheet) => {
@@ -44,7 +41,9 @@ const parse = async (name: string, format: Format): Promise<ReturnData> => {
         worksheet.eachRow((row, rowNumber) => {
           // Ignoring header
           if (rowNumber > 1) {
-            const data: EmailListItem = {};
+            const data: TemplateTypes.Format = {
+              email: format.email,
+            };
 
             Object.keys(format).forEach((key) => {
               data[key] = row.getCell(format[key]).text.trim() || "";
