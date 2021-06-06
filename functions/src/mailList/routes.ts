@@ -3,6 +3,7 @@ import express from "express";
 // Middlewares
 import { middlewares } from "../user";
 import validationMiddleware from "../utils/functions/validationMiddleware";
+import uploadFile from "../config/fileUpload";
 
 // Controllers
 import * as controllers from "./controllers";
@@ -17,11 +18,12 @@ const router = express.Router();
  * Type: POST
  * Desc: Add a new mailList
  * Route: {{server_url}}/api/mail-list
- * Middleware: Login, File Upload
+ * Middleware: Login, UploadFile
  */
 router.post(
   "/",
   middlewares.login,
+  uploadFile,
   validationMiddleware(addNew),
   controllers.addNew
 );
@@ -48,7 +50,7 @@ router.get("/list", middlewares.login, controllers.listMailListUser);
  * Route: {{server_url}}/api/mail-list/view/:mailListId
  * Middleware: Login
  */
-router.get("/view/:mailListId", middlewares.login, controllers.viewMailList);
+router.get("/view/:id", middlewares.login, controllers.viewMailList);
 
 // * End of API Endpoints -->
 

@@ -3,14 +3,13 @@ import Busboy from "busboy";
 import { v4 as uuid } from "uuid";
 import { extname } from "path";
 import { bucket } from "../config/firebase";
+import sendResponse from "../utils/functions/sendResponse";
 
 type Obj = { [key: string]: string };
 
 const fileUploadPromise = (
   fileStream: NodeJS.ReadableStream,
-  originalFileName: string,
-  fieldName: string,
-  fields: Obj
+  originalFileName: string
 ): Promise<string> =>
   new Promise((resolve, reject) => {
     const fileExt = extname(originalFileName);
@@ -25,12 +24,11 @@ const fileUploadPromise = (
         reject(err);
       })
       .on("finish", () => {
-        fields[fieldName] = fileName;
         resolve(fileName);
       });
   });
 
-const uploadFile = async (req: Request, _res: Response, next: NextFunction) => {
+const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
   const busboy = new Busboy({ headers: req.headers });
 
   const fields: Obj = {};
@@ -41,16 +39,20 @@ const uploadFile = async (req: Request, _res: Response, next: NextFunction) => {
 
   const promiseArr: Promise<string>[] = [];
 
-  busboy.on("file", (fieldName, fileStream, originalFileName) => {
-    promiseArr.push(
-      fileUploadPromise(fileStream, originalFileName, fieldName, fields)
-    );
+  busboy.on("file", (_, fileStream, originalFileName) => {
+    promiseArr.push(fileUploadPromise(fileStream, originalFileName));
   });
 
   busboy.on("finish", async () => {
-    await Promise.all(promiseArr);
-    req.body = fields;
-    next();
+    try {
+      // @ts-ignore
+      req.files = await Promise.all(promiseArr);
+      req.body = fields;
+      next();
+      return;
+    } catch (error) {
+      return sendResponse(res, 400, "Unable to upload files.");
+    }
   });
 };
 

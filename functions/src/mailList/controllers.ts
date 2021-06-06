@@ -5,7 +5,6 @@ import { db, collections } from "../config/firebase";
 import Request from "../utils/types/CustomRequest";
 import { Response } from "express";
 import { MailListData, MailListDocumentData } from "./types";
-import { types as mailListItemTypes } from "../mailListItem";
 import UploadedFile from "../utils/types/CustomReqFile";
 
 // * Utils
@@ -17,9 +16,10 @@ import sendResponse, {
   serverErrorResponse,
   validationErrorResponse,
 } from "../utils/functions/sendResponse";
+import findMailListItems from "./utils/findMailListIrtems";
 
 // * Add a new mailList
-export const addNew = async (
+const addNew = async (
   req: Request<validators.AddMailListBody>,
   res: Response
 ) => {
@@ -92,7 +92,7 @@ export const addNew = async (
   }
 };
 
-export const listMailList = async (req: Request, res: Response) => {
+const listMailList = async (req: Request, res: Response) => {
   try {
     const {
       error,
@@ -127,7 +127,7 @@ export const listMailList = async (req: Request, res: Response) => {
   }
 };
 
-export const listMailListUser = async (req: Request, res: Response) => {
+const listMailListUser = async (req: Request, res: Response) => {
   try {
     const {
       error,
@@ -167,89 +167,42 @@ export const listMailListUser = async (req: Request, res: Response) => {
   }
 };
 
-export const viewMailList = async (req: Request, res: Response) => {
+const viewMailList = async (req: Request, res: Response) => {
   try {
-    // Validate req.query
-    const {
-      error,
-      value: { page },
-    } = validators.pagination(req.query);
-    if (error)
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Invalid inputs. Try again.",
-          data: error.details[0].message,
-        },
-      });
-
-    // Finding valid mailList
-    const mailListDoc = (await db
+    const mailList = (await db
       .collection(collections.mailList)
-      .doc(req.params.mailListId)
+      .doc(req.params.id)
       .get()) as firestore.DocumentSnapshot<MailListDocumentData>;
-    const mailListDocData = mailListDoc.data();
-
-    if (!mailListDoc.exists || !mailListDocData) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "Mail List not found.",
-          data: null,
-        },
-      });
+    if (!mailList.exists) {
+      return sendResponse(res, 400, "Mail List not found.");
     }
 
-    // Verify User access
-    if (
-      !req.user ||
-      (!req.user.isAdmin && req.user.id.trim() !== mailListDocData.uid.trim())
-    ) {
-      return res.status(400).json({
-        body: null,
-        error: {
-          msg: "You do not have access to this mail list.",
-          data: null,
-        },
-      });
+    const mailListData = mailList.data();
+    if (!mailListData) {
+      return sendResponse(res, 400, "Mail List document is empty.");
     }
 
-    // Find related mailListItems (paginated)
-    const mailListItemDocs = (await db
-      .collection(collections.mailListItem)
-      .where("mailListId", "==", mailListDoc.id.trim())
-      .orderBy("date", "asc")
-      .offset(page * 10)
-      .limit(10)
-      .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
+    const { error, data } = await findMailListItems(mailList.id);
+    if (error || !data) {
+      return sendResponse(res, 400, error || "Unable to find.");
+    }
 
-    let isLast: boolean = false;
-    const list = mailListItemDocs.docs.map((doc) => {
-      if (doc.data().last) {
-        isLast = true;
-      }
-
-      return {
-        ...doc.data(),
-        date: doc.data().date.toDate(),
-      };
-    });
-
-    return res.status(200).json({
-      body: {
-        msg: "MailList List found.",
-        data: {
-          list,
-          hasMore:
-            !mailListItemDocs.empty && mailListItemDocs.size > 10 && !isLast
-              ? true
-              : false,
+    return sendResponse(res, 200, null, {
+      msg: "MailList and related documents found.",
+      data: {
+        mailList: {
+          ...mailListData,
+          addedOn: mailListData.addedOn.toDate(),
+          lastSent: mailListData.lastSent?.toDate() || null,
         },
+        sent: data.sent,
+        unsent: data.unsent,
       },
-      error: null,
     });
   } catch (error) {
     console.error(error);
     return serverErrorResponse(res);
   }
 };
+
+export { addNew, listMailList, listMailListUser, viewMailList };

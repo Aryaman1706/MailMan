@@ -4,7 +4,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { google } from "googleapis";
 import { types as mailListTypes } from "../mailList";
-import { EmailListItem } from "../utils/functions/parse";
+import { types as templateTypes } from "../template";
 import { bucket } from "../config/firebase";
 import readFile from "../utils/functions/readFile";
 
@@ -15,7 +15,7 @@ type MailResult = {
 
 const mailer = async (
   mailList: mailListTypes.MailListData,
-  emailList: EmailListItem[]
+  emailList: templateTypes.Format[]
 ) => {
   const OAuth2 = google.auth.OAuth2;
   const oauth2Client = new OAuth2(

@@ -3,7 +3,7 @@ import { db, collections } from "../config/firebase";
 import { types as mailListTypes } from "../mailList";
 import { types as mailListItemTypes } from "../mailListItem";
 import { types as userTypes } from "../user";
-import { EmailListItem } from "../utils/functions/parse";
+import { types as templateTypes } from "../template";
 import mailer from "./mailer";
 
 const sendMails = async () => {
@@ -91,7 +91,7 @@ const sendMails = async () => {
   const pendingMailListItemDocs = pendingMailListItems.docs.slice(0, 2);
 
   // Send emails
-  const emailData: EmailListItem[] = [];
+  const emailData: templateTypes.Format[] = [];
   pendingMailListItemDocs.forEach((doc) => {
     emailData.push(...doc.data().list);
   });

@@ -14,7 +14,7 @@ import sendResponse, {
 } from "../utils/functions/sendResponse";
 
 // * SignUp a new user
-export const signupUser = async (
+const signupUser = async (
   req: Request<validators.UserSignupBody>,
   res: Response
 ) => {
@@ -59,7 +59,7 @@ export const signupUser = async (
 };
 
 // * Get user profile
-export const getProfile = async (req: Request, res: Response) => {
+const getProfile = async (req: Request, res: Response) => {
   try {
     const uid = req.user?.id;
     if (!uid) {
@@ -104,10 +104,7 @@ export const getProfile = async (req: Request, res: Response) => {
 };
 
 // * Edit user SMTP settings
-export const editUser = async (
-  req: Request<validators.SmtpBody>,
-  res: Response
-) => {
+const editUser = async (req: Request<validators.SmtpBody>, res: Response) => {
   try {
     const uid = req.user?.id;
     if (!uid) {
@@ -135,3 +132,5 @@ export const editUser = async (
     return serverErrorResponse(res);
   }
 };
+
+export { signupUser, getProfile, editUser };
