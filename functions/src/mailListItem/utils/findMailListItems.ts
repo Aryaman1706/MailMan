@@ -12,7 +12,7 @@ import sendResponse, {
 } from "../../utils/functions/sendResponse";
 
 const findMailListItems = async (mailListId: string, sent: boolean) => {
-  const controller = async (req: Request, res: Response) => {
+  const controller = async (_req: Request, res: Response) => {
     try {
       const mailList = (await db
         .collection(collections.mailList)
@@ -46,6 +46,8 @@ const findMailListItems = async (mailListId: string, sent: boolean) => {
       });
 
       // Generate File
+
+      return;
     } catch (error) {
       console.error(error);
       return serverErrorResponse(res);

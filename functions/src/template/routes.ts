@@ -62,7 +62,7 @@ router.delete(
  */
 router.post(
   "/image/upload",
-  userMiddlewares.adminLogin,
+  // userMiddlewares.adminLogin,
   uploadFile,
   controllers.uploadImage
 );

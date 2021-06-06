@@ -1,5 +1,6 @@
 import express from "express";
 import { config } from "dotenv";
+import * as functions from "firebase-functions";
 
 config();
 
@@ -15,5 +16,5 @@ middlewares(app);
 // * Routes
 routes(app);
 
-// * Start Server
-app.listen(5000, () => console.log("Server started.."));
+// * Deploy Cloud Functions
+exports.api = functions.https.onRequest(app);

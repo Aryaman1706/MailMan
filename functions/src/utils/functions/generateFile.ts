@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import ExcelJS from "exceljs";
 
 import { types as templateTypes } from "../../template";

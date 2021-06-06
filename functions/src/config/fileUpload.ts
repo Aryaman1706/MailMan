@@ -4,13 +4,18 @@ import { v4 as uuid } from "uuid";
 import { extname } from "path";
 import { bucket } from "../config/firebase";
 import sendResponse from "../utils/functions/sendResponse";
+import onFinished from "on-finished";
 
 type Obj = { [key: string]: string };
+
+const drainStream = (stream: NodeJS.ReadableStream) => {
+  stream.on("readable", stream.read.bind(stream));
+};
 
 const fileUploadPromise = (
   fileStream: NodeJS.ReadableStream,
   originalFileName: string
-): Promise<string> =>
+): Promise<Obj> =>
   new Promise((resolve, reject) => {
     const fileExt = extname(originalFileName);
     const fileName = `${uuid()}${fileExt}`;
@@ -24,7 +29,7 @@ const fileUploadPromise = (
         reject(err);
       })
       .on("finish", () => {
-        resolve(fileName);
+        resolve({ name: fileName });
       });
   });
 
@@ -37,23 +42,33 @@ const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
     fields[name] = value;
   });
 
-  const promiseArr: Promise<string>[] = [];
+  const promiseArr: Promise<Obj>[] = [];
 
   busboy.on("file", (_, fileStream, originalFileName) => {
     promiseArr.push(fileUploadPromise(fileStream, originalFileName));
   });
 
-  busboy.on("finish", async () => {
+  busboy.on("finish", async (): Promise<Response | void> => {
     try {
       // @ts-ignore
       req.files = await Promise.all(promiseArr);
       req.body = fields;
-      next();
-      return;
+
+      req.unpipe(busboy);
+      drainStream(req);
+      busboy.removeAllListeners();
+
+      onFinished(req, () => {
+        next();
+      });
     } catch (error) {
+      console.error(error);
       return sendResponse(res, 400, "Unable to upload files.");
     }
   });
+
+  // @ts-ignore
+  busboy.end(req.rawBody);
 };
 
 export default uploadFile;

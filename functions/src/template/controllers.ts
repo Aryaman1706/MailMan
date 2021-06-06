@@ -204,7 +204,7 @@ const deleteTemplate = async (req: Request, res: Response) => {
 // * Upload image to HTML mail template
 const uploadImage = async (req: Request, res: Response) => {
   try {
-    if (!req.file) {
+    if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
       return res.status(400).json({
         error: {
           message: "File not uploaded. Try again",
@@ -212,7 +212,7 @@ const uploadImage = async (req: Request, res: Response) => {
       });
     }
 
-    const fileName = (req.file as UploadedFile).name;
+    const fileName = (req.files[0] as UploadedFile).name;
     const file = bucket.file(fileName);
 
     const fileExists = (await file.exists())[0];
