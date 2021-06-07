@@ -11,6 +11,7 @@ import AddMailList from "../Components/Dashboard/AddMailList";
 import UserMailListing from "../Components/Dashboard/User/UserMailListing";
 import ListTemplates from "../Components/Dashboard/ListTemplates";
 import ViewTemplate from "../Components/Dashboard/ViewTemplate";
+import ViewMailList from "../Components/Dashboard/ViewMailList";
 
 // * Admin Dashboard
 import AddTemplate from "../Components/Dashboard/Admin/AddTemplate";
@@ -50,6 +51,13 @@ const Routes = () => {
             onlyUsers
             layout
             component={ViewTemplate}
+          />
+          <Route
+            exact
+            path="/mail-list/open/:mailListId"
+            onlyUsers
+            layout
+            component={ViewMailList}
           />
 
           {/* Admin Dashboard */}

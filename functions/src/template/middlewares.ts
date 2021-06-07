@@ -2,7 +2,8 @@ import { validationErrorResponse } from "../utils/functions/sendResponse";
 import * as validators from "./validators";
 
 // Types
-import { Request, Response, NextFunction } from "express";
+import Request from "../utils/types/CustomRequest";
+import { Response, NextFunction } from "express";
 import { Format } from "./types";
 
 type NewTemplateValid = Omit<validators.NewTemplateBody, "format"> & {
@@ -10,7 +11,7 @@ type NewTemplateValid = Omit<validators.NewTemplateBody, "format"> & {
 };
 
 const validateNewTemplate = (
-  req: Request,
+  req: Request<any>,
   res: Response,
   next: NextFunction
 ) => {
@@ -30,6 +31,7 @@ const validateNewTemplate = (
   value.format = format;
 
   req.body = value;
+  req.user;
 
   next();
   return;

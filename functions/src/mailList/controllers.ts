@@ -16,7 +16,7 @@ import sendResponse, {
   serverErrorResponse,
   validationErrorResponse,
 } from "../utils/functions/sendResponse";
-import findMailListItems from "./utils/findMailListIrtems";
+import findMailListItems from "./utils/findMailListItems";
 
 // * Add a new mailList
 const addNew = async (
