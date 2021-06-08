@@ -1,69 +1,74 @@
 import nodemailer, { SentMessageInfo } from "nodemailer";
+import { bucket } from "../config/firebase";
 import handlebars from "handlebars";
 import { promises as fs } from "fs";
 import path from "path";
-import { google } from "googleapis";
+import juice from "juice";
+import CryptoJS from "crypto-js";
+
 import { types as mailListTypes } from "../mailList";
 import { types as templateTypes } from "../template";
-import { bucket } from "../config/firebase";
+
 import readFile from "../utils/functions/readFile";
+import styles from "../utils/styles";
 
 type MailResult = {
   info: SentMessageInfo | null;
   error: string | null;
 };
 
+type Smtp = {
+  email: string;
+  password: string;
+};
+
 const mailer = async (
   mailList: mailListTypes.MailListData,
+  smtp: Smtp,
   emailList: templateTypes.Format[]
 ) => {
-  const OAuth2 = google.auth.OAuth2;
-  const oauth2Client = new OAuth2(
-    "76344468913-5i065hfpt4p8fkhe60ce5goftadh1h6m.apps.googleusercontent.com",
-    "XhjpXy3KeN6UiLyl7NmcPFkw",
-    "https://developers.google.com/oauthplayground"
-  );
-  oauth2Client.setCredentials({
-    refresh_token:
-      "1//04ARu6D0CZ7YRCgYIARAAGAQSNwF-L9IrOWoXzwYkHJQ3_zii2Dc7oaQVhTLGJZTVaA3c068Uz-LSQj4wnm4EUqguGvp-DPf34FM",
-  });
-
-  const accessToken = oauth2Client.getAccessToken();
-
   const smtpTransport = nodemailer.createTransport({
-    // @ts-ignore
-    service: "gmail",
+    port: 465,
+    host: "mail.absoluteveritas.com",
     auth: {
-      type: "OAuth2",
-      user: "1761ary@gmail.com",
-      clientId:
-        "76344468913-5i065hfpt4p8fkhe60ce5goftadh1h6m.apps.googleusercontent.com",
-      clientSecret: "XhjpXy3KeN6UiLyl7NmcPFkw",
-      refreshToken:
-        "1//04ARu6D0CZ7YRCgYIARAAGAQSNwF-L9IrOWoXzwYkHJQ3_zii2Dc7oaQVhTLGJZTVaA3c068Uz-LSQj4wnm4EUqguGvp-DPf34FM",
-      accessToken,
+      user: smtp.email.trim(),
+      pass: CryptoJS.AES.decrypt(smtp.password, "69c48f6acb3a752f6935")
+        .toString(CryptoJS.enc.Utf8)
+        .trim(),
     },
-    tls: {
-      rejectUnauthorized: false,
-    },
+    secure: true,
+    logger: true,
   });
+
+  const verified = await smtpTransport
+    .verify()
+    .catch((err: Error) => err.message);
+  if (typeof verified === "string") {
+    console.log("SMTP connection failed");
+    return;
+  }
 
   const htmlTemplate = await readFile(
     bucket.file(mailList.template.html).createReadStream()
   );
+  const attachments = mailList.template.attachements.map((fileName) => ({
+    content: bucket.file(fileName).createReadStream(),
+  }));
+
   const template = handlebars.compile(htmlTemplate);
 
   const promiseList: Promise<MailResult>[] = [];
 
   emailList.forEach((value) => {
-    const htmlToSend = template({ ...value });
+    const htmlToSend = juice.inlineContent(template({ ...value }), styles);
     promiseList.push(
       smtpTransport
         .sendMail({
-          from: '"Aryaman Grover" <1761ary@gmail.com>',
+          from: `"Absolute Veritas" < ${smtp.email} >`,
           to: value.email,
           subject: mailList.template.subject,
           html: htmlToSend,
+          attachments,
         })
         .then((msgInfo: SentMessageInfo) => ({
           info: msgInfo || "Mail sent successfully.",

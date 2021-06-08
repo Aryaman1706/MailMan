@@ -1,13 +1,14 @@
-import { firestore } from "firebase-admin";
 import { db, collections } from "../config/firebase";
+
+import { firestore } from "firebase-admin";
 import { types as mailListTypes } from "../mailList";
 import { types as mailListItemTypes } from "../mailListItem";
 import { types as userTypes } from "../user";
 import { types as templateTypes } from "../template";
+
 import mailer from "./mailer";
 
 const sendMails = async () => {
-  // Finding incomplete mailLists
   const incompleteMailLists = (await db
     .collection(collections.mailList)
     .where("complete", "==", false)
@@ -19,7 +20,6 @@ const sendMails = async () => {
     return;
   }
 
-  // Segregating active and inactive mailLists
   const activeMailLists = incompleteMailLists.docs.filter((doc) =>
     Boolean(doc.data().active)
   );
@@ -27,41 +27,47 @@ const sendMails = async () => {
     (doc) => !Boolean(doc.data().active)
   );
 
-  // Validating activeMailLists
-  if (activeMailLists.length === 0) {
-    console.log("No active template found.");
+  // If more than one mailList is active at same time
+  if (activeMailLists.length > 1) {
+    // TODO:- Keep the oldest one active
+    console.log("Multiple active mailLists found.");
+    return;
+  }
 
-    // Mark first inactiveMailList if any as active
+  let activeMailList = activeMailLists.length > 0 ? activeMailLists[0] : null;
+
+  // If no active mailList found
+  // then set the first mailList in inactiveMailList to be active if present
+  if (!activeMailList) {
+    console.log("No active mailList found.");
+
     if (inactiveMailLists.length > 0) {
       await inactiveMailLists[0].ref.update({
         active: true,
       });
+
+      activeMailList = inactiveMailLists[0];
+    } else {
+      console.log("No inactive mailList found.");
+      return;
     }
-    return;
-  } else if (activeMailLists.length > 1) {
-    console.log("Multiple active templates found.");
-    return;
   }
 
-  // Finding the oldest unsent mailListItems corresponding to activeMailList
-  const activeMailList = activeMailLists[0];
-  const currentDate = firestore.Timestamp.now();
-
-  // Finding user SMTP
-  const userSnap = await db
+  // Validating user SMTP
+  const userSnap = (await db
     .collection(collections.user)
     .doc(activeMailList.data().uid)
     .get()
-    .catch((err: Error) => err.message);
+    .catch((err: Error) => err.message)) as
+    | firestore.DocumentSnapshot<userTypes.UserProfileDocumentData>
+    | string;
 
   if (typeof userSnap === "string" || !userSnap.exists) {
     console.log("User account not found.");
     return;
   }
 
-  const userData = userSnap.data() as
-    | userTypes.UserProfileDocumentData
-    | undefined;
+  const userData = userSnap.data();
 
   if (
     !userData ||
@@ -73,6 +79,8 @@ const sendMails = async () => {
     return;
   }
 
+  const currentDate = firestore.Timestamp.now();
+
   const pendingMailListItems = (await db
     .collection(collections.mailListItem)
     .where("mailListId", "==", activeMailList.id)
@@ -81,8 +89,8 @@ const sendMails = async () => {
     .orderBy("date", "asc")
     .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
 
-  // Validating pendingMailListItems
-  if (pendingMailListItems.empty || pendingMailListItems.size === 0) {
+  if (pendingMailListItems.empty) {
+    // TODO:-  MailList is active but within it has no pending items
     console.log("No pending mail list items found.");
     return;
   }
@@ -95,13 +103,17 @@ const sendMails = async () => {
   pendingMailListItemDocs.forEach((doc) => {
     emailData.push(...doc.data().list);
   });
-  await mailer(activeMailList.data(), emailData);
+  await mailer(
+    activeMailList.data(),
+    userData.smtp as { email: string; password: string },
+    emailData
+  );
 
   const promiseArr: Promise<firestore.WriteResult>[] = [];
   // Last mailListItem for activeMailList was sent
   if (
-    Boolean(pendingMailListItemDocs[0].data().last) ||
-    Boolean(pendingMailListItemDocs[1].data().last)
+    Boolean(pendingMailListItemDocs[0]?.data()?.last) ||
+    Boolean(pendingMailListItemDocs[1]?.data()?.last)
   ) {
     // Mark activeMailList as inactive and complete
     promiseArr.push(
@@ -127,6 +139,7 @@ const sendMails = async () => {
     ...pendingMailListItemDocs.map((doc) =>
       doc.ref.update({
         sent: true,
+        date: currentDate,
       })
     )
   );
