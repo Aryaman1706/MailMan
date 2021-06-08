@@ -90,8 +90,12 @@ const sendMails = async () => {
     .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
 
   if (pendingMailListItems.empty) {
-    // TODO:-  MailList is active but within it has no pending items
     console.log("No pending mail list items found.");
+    await activeMailList.ref.update({
+      active: false,
+      complete: true,
+    });
+
     return;
   }
 

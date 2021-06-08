@@ -22,10 +22,10 @@ const createMailListItems = async (
     if (parsingError) {
       return parsingError;
     }
-    console.log(emailList);
 
     const batch = db.batch();
     let currentDate = new Date();
+    let count = 0;
 
     emailList.forEach((item, index) => {
       const data: mailListItemTypes.MailListItemData = {
@@ -37,11 +37,16 @@ const createMailListItems = async (
         last: Boolean(index === emailList.length - 1),
       };
       batch.create(db.collection(collections.mailListItem).doc(), data);
+      count++;
 
-      currentDate.setHours(
-        currentDate.getHours() + 1,
-        currentDate.getMinutes() + 10
-      );
+      if (count === 2) {
+        currentDate.setHours(
+          currentDate.getHours() + 1,
+          currentDate.getMinutes() + 10
+        );
+
+        count = 0;
+      }
     });
 
     await batch.commit();
