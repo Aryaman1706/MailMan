@@ -24,10 +24,10 @@ const addNew = async (
   res: Response
 ) => {
   try {
-    if (!req.file) {
+    if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
       return sendResponse(res, 400, "Please upload a file.");
     }
-    const fileName = (req.file as UploadedFile).name;
+    const fileName = (req.files[0] as UploadedFile).name;
 
     if (!req.user) {
       return sendResponse(res, 400, "Invalid account.");
@@ -63,7 +63,7 @@ const addNew = async (
 
     // Determining active status of new mailList
     const { error: activeError, active } = await getActive();
-    if (activeError || !active) {
+    if (activeError || active === null) {
       return sendResponse(res, 400, activeError || "Undetermined data.");
     }
 
@@ -111,6 +111,7 @@ const listMailList = async (req: Request, res: Response) => {
 
     const list = mailLists.docs.map((doc) => ({
       ...doc.data(),
+      id: doc.id,
       addedOn: doc.data().addedOn.toDate(),
     }));
 
@@ -151,6 +152,7 @@ const listMailListUser = async (req: Request, res: Response) => {
 
     const list = mailLists.docs.map((doc) => ({
       ...doc.data(),
+      id: doc.id,
       addedOn: doc.data().addedOn.toDate(),
     }));
 

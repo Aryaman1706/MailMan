@@ -9,14 +9,22 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const generateEmailList = (list) =>
-  list.map((mailList) =>
-    mailList.list.map((item) => ({
-      email: item.email,
-      sent: mailList.sent,
-      date: mailList.date || null,
-    }))
-  );
+const generateEmailList = (list) => {
+  const emailList = [];
+
+  list.forEach((mailList) => {
+    mailList.list.forEach((item) => {
+      emailList.push({
+        email: item.email,
+        sent: mailList.sent,
+        date: mailList.date || null,
+      });
+    });
+  });
+
+  console.log({ emailList });
+  return emailList;
+};
 
 const EmailList = ({ sent, list }) => {
   const { bold } = useStyles();
@@ -26,12 +34,12 @@ const EmailList = ({ sent, list }) => {
     <>
       <Grid container alignItems="stretch">
         <Grid item xs={8}>
-          <Typography align="center" variant="h6">
+          <Typography variant="h6">
             {sent ? "Emails Sent" : "Unsent Emails"}
           </Typography>
         </Grid>
         <Grid item xs={4}>
-          <Button variant="contained" color="primary">
+          <Button fullWidth variant="contained" color="primary">
             File
           </Button>
         </Grid>

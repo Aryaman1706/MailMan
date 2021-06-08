@@ -7,6 +7,8 @@ import {
 } from "@material-ui/core";
 import Visibility from "@material-ui/icons/Visibility";
 
+import { useHistory } from "react-router";
+
 const useStyles = makeStyles(() => ({
   flexContainer: {
     display: "flex",
@@ -20,6 +22,11 @@ const useStyles = makeStyles(() => ({
 
 const ListItem = ({ mailListDoc }) => {
   const { flexContainer, paper } = useStyles();
+  const history = useHistory();
+
+  const viewMailList = () => {
+    history.push(`/mail-list/open/${mailListDoc.id}`);
+  };
 
   return (
     <>
@@ -33,7 +40,7 @@ const ListItem = ({ mailListDoc }) => {
               </Typography>
             </div>
             <div>
-              <IconButton color="primary">
+              <IconButton color="primary" onClick={viewMailList}>
                 <Visibility />
               </IconButton>
             </div>

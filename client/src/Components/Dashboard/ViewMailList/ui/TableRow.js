@@ -21,7 +21,7 @@ const TableRow = ({ field, value, component }) => {
         <p className={`${text} ${bold}`}>{field}</p>
       </Grid>
       <Grid item xs={8} className={cell}>
-        <p className={text}>{value || component}</p>
+        {value ? <p className={text}>{value}</p> : component}
       </Grid>
     </Grid>
   );

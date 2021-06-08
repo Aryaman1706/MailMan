@@ -22,6 +22,7 @@ const createMailListItems = async (
     if (parsingError) {
       return parsingError;
     }
+    console.log(emailList);
 
     const batch = db.batch();
     let currentDate = new Date();

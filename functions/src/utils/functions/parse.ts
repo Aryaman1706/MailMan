@@ -58,7 +58,7 @@ const parse = async (
     });
 
     // ! MAKE CHANGES HERE
-    const chunkedEmailList = chunk(emailList, 5);
+    const chunkedEmailList = chunk(emailList, 10);
     return {
       emailList: chunkedEmailList,
       error: null,

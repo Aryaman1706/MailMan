@@ -26,7 +26,7 @@ const ListMailList = ({ full, promiseFn }) => {
   return (
     <>
       <Heading text={full ? "All Queued E-mails" : "Your Queued E-mails"} />
-      <Grid container>
+      <Grid container spacing={1}>
         {query.data?.body.data.list.map((mailListDoc, index) => (
           <ListItem key={index} mailListDoc={mailListDoc} />
         ))}
