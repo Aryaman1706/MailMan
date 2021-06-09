@@ -5,21 +5,20 @@ import { types as mailListItemTypes } from "../../mailListItem";
 
 type MailListItemDocumentData = Pick<
   mailListItemTypes.MailListItemDocumentData,
-  "list" | "sent" | "date"
+  "list" | "sent" | "sentOn"
 >;
 
 type MailListItemData = Pick<
   mailListItemTypes.MailListItemData,
   "list" | "sent"
-> & { id: string; date: Date };
+> & { id: string; sentOn: Date | null };
 
 const findMailListItems = async (mailListId: string) => {
   try {
     const mailListItemList = (await db
       .collection(collections.mailListItem)
       .where("mailListId", "==", mailListId)
-      .orderBy("date", "desc")
-      .select("list", "sent", "date")
+      .select("list", "sent", "sentOn")
       .get()) as firestore.QuerySnapshot<MailListItemDocumentData>;
 
     if (mailListItemList.empty) {
@@ -38,7 +37,7 @@ const findMailListItems = async (mailListId: string) => {
     mailListItemList.docs.forEach((doc) => {
       const data: MailListItemData = {
         ...doc.data(),
-        date: doc.data().date.toDate(),
+        sentOn: doc.data().sentOn?.toDate() || null,
         id: doc.id,
       };
 

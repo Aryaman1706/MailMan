@@ -9,16 +9,16 @@ const getActive = async (): Promise<{
   active: boolean | null;
 }> => {
   try {
-    const activeTemplates = (await db
+    const activeMailLists = (await db
       .collection(collections.mailList)
       .where("active", "==", true)
       .get()) as firestore.QuerySnapshot<MailListDocumentData>;
 
-    if (activeTemplates.empty || activeTemplates.size === 0) {
+    if (activeMailLists.empty || activeMailLists.size === 0) {
       return { error: null, active: true };
     }
 
-    if (activeTemplates.size > 1) {
+    if (activeMailLists.size > 1) {
       return {
         error: "More than one active mail list.",
         active: null,

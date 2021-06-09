@@ -24,6 +24,7 @@ import styles from "../utils/styles";
 const newTemplate = async (req: Request<NewTemplateValid>, res: Response) => {
   try {
     let attachements: string[] = [];
+    console.log(req.files);
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
       attachements = (req.files as UploadedFile[]).map((file) => file.name);
     }

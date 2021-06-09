@@ -5,7 +5,6 @@ import { types as mailListItemTypes } from "../../mailListItem";
 import { types as templateTypes } from "../../template";
 
 import parse from "../../utils/functions/parse";
-import { firestore } from "firebase-admin";
 
 const createMailListItems = async (
   fileName: string,
@@ -24,8 +23,6 @@ const createMailListItems = async (
     }
 
     const batch = db.batch();
-    let currentDate = new Date();
-    let count = 0;
 
     emailList.forEach((item, index) => {
       const data: mailListItemTypes.MailListItemData = {
@@ -33,20 +30,10 @@ const createMailListItems = async (
         mailListId: newMailListId,
         list: item,
         sent: false,
-        date: firestore.Timestamp.fromDate(currentDate),
+        sentOn: null,
         last: Boolean(index === emailList.length - 1),
       };
       batch.create(db.collection(collections.mailListItem).doc(), data);
-      count++;
-
-      if (count === 2) {
-        currentDate.setHours(
-          currentDate.getHours() + 1,
-          currentDate.getMinutes() + 10
-        );
-
-        count = 0;
-      }
     });
 
     await batch.commit();

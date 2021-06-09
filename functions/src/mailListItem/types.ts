@@ -6,7 +6,7 @@ interface MailListItemData {
   mailListId: string;
   list: TemplateTypes.Format[];
   sent: boolean;
-  date: firestore.Timestamp;
+  sentOn: firestore.Timestamp | null;
   last: boolean;
 }
 

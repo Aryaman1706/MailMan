@@ -12,12 +12,12 @@ const useStyles = makeStyles(() => ({
 const generateEmailList = (list) => {
   const emailList = [];
 
-  list.forEach((mailList) => {
-    mailList.list.forEach((item) => {
+  list.forEach((mailListItem) => {
+    mailListItem.list.forEach((item) => {
       emailList.push({
         email: item.email,
-        sent: mailList.sent,
-        date: mailList.date || null,
+        sent: mailListItem.sent,
+        sentOn: mailListItem.sentOn,
       });
     });
   });
@@ -51,9 +51,9 @@ const EmailList = ({ sent, list }) => {
             </Grid>
             <Grid item xs={5}>
               <p>
-                {item.date
-                  ? new Date(item.date).toLocaleString()
-                  : "Not available"}
+                {item.sentOn
+                  ? new Date(item.sentOn).toLocaleString()
+                  : "Waiting..."}
               </p>
             </Grid>
             <Grid item xs={2}>
