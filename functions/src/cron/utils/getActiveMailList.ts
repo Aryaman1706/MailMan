@@ -18,7 +18,7 @@ const getActiveMailList = async (): Promise<ReturnArray> => {
       .get()) as firestore.QuerySnapshot<mailListTypes.MailListDocumentData>;
 
     console.info({
-      incompleteMailLists: incompleteMailLists.docs.forEach((doc) => doc.id),
+      incompleteMailLists: incompleteMailLists.docs.map((doc) => doc.id),
     });
 
     if (incompleteMailLists.empty || incompleteMailLists.size === 0) {

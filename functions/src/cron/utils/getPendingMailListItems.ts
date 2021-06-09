@@ -12,11 +12,11 @@ const getPendingMailListItems = async (
       .collection(collections.mailListItem)
       .where("mailListId", "==", activeMailList.id)
       .where("sent", "==", false)
-      .orderBy("index", "desc")
+      .orderBy("index", "asc")
       .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
 
     console.info({
-      pendingMailListItems: pendingMailListItems.docs.forEach((doc) => ({
+      pendingMailListItems: pendingMailListItems.docs.map((doc) => ({
         id: doc.id,
         index: doc.data().index,
         last: doc.data().last,
@@ -30,6 +30,12 @@ const getPendingMailListItems = async (
 
     // Selecting at max 2 pendingMailListItems
     const pendingMailListItemDocs = pendingMailListItems.docs.slice(0, 2);
+    console.info({
+      pendingMailListItemDocs: pendingMailListItemDocs.map((doc) => ({
+        ...doc.data(),
+        list: undefined,
+      })),
+    });
 
     return pendingMailListItemDocs;
   } catch (error) {

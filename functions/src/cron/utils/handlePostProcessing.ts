@@ -29,7 +29,11 @@ const handlePostProcessing = async ({
     const wasLastMailItemSent = pendingMailListItemDocs.find(
       (doc) => doc.data().last === true
     );
-    console.info({ wasLastMailItemSent });
+    console.info({
+      wasLastMailItemSent: wasLastMailItemSent
+        ? { ...wasLastMailItemSent.data(), list: undefined }
+        : false,
+    });
 
     if (wasLastMailItemSent) {
       console.info("marking activeMailList as complete.");
@@ -43,6 +47,7 @@ const handlePostProcessing = async ({
         console.info("marking 1st item in inactiveMailLists to be active");
         writeBatch.update(inactiveMailLists[0].ref, {
           active: true,
+          lastSent: firestore.Timestamp.now(),
         });
       }
     } else {

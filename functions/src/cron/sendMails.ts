@@ -12,7 +12,6 @@ const sendMails = async () => {
     const [activeMailList, activeMailLists, inactiveMailLists] =
       await getActiveMailList();
 
-    // Info
     console.log({
       activeMailList: activeMailList?.id || null,
       activeMailLists: activeMailLists.map((doc) => doc.id),
@@ -66,8 +65,7 @@ const sendMails = async () => {
     const connectionError = await mailer(
       activeMailList.data(),
       smtp,
-      emailData,
-      true
+      emailData
     );
     if (connectionError) {
       console.log("Error connecting to SMTP. Aborting...");
