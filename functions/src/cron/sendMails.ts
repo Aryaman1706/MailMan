@@ -1,4 +1,3 @@
-import { firestore } from "firebase-admin";
 import { types as templateTypes } from "../template";
 
 import getActiveMailList from "./utils/getActiveMailList";
@@ -6,6 +5,7 @@ import getUserSmtp from "./utils/getUserSmtp";
 import isScheduledFunc from "./utils/isScheduled";
 import getPendingMailListItems from "./utils/getPendingMailListItems";
 import mailer from "./utils/mailer";
+import handlePostProcessing from "./utils/handlePostProcessing";
 
 const sendMails = async () => {
   try {
@@ -40,11 +40,22 @@ const sendMails = async () => {
       activeMailList
     );
     if (pendingMailListItemDocs.length === 0) {
+      console.log("No pendingMailListItems found for activeMailList.");
+
       // TODO
       // Update activeMailList to be complete
+      await activeMailList.ref.update({
+        active: false,
+        complete: true,
+      });
+      console.log("Updating activeMailList to be complete.");
+
       // set activeMailList = inactiveMailLists[0]
       // find pendingMailListItems
       // make transfers in activeMailLists and inactiveMailLists
+
+      console.log("Aborting...");
+      return;
     }
 
     // Send emails
@@ -63,57 +74,16 @@ const sendMails = async () => {
       return;
     }
 
-    const promiseArr: Promise<firestore.WriteResult>[] = [];
-    // // Last mailListItem for activeMailList was sent
-    // if (
-    //   Boolean(pendingMailListItemDocs[0]?.data()?.last) ||
-    //   Boolean(pendingMailListItemDocs[1]?.data()?.last)
-    // ) {
-    //   // Mark activeMailList as inactive and complete
-    //   promiseArr.push(
-    //     activeMailList.ref.update({
-    //       active: false,
-    //       complete: true,
-    //       lastSent: currentDate,
-    //     })
-    //   );
-
-    //   // Mark the first inactiveMailList as active
-    //   if (inactiveMailLists.length > 0) {
-    //     promiseArr.push(
-    //       inactiveMailLists[0].ref.update({
-    //         active: true,
-    //       })
-    //     );
-    //   }
-    // }
-
-    console.log({
-      doc1: pendingMailListItemDocs[0]?.data(),
-      doc2: pendingMailListItemDocs[1]?.data(),
+    await handlePostProcessing({
+      activeMailList,
+      pendingMailListItemDocs,
+      inactiveMailLists,
     });
-
-    // Mark pendingMailListItemDocs as sent
-    promiseArr.push(
-      ...pendingMailListItemDocs.map((doc) =>
-        doc.ref.update({
-          sent: true,
-          sentOn: firestore.Timestamp.now(),
-        })
-      )
-    );
-
-    // Update lastSent in activeMailList
-    promiseArr.push(
-      activeMailList.ref.update({
-        lastSent: firestore.Timestamp.now(),
-      })
-    );
-
-    await Promise.all(promiseArr);
+    console.log("All changes done. Function Completed.");
   } catch (error) {
-    console.log("Error Occured. Aborting...");
+    console.log("Error Occured.");
     console.error(error);
+    console.log("Aborting...");
     return;
   }
 };

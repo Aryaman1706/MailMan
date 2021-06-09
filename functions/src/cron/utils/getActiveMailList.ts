@@ -50,10 +50,10 @@ const getActiveMailList = async (): Promise<ReturnArray> => {
     // If activeMailLists is empty
     // then set the first mailList in inactiveMailList to be active if present
     if (!activeMailList) {
-      console.log("activeMailLists is empty.");
+      console.info("activeMailLists is empty.");
 
       if (inactiveMailLists.length > 0) {
-        console.log("marking first item in inactiveMailLists to be active");
+        console.info("marking first item in inactiveMailLists to be active");
         await inactiveMailLists[0].ref.update({
           active: true,
         });
@@ -63,7 +63,7 @@ const getActiveMailList = async (): Promise<ReturnArray> => {
         inactiveMailLists.splice(0, 1);
         activeMailLists[0] = activeMailList;
       } else {
-        console.log("inactiveMailLists is also empty.");
+        console.info("inactiveMailLists is also empty.");
         return [null, activeMailLists, inactiveMailLists];
       }
     }
