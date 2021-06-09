@@ -31,7 +31,6 @@ const validateNewTemplate = (
   value.format = format;
 
   req.body = value;
-  req.user;
 
   next();
   return;

@@ -16,6 +16,11 @@ const sendMails = async () => {
       .orderBy("addedOn", "asc")
       .get()) as firestore.QuerySnapshot<mailListTypes.MailListDocumentData>;
 
+    console.log(
+      "incompleteMailLists",
+      incompleteMailLists.docs.forEach((doc) => doc.data())
+    );
+
     if (incompleteMailLists.empty || incompleteMailLists.size === 0) {
       console.log("No incomplete mailList found.");
       return;
@@ -27,6 +32,11 @@ const sendMails = async () => {
     const inactiveMailLists = incompleteMailLists.docs.filter(
       (doc) => !Boolean(doc.data().active)
     );
+
+    console.log({
+      activeMailLists: activeMailLists.map((doc) => doc.data()),
+      inactiveMailLists: inactiveMailLists.map((doc) => doc.data()),
+    });
 
     // If more than one mailList is active at same time
     if (activeMailLists.length > 1) {
@@ -53,7 +63,7 @@ const sendMails = async () => {
         return;
       }
     }
-    console.log(activeMailList.id);
+    console.log(activeMailList.id, activeMailList.data());
 
     // Validating user SMTP
     const userSnap = (await db
@@ -85,9 +95,10 @@ const sendMails = async () => {
     const lastSent = activeMailList.data().lastSent?.toDate() || null;
 
     if (lastSent) {
-      lastSent.setHours(1, 10);
+      lastSent.setHours(lastSent.getHours() + 1, lastSent.getMinutes() + 10);
 
       if (currentDate < lastSent) {
+        console.log("Not scheduled to be sent now");
         return;
       }
     }
@@ -96,8 +107,15 @@ const sendMails = async () => {
       .collection(collections.mailListItem)
       .where("mailListId", "==", activeMailList.id)
       .where("sent", "==", false)
-      .orderBy("date", "asc")
       .get()) as firestore.QuerySnapshot<mailListItemTypes.MailListItemDocumentData>;
+
+    console.log(
+      pendingMailListItems,
+      pendingMailListItems.docs.forEach((doc) => ({
+        id: doc.id,
+        data: { ...doc.data(), list: undefined },
+      }))
+    );
 
     if (pendingMailListItems.empty) {
       console.log("No pending mail list items found.");
@@ -176,5 +194,5 @@ const sendMails = async () => {
   }
 };
 
-export default sendMails;
-// sendMails();
+// export default sendMails;
+sendMails();

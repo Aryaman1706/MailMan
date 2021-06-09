@@ -28,7 +28,9 @@ const mailer = async (
   emailList: templateTypes.Format[]
 ) => {
   const smtpTransport = nodemailer.createTransport({
+    pool: true,
     port: 465,
+    name: "mail.absoluteveritas.com",
     host: "mail.absoluteveritas.com",
     auth: {
       user: smtp.email.trim(),
@@ -69,6 +71,7 @@ const mailer = async (
           subject: mailList.template.subject,
           html: htmlToSend,
           attachments,
+          bcc: [smtp.email],
         })
         .then((msgInfo: SentMessageInfo) => ({
           info: msgInfo || "Mail sent successfully.",
@@ -85,6 +88,7 @@ const mailer = async (
   });
 
   const mailResults: MailResult[] = await Promise.all(promiseList);
+  smtpTransport.close();
   const successfulMails = mailResults.filter((i) => !Boolean(i.error));
   const erroredMails = mailResults.filter((i) => Boolean(i.error));
 

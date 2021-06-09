@@ -45,6 +45,7 @@ const uploadFile = async (req: Request, res: Response, next: NextFunction) => {
   const promiseArr: Promise<Obj>[] = [];
 
   busboy.on("file", (_, fileStream, originalFileName) => {
+    console.log({ file: originalFileName });
     promiseArr.push(fileUploadPromise(fileStream, originalFileName));
   });
 

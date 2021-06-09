@@ -5,12 +5,12 @@ const serviceAccount = path.resolve(
   __dirname,
   "../",
   "../",
-  "av-mailer-396d7-firebase-adminsdk-m7d0y-8881d8f398.json"
+  "av-mailer-01-firebase-adminsdk-9xgsj-dd14fc3947.json"
 );
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "av-mailer-396d7.appspot.com",
+  storageBucket: "av-mailer-01.appspot.com",
 });
 
 export const collections = {

@@ -39,9 +39,9 @@ const Attachments = ({ fileChangeHandler, removeFile, attachments }) => {
       </Grid>
 
       <Grid item xs={10}>
-        {attachments.length > 0 ? (
+        {[...attachments].length > 0 ? (
           <Grid container alignItems="center" spacing={2}>
-            {attachments.map((file, index) => (
+            {[...attachments].map((file, index) => (
               <Grid key={index} item xs={2}>
                 <div className={flexContainer}>
                   <p>{file.name}</p>

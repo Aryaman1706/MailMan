@@ -4,7 +4,7 @@ const useFileHandler = () => {
   const [attachements, setAttachments] = useState([]);
 
   const fileChangeHandler = (e) => {
-    setAttachments([...e.target.files]);
+    setAttachments(e.target.files);
   };
 
   const removeFile = (pos) => {
