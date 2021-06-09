@@ -27,11 +27,11 @@ const addNew = async (
     if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
       return sendResponse(res, 400, "Please upload a file.");
     }
-    const fileName = (req.files[0] as UploadedFile).name;
-
     if (!req.user) {
       return sendResponse(res, 400, "Invalid account.");
     }
+
+    const fileName = (req.files[0] as UploadedFile).name;
 
     // Finding valid template and user
     const { error: dbError, data } = await findRelatedData(

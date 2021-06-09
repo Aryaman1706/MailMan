@@ -31,6 +31,7 @@ const createMailListItems = async (
         list: item,
         sent: false,
         sentOn: null,
+        index,
         last: Boolean(index === emailList.length - 1),
       };
       batch.create(db.collection(collections.mailListItem).doc(), data);

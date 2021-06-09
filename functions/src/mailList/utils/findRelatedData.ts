@@ -103,10 +103,7 @@ const findNValidate = async (
       };
     }
 
-    return {
-      error: "Server error.",
-      data: null,
-    };
+    throw error;
   }
 };
 
