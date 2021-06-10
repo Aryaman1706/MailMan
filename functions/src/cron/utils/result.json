@@ -1,1 +1,165 @@
-{"successfulMails":[{"info":{"accepted":["1761ary@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1085,"messageTime":524,"messageSize":813,"response":"250 OK id=1lr7C1-003T5n-LD","envelope":{"from":"cs6@absoluteveritas.com","to":["1761ary@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<21a3503f-67f7-f286-7494-ee143b7ca10e@absoluteveritas.com>"},"error":null},{"info":{"accepted":["zqexaf@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1084,"messageTime":531,"messageSize":812,"response":"250 OK id=1lr7C1-003T5o-LF","envelope":{"from":"cs6@absoluteveritas.com","to":["zqexaf@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<74c71f63-a085-4fd2-7d14-e67ff01d7ec5@absoluteveritas.com>"},"error":null},{"info":{"accepted":["1761ary@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1134,"messageTime":536,"messageSize":813,"response":"250 OK id=1lr7C1-003T5t-Fq","envelope":{"from":"cs6@absoluteveritas.com","to":["1761ary@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<f78afb67-7e65-32ec-0d92-3308941ca9a1@absoluteveritas.com>"},"error":null},{"info":{"accepted":["zqexaf@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1114,"messageTime":532,"messageSize":812,"response":"250 OK id=1lr7C1-003T5q-FD","envelope":{"from":"cs6@absoluteveritas.com","to":["zqexaf@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<7f394db2-6334-e91a-4f10-26b0f6860f9a@absoluteveritas.com>"},"error":null},{"info":{"accepted":["1761ary@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1087,"messageTime":524,"messageSize":813,"response":"250 OK id=1lr7C1-003T5p-LY","envelope":{"from":"cs6@absoluteveritas.com","to":["1761ary@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<bd16ec68-69c0-d0ce-cfbc-dd368998b9bc@absoluteveritas.com>"},"error":null},{"info":{"accepted":["zqexaf@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1106,"messageTime":531,"messageSize":812,"response":"250 OK id=1lr7C3-003T5q-3k","envelope":{"from":"cs6@absoluteveritas.com","to":["zqexaf@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<617bcd7f-b5d4-d349-4781-ea94b4c978e1@absoluteveritas.com>"},"error":null},{"info":{"accepted":["1761ary@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1116,"messageTime":542,"messageSize":813,"response":"250 OK id=1lr7C3-003T5t-4h","envelope":{"from":"cs6@absoluteveritas.com","to":["1761ary@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<6b40976e-2856-bc31-0022-9384c20c0dad@absoluteveritas.com>"},"error":null},{"info":{"accepted":["zqexaf@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1081,"messageTime":526,"messageSize":812,"response":"250 OK id=1lr7C3-003T5n-8Z","envelope":{"from":"cs6@absoluteveritas.com","to":["zqexaf@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<16722b8f-1ef8-9901-0bd2-bc33d61ec05f@absoluteveritas.com>"},"error":null},{"info":{"accepted":["1761ary@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1096,"messageTime":519,"messageSize":813,"response":"250 OK id=1lr7C3-003T5o-9Q","envelope":{"from":"cs6@absoluteveritas.com","to":["1761ary@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<c0f4999e-c19c-8079-9467-4163d4e6bf5f@absoluteveritas.com>"},"error":null},{"info":{"accepted":["1761ary@gmail.com","cs6@absoluteveritas.com"],"rejected":[],"envelopeTime":1104,"messageTime":551,"messageSize":813,"response":"250 OK id=1lr7C3-003T5p-9q","envelope":{"from":"cs6@absoluteveritas.com","to":["1761ary@gmail.com","cs6@absoluteveritas.com"]},"messageId":"<5f675924-0d13-f6a6-5eaa-21792f8beaf6@absoluteveritas.com>"},"error":null}],"erroredMails":[]}
+{
+  "successfulMails": [
+    {
+      "info": {
+        "accepted": ["1761ary@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1085,
+        "messageTime": 524,
+        "messageSize": 813,
+        "response": "250 OK id=1lr7C1-003T5n-LD",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["1761ary@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<21a3503f-67f7-f286-7494-ee143b7ca10e@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1084,
+        "messageTime": 531,
+        "messageSize": 812,
+        "response": "250 OK id=1lr7C1-003T5o-LF",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<74c71f63-a085-4fd2-7d14-e67ff01d7ec5@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["1761ary@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1134,
+        "messageTime": 536,
+        "messageSize": 813,
+        "response": "250 OK id=1lr7C1-003T5t-Fq",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["1761ary@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<f78afb67-7e65-32ec-0d92-3308941ca9a1@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1114,
+        "messageTime": 532,
+        "messageSize": 812,
+        "response": "250 OK id=1lr7C1-003T5q-FD",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<7f394db2-6334-e91a-4f10-26b0f6860f9a@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["1761ary@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1087,
+        "messageTime": 524,
+        "messageSize": 813,
+        "response": "250 OK id=1lr7C1-003T5p-LY",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["1761ary@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<bd16ec68-69c0-d0ce-cfbc-dd368998b9bc@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1106,
+        "messageTime": 531,
+        "messageSize": 812,
+        "response": "250 OK id=1lr7C3-003T5q-3k",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<617bcd7f-b5d4-d349-4781-ea94b4c978e1@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["1761ary@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1116,
+        "messageTime": 542,
+        "messageSize": 813,
+        "response": "250 OK id=1lr7C3-003T5t-4h",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["1761ary@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<6b40976e-2856-bc31-0022-9384c20c0dad@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1081,
+        "messageTime": 526,
+        "messageSize": 812,
+        "response": "250 OK id=1lr7C3-003T5n-8Z",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["zqexaf@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<16722b8f-1ef8-9901-0bd2-bc33d61ec05f@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["1761ary@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1096,
+        "messageTime": 519,
+        "messageSize": 813,
+        "response": "250 OK id=1lr7C3-003T5o-9Q",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["1761ary@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<c0f4999e-c19c-8079-9467-4163d4e6bf5f@absoluteveritas.com>"
+      },
+      "error": null
+    },
+    {
+      "info": {
+        "accepted": ["1761ary@gmail.com", "cs6@absoluteveritas.com"],
+        "rejected": [],
+        "envelopeTime": 1104,
+        "messageTime": 551,
+        "messageSize": 813,
+        "response": "250 OK id=1lr7C3-003T5p-9q",
+        "envelope": {
+          "from": "cs6@absoluteveritas.com",
+          "to": ["1761ary@gmail.com", "cs6@absoluteveritas.com"]
+        },
+        "messageId": "<5f675924-0d13-f6a6-5eaa-21792f8beaf6@absoluteveritas.com>"
+      },
+      "error": null
+    }
+  ],
+  "erroredMails": []
+}

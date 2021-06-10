@@ -1,0 +1,22 @@
+[debug] [2021-06-10T07:15:06.177Z] ----------------------------------------------------------------------
+[debug] [2021-06-10T07:15:06.179Z] Command:       /home/aryaman/.nvm/versions/node/v14.17.0/bin/node /home/aryaman/.nvm/versions/node/v14.17.0/bin/firebase deploy --only functions
+[debug] [2021-06-10T07:15:06.179Z] CLI Version:   9.11.0
+[debug] [2021-06-10T07:15:06.179Z] Platform:      linux
+[debug] [2021-06-10T07:15:06.179Z] Node Version:  v14.17.0
+[debug] [2021-06-10T07:15:06.180Z] Time:          Thu Jun 10 2021 12:45:06 GMT+0530 (India Standard Time)
+[debug] [2021-06-10T07:15:06.180Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-06-10T07:15:06.184Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-06-10T07:15:06.185Z] > authorizing via signed-in user (absoluteveritas02@gmail.com)
+[debug] [2021-06-10T07:15:06.185Z] [iam] checking project av-mailer-01 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2021-06-10T07:15:06.186Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/av-mailer-01:testIamPermissions  
+ {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2021-06-10T07:15:07.701Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Jun 2021 07:15:08 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=1311","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-06-10T07:15:07.708Z] >>> HTTP REQUEST POST https://iam.googleapis.com/v1/projects/av-mailer-01/serviceAccounts/av-mailer-01@appspot.gserviceaccount.com:testIamPermissions  
+ {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2021-06-10T07:15:09.339Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Thu, 10 Jun 2021 07:15:10 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[info] 
+[info] === Deploying to 'av-mailer-01'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build

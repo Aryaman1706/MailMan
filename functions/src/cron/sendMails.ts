@@ -86,5 +86,4 @@ const sendMails = async () => {
   }
 };
 
-// export default sendMails;
-sendMails();
+export default sendMails;
