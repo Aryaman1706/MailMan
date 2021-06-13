@@ -33,7 +33,6 @@ const addNew = async (
 
     const fileName = (req.files[0] as UploadedFile).name;
 
-    // Finding valid template and user
     const { error: dbError, data } = await findRelatedData(
       req.body.templateId,
       req.user.id
@@ -61,15 +60,14 @@ const addNew = async (
       lastSent: null,
     };
 
-    // Determining active status of new mailList
-    const { error: activeError, active } = await getActive();
+    const { error: activeError, active, lastSent } = await getActive();
     if (activeError || active === null) {
       return sendResponse(res, 400, activeError || "Undetermined data.");
     }
 
     mailListData.active = active;
+    mailListData.lastSent = lastSent;
 
-    // Create mailListItems
     const mailListItemsError = await createMailListItems(
       fileName,
       templateData.format,

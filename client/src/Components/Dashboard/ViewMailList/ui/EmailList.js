@@ -51,7 +51,7 @@ const EmailList = ({ sent, list }) => {
             </Grid>
             <Grid item xs={5}>
               <p>
-                {item.sentOn
+                {item.sent && item.sentOn
                   ? new Date(item.sentOn).toLocaleString()
                   : "Waiting..."}
               </p>

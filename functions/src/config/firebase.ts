@@ -9,7 +9,8 @@ const serviceAccount = path.resolve(
 );
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  // credential: admin.credential.cert(serviceAccount),
+  projectId: "av-mailer-01",
   storageBucket: "av-mailer-01.appspot.com",
 });
 

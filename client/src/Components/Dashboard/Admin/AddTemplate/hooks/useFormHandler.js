@@ -53,7 +53,8 @@ const useFormHandler = (formikProps) => {
       formData.append("subject", formikProps.values.subject);
       formData.append("html", formikProps.values.html);
       formData.append("format", JSON.stringify(format));
-      formData.append("attachments", attachements);
+      
+      attachements.forEach((file, index) => formData.append(`attachments[${index}]`, file))
 
       submitForm(formData);
       formikProps.resetForm();
