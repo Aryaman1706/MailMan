@@ -5,6 +5,7 @@ const editorConfig = {
       "|",
       "bold",
       "italic",
+      "fontColor",
       "link",
       "bulletedList",
       "numberedList",
@@ -38,6 +39,18 @@ const editorConfig = {
     header: {
       "Content-Type": "multipart/form-data",
     },
+  },
+  fontColor: {
+    colors: [
+      {
+        color: "hsl(0, 0%, 0%)",
+        label: "Black",
+      },
+      {
+        color: "hsl(240,100%,50%)",
+        label: "Blue",
+      },
+    ],
   },
 };
 

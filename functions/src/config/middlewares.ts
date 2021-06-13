@@ -7,7 +7,7 @@ const middlewares = (app: Express) => {
 
   // Response Headers
   app.use((_req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://av-mailer-01.web.app");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     // @ts-ignore
     res.header("Access-Control-Allow-Credentials", true);
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
@@ -21,7 +21,7 @@ const middlewares = (app: Express) => {
   // CORS Config
   app.use(
     cors({
-      origin: "https://av-mailer-01.web.app",
+      origin: "http://localhost:3000",
       credentials: true,
       preflightContinue: true,
     })

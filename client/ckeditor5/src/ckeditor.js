@@ -7,6 +7,7 @@ import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat.js';
 import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold.js';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
+import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor.js';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
 import Image from '@ckeditor/ckeditor5-image/src/image.js';
 import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize.js';
@@ -19,7 +20,7 @@ import Link from '@ckeditor/ckeditor5-link/src/link.js';
 import List from '@ckeditor/ckeditor5-list/src/list.js';
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed.js';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
-import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
+import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice.js';
 import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter.js';
 import Table from '@ckeditor/ckeditor5-table/src/table.js';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar.js';
@@ -33,6 +34,7 @@ Editor.builtinPlugins = [
 	BlockQuote,
 	Bold,
 	Essentials,
+	FontColor,
 	Heading,
 	Image,
 	ImageResize,
