@@ -1,8 +1,6 @@
 import nodemailer, { SentMessageInfo } from "nodemailer";
 import { bucket } from "../../config/firebase";
 import handlebars from "handlebars";
-import { promises as fs } from "fs";
-import path from "path";
 import juice from "juice";
 import CryptoJS from "crypto-js";
 
@@ -49,22 +47,23 @@ const mailer = async (
       .catch((err: Error) => err.message);
     if (typeof verified === "string") {
       console.info("SMTP connection failed");
+      console.log(verified);
       return "unable to connect to SMTP.";
     }
 
     const htmlTemplate = await readFile(
       bucket.file(mailList.template.html).createReadStream()
     );
-    const attachments = mailList.template.attachements.map((fileName) => ({
-      fileName,
-      content: bucket.file(fileName).createReadStream(),
-    }));
+    // const attachments = mailList.template.attachements.map((fileName) => ({
+    //   fileName,
+    //   content: bucket.file(fileName).createReadStream(),
+    // }));
 
     const template = handlebars.compile(htmlTemplate);
 
     const promiseList: Promise<MailResult>[] = [];
 
-    emailList.forEach((value) => {
+    emailList.slice(0, 15).forEach((value) => {
       const htmlToSend = juice.inlineContent(template({ ...value }), styles);
       promiseList.push(
         smtpTransport
@@ -73,7 +72,13 @@ const mailer = async (
             to: value.email,
             subject: mailList.template.subject,
             html: htmlToSend,
-            attachments,
+            attachments: [
+              {
+                filename: "text.bin",
+                content: "hello world!",
+                contentType: "text/plain",
+              },
+            ],
             bcc: [smtp.email],
           })
           .then((msgInfo: SentMessageInfo) => ({
@@ -90,16 +95,8 @@ const mailer = async (
       );
     });
 
-    const mailResults: MailResult[] = await Promise.all(promiseList);
+    await Promise.all(promiseList);
     smtpTransport.close();
-    const successfulMails = mailResults.filter((i) => !Boolean(i.error));
-    const erroredMails = mailResults.filter((i) => Boolean(i.error));
-
-    await fs.writeFile(
-      path.resolve(__dirname, "./", "result.json"),
-      JSON.stringify({ successfulMails, erroredMails })
-    );
-
     console.info("Emails sent.");
     return null;
   } catch (error) {

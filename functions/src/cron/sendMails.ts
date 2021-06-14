@@ -5,7 +5,7 @@ import getUserSmtp from "./utils/getUserSmtp";
 import isScheduledFunc from "./utils/isScheduled";
 import getPendingMailListItems from "./utils/getPendingMailListItems";
 import mailer from "./utils/mailer";
-import handlePostProcessing from "./utils/handlePostProcessing";
+// import handlePostProcessing from "./utils/handlePostProcessing";
 
 const sendMails = async () => {
   try {
@@ -65,20 +65,21 @@ const sendMails = async () => {
     const connectionError = await mailer(
       activeMailList.data(),
       smtp,
-      emailData,
-      true
+      emailData
+      // true
     );
     if (connectionError) {
       console.log("Error connecting to SMTP. Aborting...");
       return;
     }
 
-    await handlePostProcessing({
-      activeMailList,
-      pendingMailListItemDocs,
-      inactiveMailLists,
-    });
+    // await handlePostProcessing({
+    //   activeMailList,
+    //   pendingMailListItemDocs,
+    //   inactiveMailLists,
+    // });
     console.log("All changes done. Function Completed.");
+    return;
   } catch (error) {
     console.log("Error Occured.");
     console.error(error);
@@ -87,5 +88,5 @@ const sendMails = async () => {
   }
 };
 
-// export default sendMails;
 sendMails();
+// export default sendMails;

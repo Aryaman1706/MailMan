@@ -100,11 +100,13 @@ const listMailList = async (req: Request, res: Response) => {
       return validationErrorResponse(res, error);
     }
 
+    const perPageCount = 10;
+
     const mailLists = (await db
       .collection(collections.mailList)
       .orderBy("addedOn", "desc")
-      .offset(page * 10)
-      .limit(10)
+      .offset(page * perPageCount)
+      .limit(perPageCount)
       .get()) as firestore.QuerySnapshot<MailListDocumentData>;
 
     const list = mailLists.docs.map((doc) => ({
@@ -117,7 +119,8 @@ const listMailList = async (req: Request, res: Response) => {
       msg: "MailList List found.",
       data: {
         list,
-        hasMore: !mailLists.empty && mailLists.size > 10 ? true : false,
+        hasMore:
+          !mailLists.empty && mailLists.size === perPageCount ? true : false,
       },
     });
   } catch (error) {
@@ -140,12 +143,14 @@ const listMailListUser = async (req: Request, res: Response) => {
       return sendResponse(res, 400, "Invalid account.");
     }
 
+    const perPageCount = 10;
+
     const mailLists = (await db
       .collection(collections.mailList)
       .where("uid", "==", req.user.id)
       .orderBy("addedOn", "desc")
-      .offset(page * 10)
-      .limit(10)
+      .offset(page * perPageCount)
+      .limit(perPageCount)
       .get()) as firestore.QuerySnapshot<MailListDocumentData>;
 
     const list = mailLists.docs.map((doc) => ({
@@ -158,7 +163,8 @@ const listMailListUser = async (req: Request, res: Response) => {
       msg: "MailList List found.",
       data: {
         list,
-        hasMore: !mailLists.empty && mailLists.size > 10 ? true : false,
+        hasMore:
+          !mailLists.empty && mailLists.size === perPageCount ? true : false,
       },
     });
   } catch (error) {

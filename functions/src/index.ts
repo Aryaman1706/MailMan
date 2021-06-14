@@ -25,6 +25,7 @@ exports.api = functions.region("asia-east2").https.onRequest(app);
 //   .pubsub.schedule("every 20 minutes")
 //   .timeZone("Asia/Kolkata")
 //   .onRun((_ctx) => {
+//     console.log("===========CRON JOB STARTED==========");
 //     sendMails()
 //       .then(() => {
 //         return null;
