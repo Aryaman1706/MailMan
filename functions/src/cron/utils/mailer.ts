@@ -56,6 +56,7 @@ const mailer = async (
       bucket.file(mailList.template.html).createReadStream()
     );
     const attachments = mailList.template.attachements.map((fileName) => ({
+      fileName,
       content: bucket.file(fileName).createReadStream(),
     }));
 

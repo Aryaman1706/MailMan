@@ -17,7 +17,6 @@ const ViewTemplate = () => {
     <>
       <Heading text="Open Template" />
       <Grid container spacing={3}>
-        <Grid item xs={12}></Grid>
         <Item field="Title" value={template.title} />
         <Item field="Subject" value={template.subject} />
         <Item field="Date" value={new Date(template.date).toLocaleString()} />

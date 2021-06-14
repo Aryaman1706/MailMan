@@ -65,7 +65,8 @@ const sendMails = async () => {
     const connectionError = await mailer(
       activeMailList.data(),
       smtp,
-      emailData
+      emailData,
+      true
     );
     if (connectionError) {
       console.log("Error connecting to SMTP. Aborting...");
@@ -86,4 +87,5 @@ const sendMails = async () => {
   }
 };
 
-export default sendMails;
+// export default sendMails;
+sendMails();

@@ -1,7 +1,6 @@
-import { Button, makeStyles } from "@material-ui/core";
-import Loader from "../../../Loader";
+import { Button, makeStyles, LinearProgress } from "@material-ui/core";
 
-import useDownloadFile from "../hooks/useDownloadFile";
+import useDownloadFile, { Status } from "../../../../hooks/useDownloadFile";
 
 const useStyles = makeStyles(() => ({
   flexContainer: {
@@ -11,17 +10,24 @@ const useStyles = makeStyles(() => ({
     justifyContent: "center",
     placeItems: "center",
   },
+  loader: {
+    width: "100px",
+  },
 }));
 
 const DownloadBtn = ({ fileName }) => {
-  const { flexContainer } = useStyles();
-  const [downloadFile, loading] = useDownloadFile(fileName);
+  const { flexContainer, loader } = useStyles();
+  const [downloadFile, status] = useDownloadFile(fileName);
 
   return (
     <div className={flexContainer}>
-      <Button variant="contained" color="primary" onClick={downloadFile}>
-        {loading ? <Loader /> : "Download"}
-      </Button>
+      {status === Status.Loading ? (
+        <LinearProgress className={loader} />
+      ) : (
+        <Button variant="contained" color="primary" onClick={downloadFile}>
+          Download
+        </Button>
+      )}
     </div>
   );
 };

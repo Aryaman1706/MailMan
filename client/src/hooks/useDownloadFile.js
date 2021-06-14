@@ -5,18 +5,26 @@ import { useState } from "react";
 import firebase from "firebase";
 import "firebase/storage";
 
+export const Status = {
+  Idle: "idle",
+  Loading: "loading",
+  Errored: "errored",
+  Completed: "completed",
+};
+
 const useDownloadFile = (fileName) => {
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(Status.Idle);
 
   const downloadFile = async () => {
     try {
-      setLoading(true);
+      setStatus(Status.Loading);
 
       const url = await firebase.storage().ref(fileName).getDownloadURL();
-      setLoading(false);
+      setStatus(Status.Completed);
 
       window.open(url);
     } catch (error) {
+      setStatus(Status.Errored);
       Swal.fire({
         position: "center",
         icon: "error",
@@ -27,7 +35,7 @@ const useDownloadFile = (fileName) => {
     }
   };
 
-  return [downloadFile, loading];
+  return [downloadFile, status];
 };
 
 export default useDownloadFile;
