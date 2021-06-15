@@ -8,7 +8,7 @@ interface TemplateData {
   title: string;
   subject: string;
   html: string;
-  attachements: string[];
+  attachments: string[];
   format: Format;
   date: firestore.Timestamp;
 }

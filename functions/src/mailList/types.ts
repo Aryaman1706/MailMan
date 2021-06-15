@@ -1,11 +1,10 @@
 import { firestore } from "firebase-admin";
+import { types as TemplateTypes } from "../template";
 
-type Template = {
-  title: string;
-  subject: string;
-  html: string;
-  attachements: string[];
-};
+type Template = Pick<
+  TemplateTypes.TemplateData,
+  "title" | "subject" | "html" | "attachments"
+>;
 
 interface MailListData {
   templateId: string;

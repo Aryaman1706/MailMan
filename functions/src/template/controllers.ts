@@ -23,10 +23,10 @@ import styles from "../utils/styles";
 // * Create new template
 const newTemplate = async (req: Request<NewTemplateValid>, res: Response) => {
   try {
-    let attachements: string[] = [];
+    let attachments: string[] = [];
     console.log(req.files);
     if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-      attachements = (req.files as UploadedFile[]).map((file) => file.name);
+      attachments = (req.files as UploadedFile[]).map((file) => file.name);
     }
 
     const fileName = `${v4()}.html`;
@@ -45,7 +45,7 @@ const newTemplate = async (req: Request<NewTemplateValid>, res: Response) => {
       title: req.body.title,
       subject: req.body.subject,
       html: fileName,
-      attachements,
+      attachments,
       format: req.body.format,
       date: firestore.Timestamp.now(),
     };
@@ -154,7 +154,7 @@ const deleteTemplate = async (req: Request, res: Response) => {
     }
 
     const deleteFilePromises = [
-      ...templateData.attachements,
+      ...templateData.attachments,
       templateData.html,
     ].map((fileName) =>
       bucket

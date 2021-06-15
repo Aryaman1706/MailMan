@@ -6,7 +6,7 @@ config();
 
 import middlewares from "./config/middlewares";
 import routes from "./config/routes";
-// import sendMails from "./cron/sendMails";
+import sendMails from "./cron/sendMails";
 
 // * Server Init
 const app = express();
@@ -20,18 +20,18 @@ routes(app);
 // * Deploy Cloud Functions
 exports.api = functions.region("asia-east2").https.onRequest(app);
 
-// exports.mailer = functions
-//   .region("asia-east2")
-//   .pubsub.schedule("every 20 minutes")
-//   .timeZone("Asia/Kolkata")
-//   .onRun((_ctx) => {
-//     console.log("===========CRON JOB STARTED==========");
-//     sendMails()
-//       .then(() => {
-//         return null;
-//       })
-//       .catch((err: Error) => {
-//         console.error(err);
-//         return null;
-//       });
-//   });
+exports.mailer = functions
+  .region("asia-east2")
+  .pubsub.schedule("every 20 minutes")
+  .timeZone("Asia/Kolkata")
+  .onRun((_ctx) => {
+    console.log("===========CRON JOB STARTED==========");
+    sendMails()
+      .then(() => {
+        return null;
+      })
+      .catch((err: Error) => {
+        console.error(err);
+        return null;
+      });
+  });

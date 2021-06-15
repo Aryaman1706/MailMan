@@ -54,16 +54,16 @@ const mailer = async (
     const htmlTemplate = await readFile(
       bucket.file(mailList.template.html).createReadStream()
     );
-    // const attachments = mailList.template.attachements.map((fileName) => ({
+    // const attachments = mailList.template.attachments.map(fileName => ({
     //   fileName,
-    //   content: bucket.file(fileName).createReadStream(),
-    // }));
+    //   path: ""
+    // }))
 
     const template = handlebars.compile(htmlTemplate);
 
     const promiseList: Promise<MailResult>[] = [];
 
-    emailList.slice(0, 15).forEach((value) => {
+    emailList.forEach((value) => {
       const htmlToSend = juice.inlineContent(template({ ...value }), styles);
       promiseList.push(
         smtpTransport
@@ -72,13 +72,7 @@ const mailer = async (
             to: value.email,
             subject: mailList.template.subject,
             html: htmlToSend,
-            attachments: [
-              {
-                filename: "text.bin",
-                content: "hello world!",
-                contentType: "text/plain",
-              },
-            ],
+            // attachments: [],
             bcc: [smtp.email],
           })
           .then((msgInfo: SentMessageInfo) => ({

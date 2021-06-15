@@ -49,7 +49,7 @@ const addNew = async (
         title: templateData.title,
         subject: templateData.subject,
         html: templateData.html,
-        attachements: templateData.attachements,
+        attachments: templateData.attachments,
       },
       email: userRecord.email!,
       uid: userRecord.uid,
