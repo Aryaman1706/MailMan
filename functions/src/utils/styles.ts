@@ -12,6 +12,17 @@ const styles = `<style>
   --ck-todo-list-checkmark-size: 16px;
 }
 
+p {
+  margin: 0px !important;
+  font-family: arial, sans-serif !important;
+  font-size: 13.33px !important;
+}
+
+span {
+  font-family: arial, sans-serif !important;
+  font-size: 13.33px !important;
+}
+
 /* ckeditor5-highlight/theme/highlight.css */
 .marker-yellow {
   background-color: var(--ck-highlight-marker-yellow);

@@ -16,10 +16,41 @@ const useStyles = makeStyles(() => ({
   textField: {
     marginBottom: "15px",
   },
+  ckeditorContent: {
+    "& .ck-editor__main": {
+      minHeight: "50px",
+      fontFamily: "arial, sans-serif",
+      "& p": {
+        "& span": {
+          fontSize: "13.33px",
+        },
+        margin: "0px",
+      },
+    },
+  },
+  ckEditorCustom: {
+    "& > div.ck.ck-reset.ck-editor.ck-rounded-corners": {
+      "& > div.ck.ck-editor__main": {
+        "& > div.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline":
+          {
+            paddingTop: "10px",
+            paddingBottom: "10px",
+            fontFamily: "arial, sans-serif",
+            "& > p": {
+              margin: "0px",
+              fontSize: "13.33px",
+            },
+            "& > span": {
+              fontSize: "13.33px",
+            },
+          },
+      },
+    },
+  },
 }));
 
 const MainForm = (formikProps) => {
-  const { textField } = useStyles();
+  const { textField, ckeditorContent, ckEditorCustom } = useStyles();
 
   const editorRef = useRef(null);
 
@@ -90,7 +121,7 @@ const MainForm = (formikProps) => {
         />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} className={ckEditorCustom}>
         <CKEditor
           editor={ClassicEditor}
           config={editorConfig}

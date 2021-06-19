@@ -30,71 +30,67 @@ const Form = (formikProps) => {
     touched,
   } = formikProps;
 
+  if (mutation.isLoading) {
+    return <Loader />;
+  }
+
   return (
     <>
-      {mutation.isLoading ? (
-        <>
-          <Loader />
-        </>
-      ) : (
-        <>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              type="text"
-              variant="outlined"
-              label="Email Address"
-              name="email"
-              value={email}
-              onChange={(e) => changeHandler(e)}
-              helperText={touched.email ? errors.email : ""}
-              error={touched.email && Boolean(errors.email)}
-            />
-          </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          type="text"
+          variant="outlined"
+          label="Email Address"
+          name="email"
+          value={email}
+          onChange={(e) => changeHandler(e)}
+          helperText={touched.email ? errors.email : ""}
+          error={touched.email && Boolean(errors.email)}
+        />
+      </Grid>
 
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              type={show ? "text" : "password"}
-              variant="outlined"
-              label="Password"
-              name="password"
-              value={password}
-              onChange={(e) => changeHandler(e)}
-              helperText={touched.password ? errors.password : ""}
-              error={touched.password && Boolean(errors.password)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShow((prev) => !prev)}>
-                      {show ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          type={show ? "text" : "password"}
+          variant="outlined"
+          label="Password"
+          name="password"
+          value={password}
+          onChange={(e) => changeHandler(e)}
+          helperText={touched.password ? errors.password : ""}
+          error={touched.password && Boolean(errors.password)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShow((prev) => !prev)}>
+                  {show ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Grid>
 
-          <Grid item xs={12}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              onClick={submitHandler}
-            >
-              Login
-            </Button>
-          </Grid>
+      <Grid item xs={12}>
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          onClick={submitHandler}
+        >
+          Login
+        </Button>
+      </Grid>
 
-          <Grid item xs={12}>
-            <div className={classes.linkContainer}>
-              <Link to="/forgot-password">
-                <p>Forgot Password?</p>
-              </Link>
-            </div>
-          </Grid>
-        </>
-      )}
+      <Grid item xs={12}>
+        <div className={classes.linkContainer}>
+          <Link to="/forgot-password">
+            <p>Forgot Password?</p>
+          </Link>
+        </div>
+      </Grid>
     </>
   );
 };
