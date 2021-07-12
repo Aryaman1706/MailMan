@@ -1,3 +1,8 @@
-type CollectionRef<T> = FirebaseFirestore.CollectionReference<T>;
+import { firestore } from "firebase-admin";
 
-export { CollectionRef };
+type CollectionRef<T> = firestore.CollectionReference<T>;
+enum CollectionErrorType {
+  SchemaValidationError = "Schema validation failed",
+}
+
+export { CollectionRef, CollectionErrorType };

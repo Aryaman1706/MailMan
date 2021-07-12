@@ -12,7 +12,7 @@ class Server {
 
   public setupMiddlewares = (middlewares: RequestHandler[]) => {
     if (this.setup.includes("routes")) {
-      throw Error(ServerErrors.MiddlewaresBeforeRoutes);
+      throw new Error(ServerErrors.MiddlewaresBeforeRoutes);
     }
 
     middlewares.forEach((middleware) => {
