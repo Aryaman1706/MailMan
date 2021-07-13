@@ -1,14 +1,28 @@
 import Joi from "joi";
 
+// * SchemaInterface
 type ValidTypes = string | number | boolean | Date;
 
-type ValidSchemaTypes = ValidTypes | SchemaInterface | ValidSchemaTypes[];
+type SchemaInterfaceValueTypes =
+  | ValidTypes
+  | SchemaInterface
+  | SchemaInterfaceValueTypes[];
 
 type SchemaInterface = {
-  [k: string]: ValidSchemaTypes;
+  [k: string]: SchemaInterfaceValueTypes;
 };
 
-type TypeToJoiSchema<T extends ValidSchemaTypes> = T extends string
+// * SchemaMap
+type SchemaMapValueTypes =
+  | Joi.StringSchema
+  | Joi.NumberSchema
+  | Joi.BooleanSchema
+  | Joi.DateSchema
+  | "Any"
+  | SchemaMap
+  | SchemaMapValueTypes[];
+
+type TypeToJoiSchema<T extends SchemaInterfaceValueTypes> = T extends string
   ? Joi.StringSchema
   : T extends number
   ? Joi.NumberSchema
@@ -19,48 +33,17 @@ type TypeToJoiSchema<T extends ValidSchemaTypes> = T extends string
   : T extends SchemaInterface
   ? SchemaMap<T>
   : T extends Array<infer U>
-  ? [U] extends [ValidSchemaTypes]
+  ? [U] extends [SchemaInterfaceValueTypes]
     ? TypeToJoiSchema<U>[]
-    : ValidJoiType<any>[]
+    : SchemaMapValueTypes[]
   : "Any";
 
-type ValidJoiType<T extends SchemaInterface> =
-  | Joi.StringSchema
-  | Joi.NumberSchema
-  | Joi.BooleanSchema
-  | Joi.DateSchema
-  | "Any"
-  | SchemaMap<T>
-  | ValidJoiType<T>[];
-
-type SchemaMap<T extends SchemaInterface> = {
-  [x in keyof T]: TypeToJoiSchema<T[x]>;
+type SchemaMap<T extends SchemaInterface = any> = {
+  [x in keyof T]: TypeToJoiSchema<T[x]> | "Any";
 };
 
-// Test
-type DemoInterface = {
-  keyString: string;
-  keyMap: {
-    subKeyString: string;
-    subKeyMap: {
-      subSubKeyDate: Date;
-    };
-  };
-  keyArray: (string | { arrayKey: string })[];
-  keyArrayOfArrays: { nestedArray1: number }[][];
+type ParsedSchema = {
+  [k: string]: Joi.AnySchema;
 };
 
-const test: SchemaMap<DemoInterface> = {
-  keyString: Joi.string(),
-  keyMap: {
-    subKeyString: Joi.string(),
-    subKeyMap: {
-      subSubKeyDate: Joi.date(),
-    },
-  },
-  keyArray: [{ arrayKey: Joi.string() }, Joi.string()],
-  keyArrayOfArrays: [[{ nestedArray1: Joi.number() }]],
-};
-console.log(test);
-
-export { SchemaInterface, SchemaMap };
+export { SchemaInterface, SchemaMap, SchemaMapValueTypes, ParsedSchema };
