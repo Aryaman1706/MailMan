@@ -6,3 +6,5 @@ node_modules/
 
 # Compiled JS
 lib/
+
+serviceAccount.json

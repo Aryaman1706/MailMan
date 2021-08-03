@@ -2,18 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
 import firebase from "firebase/app";
+import firebaseConfig from "./firebaseConfig";
 
-firebase.initializeApp({
-  apiKey: "AIzaSyC2gh8A3PNdZifvZvlJ1iHfp67SuLEqWQk",
-  authDomain: "av-mailer-01.firebaseapp.com",
-  projectId: "av-mailer-01",
-  storageBucket: "av-mailer-01.appspot.com",
-  messagingSenderId: "636619018011",
-  appId: "1:636619018011:web:0c03f6c72f8f34d51b4dbe",
-  measurementId: "G-E9RSVDY5FV",
-});
+firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
