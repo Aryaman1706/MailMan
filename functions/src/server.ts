@@ -16,9 +16,10 @@ const middlewares: RequestHandler[] = [
       "https://av-mailer-01.web.app",
       "http://localhost:3000",
     ],
-    methods: ["GET", "PUT", "POST", "DELETE", "PATCH"],
+    methods: ["GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "auth-id-token"],
     credentials: true,
-    preflightContinue: true,
+    preflightContinue: false,
   }),
 ];
 
