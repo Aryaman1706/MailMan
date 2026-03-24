@@ -10,9 +10,17 @@ const serviceAccount = path.resolve(
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  projectId: "mailman-299d7",
-  storageBucket: "mailman-299d7.appspot.com",
+  projectId: "mailman-262e8",
+  storageBucket: "mailman-262e8.appspot.com",
 });
+
+// Connect to Firestore emulator for development
+if (process.env.FUNCTIONS_EMULATOR === 'true') {
+  admin.firestore().settings({
+    host: 'localhost:8080',
+    ssl: false
+  });
+}
 
 export const collections = {
   user: "user",
